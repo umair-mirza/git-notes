@@ -9,12 +9,12 @@ app.use(cors())
 app.use(bodyParser.json())
 
 app.post("/getAccessToken", (req, res) => {
-  console.log("code", req.query.code)
+  console.log("code", req.body.code)
   axios
     .post("https://github.com/login/oauth/access_token", {
       client_id: process.env.REACT_APP_CLIENT_ID,
       client_secret: process.env.REACT_APP_CLIENT_SECRET,
-      code: req.query.code,
+      code: req.body.code,
       redirect_uri: process.env.REACT_APP_REDIRECT_URI,
     })
     .then((result) => {
