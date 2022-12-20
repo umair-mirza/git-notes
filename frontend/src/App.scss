@@ -25,6 +25,10 @@
     color: #5acba1;
     border: 1px solid #5acba1;
   }
+
+  a {
+    text-decoration: none;
+  }
 }
 
 .secondary-button {
@@ -40,5 +44,9 @@
     background-color: #5acba1;
     color: white;
     border: 1px solid white;
+  }
+
+  a {
+    text-decoration: none;
   }
 }

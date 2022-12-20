@@ -17,11 +17,27 @@ app.post("/getAccessToken", (req, res) => {
       code: req.body.code,
       redirect_uri: process.env.REACT_APP_REDIRECT_URI,
     })
-    .then((result) => {
-      console.log("access token backend", result.data)
+    .then((response) => String(response.data))
+    .then((paramsString) => {
+      let params = new URLSearchParams(paramsString)
+      const access_token = params.get("access_token")
+      console.log("the token", access_token)
+
+      // Request to return data of a user that has been authenticated
+      return axios.get("https://api.github.com/user", {
+        headers: {
+          Authorization: `token ${access_token}`,
+        },
+      })
+    })
+    .then((response) => response.data)
+    .then((data) => {
+      console.log(JSON.stringify(data))
+      return res.status(200).json(data)
     })
     .catch((err) => {
       console.log("error:", err)
+      return res.status(400).json(err)
     })
 })
 

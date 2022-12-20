@@ -1,27 +1,30 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useMemo } from "react"
 import { CiSearch } from "react-icons/ci"
 import authService from "../features/auth/authService"
+import { useSelector, useDispatch } from "react-redux"
+import { login } from "../features/auth/authSlice"
 
 import "./Header.scss"
 import "../App.scss"
 
 const Header = () => {
-  // const [codeParam, setCodeParam] = useState({
-  //   code: null,
-  // })
-  const [userState, setUserState] = useState("")
+  const [tempCode, setTempCode] = useState("")
+
+  const dispatch = useDispatch()
+
+  const codeParam = useMemo(() => ({ code: tempCode })) //useMemo ensures that the state’s reference value does not change during each render
 
   useEffect(() => {
     const queryString = window.location.search
     const urlParams = new URLSearchParams(queryString)
     const codeExists = urlParams.get("code")
     if (codeExists) {
-      //   setCodeParam({ ...codeParam, code: codeExists })
-      //   console.log(codeParam)
-      authService.login({ code: codeExists })
-      setUserState("logged")
+      setTempCode(codeExists)
+      console.log(codeParam)
+      // authService.login(codeParam)
+      dispatch(login(codeParam))
     }
-  }, [])
+  }, [tempCode, codeParam])
 
   const clientId = process.env.REACT_APP_CLIENT_ID
   const redirectURI = process.env.REACT_APP_REDIRECT_URI

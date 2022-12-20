@@ -10,8 +10,8 @@ const login = async (codeParam) => {
       )
 
       if (response.data) {
-        console.log("access token:", response.data.access_token)
-        localStorage.setItem("user", JSON.stringify(response.data.access_token))
+        console.log("user details", response.data)
+        localStorage.setItem("user", JSON.stringify(response.data))
         localStorage.setItem("isLoggedIn", true)
       }
     } catch (error) {
