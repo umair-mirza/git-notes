@@ -6,9 +6,19 @@
     Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
 }
 
+a {
+  text-decoration: none;
+}
+
 .container {
   width: 100%;
-  padding: 0 10%;
+  padding-left: 10%;
+  padding-right: 10%;
+}
+
+.top-bottom-space {
+  padding-top: 40px;
+  padding-bottom: 40px;
 }
 
 .primary-button {

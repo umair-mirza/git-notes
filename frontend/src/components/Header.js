@@ -1,30 +1,38 @@
 import React, { useState, useEffect, useMemo } from "react"
-import { CiSearch } from "react-icons/ci"
-import authService from "../features/auth/authService"
 import { useSelector, useDispatch } from "react-redux"
+import { useNavigate } from "react-router-dom"
 import { login } from "../features/auth/authSlice"
+import { CiSearch } from "react-icons/ci"
 
 import "./Header.scss"
 import "../App.scss"
+import AccountMenu from "./AccountMenu"
 
 const Header = () => {
   const [tempCode, setTempCode] = useState("")
 
   const dispatch = useDispatch()
+  const navigate = useNavigate()
 
-  const codeParam = useMemo(() => ({ code: tempCode })) //useMemo ensures that the state’s reference value does not change during each render
+  const codeParam = useMemo(() => ({ code: tempCode }), [tempCode]) //useMemo ensures that the state’s reference value does not change during each render
+
+  const { user, isSuccess, message } = useSelector((state) => state.auth)
 
   useEffect(() => {
-    const queryString = window.location.search
-    const urlParams = new URLSearchParams(queryString)
-    const codeExists = urlParams.get("code")
-    if (codeExists) {
-      setTempCode(codeExists)
-      console.log(codeParam)
-      // authService.login(codeParam)
-      dispatch(login(codeParam))
+    if (isSuccess && user) {
+      navigate("/")
+    } else {
+      const queryString = window.location.search
+      const urlParams = new URLSearchParams(queryString)
+      const codeExists = urlParams.get("code")
+
+      if (codeExists) {
+        setTempCode(codeExists)
+        console.log(codeParam)
+        dispatch(login(codeParam))
+      }
     }
-  }, [tempCode, codeParam])
+  }, [tempCode, codeParam, user, isSuccess, message, dispatch, navigate])
 
   const clientId = process.env.REACT_APP_CLIENT_ID
   const redirectURI = process.env.REACT_APP_REDIRECT_URI
@@ -35,14 +43,18 @@ const Header = () => {
       <div className="logo">Emumba</div>
       <div className="top-right">
         <div className="search">
-          <input className="searchbar" />
+          <input className="searchbar" placeholder="Search Gists" />
           <div className="search-icon">
             <CiSearch size={20} />
           </div>
         </div>
-        <div className="secondary-button">
-          <a href={GITHUB_LOGIN_URL}>Login</a>
-        </div>
+        {user ? (
+          <AccountMenu />
+        ) : (
+          <div className="secondary-button">
+            <a href={GITHUB_LOGIN_URL}>Login</a>
+          </div>
+        )}
       </div>
     </section>
   )
