@@ -10,6 +10,7 @@ app.use(bodyParser.json())
 
 app.post("/getAccessToken", (req, res) => {
   console.log("code", req.body.code)
+  let access_token
   axios
     .post("https://github.com/login/oauth/access_token", {
       client_id: process.env.REACT_APP_CLIENT_ID,
@@ -20,7 +21,7 @@ app.post("/getAccessToken", (req, res) => {
     .then((response) => String(response.data))
     .then((paramsString) => {
       let params = new URLSearchParams(paramsString)
-      const access_token = params.get("access_token")
+      access_token = params.get("access_token")
       console.log("the token", access_token)
 
       // Request to return data of a user that has been authenticated
@@ -33,7 +34,7 @@ app.post("/getAccessToken", (req, res) => {
     .then((response) => response.data)
     .then((data) => {
       console.log(JSON.stringify(data))
-      return res.status(200).json(data)
+      return res.status(200).json({ ...data, accessToken: access_token })
     })
     .catch((err) => {
       console.log("error:", err)
