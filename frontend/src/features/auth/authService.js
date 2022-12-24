@@ -3,22 +3,14 @@ import axios from "axios"
 //Login User on Github
 const login = async (codeParam) => {
   if (codeParam.code.length > 1) {
-    try {
-      console.log("login with", codeParam)
-      const response = await axios.post(
-        "http://localhost:8000/getAccessToken",
-        codeParam
-      )
+    console.log("login with", codeParam)
+    const response = await axios.post("/getAccessToken", codeParam)
 
-      if (response.data) {
-        console.log("user details", response.data)
-        localStorage.setItem("user", JSON.stringify(response.data)) //localstorage only accepts data in strings
-        localStorage.setItem("isSuccess", true)
+    if (response.data) {
+      console.log("user details", response.data)
+      localStorage.setItem("user", JSON.stringify(response.data)) //localstorage only accepts data in strings
 
-        return response.data
-      }
-    } catch (error) {
-      console.log(error)
+      return response.data
     }
   }
 }
@@ -26,7 +18,6 @@ const login = async (codeParam) => {
 //Logout User
 const logout = () => {
   localStorage.removeItem("user")
-  localStorage.setItem("isSuccess", false)
 }
 
 const authService = {

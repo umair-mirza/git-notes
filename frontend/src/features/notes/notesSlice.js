@@ -1,20 +1,24 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit"
-import authService from "./authService"
+import notesService from "./notesService"
 
 const initialState = {
+  notes: [],
+  note: {},
   isSuccess: false,
-  user: JSON.parse(localStorage.getItem("user")) || null,
   isLoading: false,
   isError: false,
   message: "",
 }
 
-//Login User
-export const login = createAsyncThunk(
-  "auth/login",
-  async (codeParam, thunkAPI) => {
+//Fetch Public Notes
+export const fetchNotes = createAsyncThunk(
+  "notes/fetchNotes",
+  async (pagesData, thunkAPI) => {
     try {
-      return await authService.login(codeParam)
+      return await notesService.fetchNotes(
+        pagesData.currPage,
+        pagesData.rowsPerPage
+      )
     } catch (error) {
       const message =
         (error.response &&
@@ -22,19 +26,13 @@ export const login = createAsyncThunk(
           error.response.data.message) ||
         error.message ||
         error.toString()
-
       return thunkAPI.rejectWithValue(message)
     }
   }
 )
 
-//Logout User
-export const logout = createAsyncThunk("auth/logout", async () => {
-  await authService.logout()
-})
-
-export const authSlice = createSlice({
-  name: "auth",
+export const notesSlice = createSlice({
+  name: "notes",
   initialState,
   reducers: {
     reset: (state) => {
@@ -46,25 +44,22 @@ export const authSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(login.pending, (state) => {
+      .addCase(fetchNotes.pending, (state) => {
         state.isLoading = true
       })
-      .addCase(login.fulfilled, (state, action) => {
+      .addCase(fetchNotes.fulfilled, (state, action) => {
         state.isLoading = false
         state.isSuccess = true
-        state.user = action.payload
+        state.notes = action.payload
       })
-      .addCase(login.rejected, (state, action) => {
+      .addCase(fetchNotes.rejected, (state, action) => {
         state.isLoading = false
         state.isSuccess = false
-        state.user = null
+        state.isError = true
         state.message = action.payload
-      })
-      .addCase(logout.fulfilled, (state) => {
-        state.user = null
       })
   },
 })
 
-export const { reset } = authSlice.actions
-export default authSlice.reducer
+export const { reset } = notesSlice.actions
+export default notesSlice.reducer

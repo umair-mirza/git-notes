@@ -1,4 +1,4 @@
-import * as React from "react"
+import React, { useState, useEffect } from "react"
 import PropTypes from "prop-types"
 import { alpha } from "@mui/material/styles"
 import Box from "@mui/material/Box"
@@ -14,48 +14,15 @@ import Toolbar from "@mui/material/Toolbar"
 import Typography from "@mui/material/Typography"
 import Paper from "@mui/material/Paper"
 import Checkbox from "@mui/material/Checkbox"
-import IconButton from "@mui/material/IconButton"
-import Tooltip from "@mui/material/Tooltip"
 import FormControlLabel from "@mui/material/FormControlLabel"
 import Switch from "@mui/material/Switch"
-import DeleteIcon from "@mui/icons-material/Delete"
-import FilterListIcon from "@mui/icons-material/FilterList"
 import { visuallyHidden } from "@mui/utils"
 
-function createData(name, calories, fat, carbs, protein) {
-  return {
-    name,
-    calories,
-    fat,
-    carbs,
-    protein,
-  }
-}
+import { useSelector, useDispatch } from "react-redux"
+import { fetchNotes } from "../features/notes/notesSlice"
+import Spinner from "./Spinner"
 
-const rows = [
-  createData("Cupcake", "Cupcake", 305, 3.7, 67, 4.3, 4.3),
-  createData("Cupcake", "Cupcake", 305, 3.7, 67, 4.3, 4.3),
-  createData("Cupcake", "Cupcake", 305, 3.7, 67, 4.3, 4.3),
-  createData("Cupcake", "Cupcake", 305, 3.7, 67, 4.3, 4.3),
-  createData("Cupcake", "Cupcake", 305, 3.7, 67, 4.3, 4.3),
-  createData("Cupcake", "Cupcake", 305, 3.7, 67, 4.3, 4.3),
-  createData("Cupcake", "Cupcake", 305, 3.7, 67, 4.3, 4.3),
-  createData("Cupcake", "Cupcake", 305, 3.7, 67, 4.3, 4.3),
-  createData("Cupcake", "Cupcake", 305, 3.7, 67, 4.3, 4.3),
-  createData("Cupcake", "Cupcake", 305, 3.7, 67, 4.3, 4.3),
-  createData("Cupcake", "Cupcake", 305, 3.7, 67, 4.3, 4.3),
-  createData("Cupcake", "Cupcake", 305, 3.7, 67, 4.3, 4.3),
-  createData("Cupcake", "Cupcake", 305, 3.7, 67, 4.3, 4.3),
-  createData("Cupcake", "Cupcake", 305, 3.7, 67, 4.3, 4.3),
-  createData("Cupcake", "Cupcake", 305, 3.7, 67, 4.3, 4.3),
-  createData("Cupcake", "Cupcake", 305, 3.7, 67, 4.3, 4.3),
-  createData("Cupcake", "Cupcake", 305, 3.7, 67, 4.3, 4.3),
-  createData("Cupcake", "Cupcake", 305, 3.7, 67, 4.3, 4.3),
-  createData("Cupcake", "Cupcake", 305, 3.7, 67, 4.3, 4.3),
-  createData("Cupcake", "Cupcake", 305, 3.7, 67, 4.3, 4.3),
-  createData("Cupcake", "Cupcake", 305, 3.7, 67, 4.3, 4.3),
-  createData("Cupcake", "Cupcake", 305, 3.7, 67, 4.3, 4.3),
-]
+import "./UserIcon.scss"
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -95,10 +62,10 @@ const headCells = [
     label: "Avatar",
   },
   {
-    id: "name",
+    id: "user",
     numeric: false,
     disablePadding: true,
-    label: "Name",
+    label: "User",
   },
   {
     id: "date",
@@ -111,12 +78,6 @@ const headCells = [
     numeric: true,
     disablePadding: false,
     label: "Time",
-  },
-  {
-    id: "note-title",
-    numeric: false,
-    disablePadding: false,
-    label: "Note Title",
   },
   {
     id: "note-id",
@@ -227,13 +188,25 @@ EnhancedTableToolbar.propTypes = {
   numSelected: PropTypes.number.isRequired,
 }
 
+//Main component
 export default function EnhancedTable() {
   const [order, setOrder] = React.useState("asc")
   const [orderBy, setOrderBy] = React.useState("calories")
   const [selected, setSelected] = React.useState([])
   const [page, setPage] = React.useState(0)
   const [dense, setDense] = React.useState(false)
-  const [rowsPerPage, setRowsPerPage] = React.useState(5)
+  const [rowsPerPage, setRowsPerPage] = React.useState(10)
+
+  const dispatch = useDispatch()
+
+  const { notes, isSuccess, isLoading, message } = useSelector(
+    (state) => state.notes
+  )
+
+  useEffect(() => {
+    dispatch(fetchNotes({ currPage: page + 1, rowsPerPage: rowsPerPage }))
+    console.log("page", page)
+  }, [dispatch, page, rowsPerPage])
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc"
@@ -243,31 +216,11 @@ export default function EnhancedTable() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelected = rows.map((n) => n.name)
+      const newSelected = notes.map((n) => n.login)
       setSelected(newSelected)
       return
     }
     setSelected([])
-  }
-
-  const handleClick = (event, name) => {
-    const selectedIndex = selected.indexOf(name)
-    let newSelected = []
-
-    if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, name)
-    } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1))
-    } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1))
-    } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(
-        selected.slice(0, selectedIndex),
-        selected.slice(selectedIndex + 1)
-      )
-    }
-
-    setSelected(newSelected)
   }
 
   const handleChangePage = (event, newPage) => {
@@ -283,11 +236,10 @@ export default function EnhancedTable() {
     setDense(event.target.checked)
   }
 
-  const isSelected = (name) => selected.indexOf(name) !== -1
-
   // Avoid a layout jump when reaching the last page with empty rows.
-  const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0
+  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - 3000) : 0
+
+  const totalCount = 3000
 
   return (
     <Box sx={{ width: "100%" }}>
@@ -305,62 +257,35 @@ export default function EnhancedTable() {
               orderBy={orderBy}
               onSelectAllClick={handleSelectAllClick}
               onRequestSort={handleRequestSort}
-              rowCount={rows.length}
+              rowCount={notes.length}
             />
             <TableBody>
-              {/* if you don't need to support IE11, you can replace the `stableSort` call with:
-                 rows.sort(getComparator(order, orderBy)).slice() */}
-              {stableSort(rows, getComparator(order, orderBy))
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row, index) => {
-                  const isItemSelected = isSelected(row.name)
-                  const labelId = `enhanced-table-checkbox-${index}`
-
-                  return (
-                    <TableRow
-                      hover
-                      onClick={(event) => handleClick(event, row.name)}
-                      role="checkbox"
-                      aria-checked={isItemSelected}
-                      tabIndex={-1}
-                      key={row.name}
-                      selected={isItemSelected}
-                    >
-                      <TableCell padding="checkbox">
-                        <Checkbox
-                          color="primary"
-                          checked={isItemSelected}
-                          inputProps={{
-                            "aria-labelledby": labelId,
-                          }}
-                        />
-                      </TableCell>
-                      <TableCell>{row.name}</TableCell>
-                      <TableCell>{row.name}</TableCell>
-                      <TableCell>{row.calories}</TableCell>
-                      <TableCell>{row.fat}</TableCell>
-                      <TableCell>{row.carbs}</TableCell>
-                      <TableCell>{row.protein}</TableCell>
-                      <TableCell>{row.protein}</TableCell>
-                    </TableRow>
-                  )
-                })}
-              {emptyRows > 0 && (
-                <TableRow
-                  style={{
-                    height: (dense ? 33 : 53) * emptyRows,
-                  }}
-                >
-                  <TableCell colSpan={6} />
+              {notes?.map((note, index) => (
+                <TableRow key={note.id} hover>
+                  <TableCell padding="checkbox">
+                    <Checkbox color="primary" />
+                  </TableCell>
+                  <TableCell>
+                    <img
+                      className="avatar"
+                      src={note.owner.avatar_url}
+                      alt="avatar"
+                    />
+                  </TableCell>
+                  <TableCell>{note.owner.login}</TableCell>
+                  <TableCell>{note.created_at}</TableCell>
+                  <TableCell>{note.created_at}</TableCell>
+                  <TableCell>{note.id}</TableCell>
+                  <TableCell>AA</TableCell>
                 </TableRow>
-              )}
+              ))}
             </TableBody>
           </Table>
         </TableContainer>
         <TablePagination
-          rowsPerPageOptions={[5, 10, 25]}
+          rowsPerPageOptions={[10, 20, 30]}
           component="div"
-          count={rows.length}
+          count={totalCount}
           rowsPerPage={rowsPerPage}
           page={page}
           onPageChange={handleChangePage}
