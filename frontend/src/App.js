@@ -1,13 +1,20 @@
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
 import Header from "./components/Header"
+import MainWindow from "./components/MainWindow"
+import Note from "./components/Note"
 
 import "./App.scss"
-import MainWindow from "./components/MainWindow"
 
 function App() {
   return (
     <div>
-      <Header />
-      <MainWindow />
+      <Router>
+        <Header />
+        <Routes>
+          <Route path="/" element={<MainWindow />} />
+          <Route path="/notes/:noteId" element={<Note />} />
+        </Routes>
+      </Router>
     </div>
   )
 }

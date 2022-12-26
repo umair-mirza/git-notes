@@ -19,40 +19,12 @@ import Switch from "@mui/material/Switch"
 import { visuallyHidden } from "@mui/utils"
 
 import { useSelector, useDispatch } from "react-redux"
-import { fetchNotes } from "../features/notes/notesSlice"
+import { useNavigate } from "react-router-dom"
+import { fetchNotes, reset } from "../features/notes/notesSlice"
 import Spinner from "./Spinner"
 
+import "./NoteTable.scss"
 import "./UserIcon.scss"
-
-function descendingComparator(a, b, orderBy) {
-  if (b[orderBy] < a[orderBy]) {
-    return -1
-  }
-  if (b[orderBy] > a[orderBy]) {
-    return 1
-  }
-  return 0
-}
-
-function getComparator(order, orderBy) {
-  return order === "desc"
-    ? (a, b) => descendingComparator(a, b, orderBy)
-    : (a, b) => -descendingComparator(a, b, orderBy)
-}
-
-// This method is created for cross-browser compatibility, if you don't
-// need to support IE11, you can use Array.prototype.sort() directly
-function stableSort(array, comparator) {
-  const stabilizedThis = array.map((el, index) => [el, index])
-  stabilizedThis.sort((a, b) => {
-    const order = comparator(a[0], b[0])
-    if (order !== 0) {
-      return order
-    }
-    return a[1] - b[1]
-  })
-  return stabilizedThis.map((el) => el[0])
-}
 
 const headCells = [
   {
@@ -123,7 +95,6 @@ function EnhancedTableHead(props) {
         {headCells.map((headCell) => (
           <TableCell
             key={headCell.id}
-            // align={headCell.numeric ? "right" : "left"}
             padding={"normal"}
             sortDirection={orderBy === headCell.id ? order : false}
           >
@@ -198,14 +169,19 @@ export default function EnhancedTable() {
   const [rowsPerPage, setRowsPerPage] = React.useState(10)
 
   const dispatch = useDispatch()
+  const navigate = useNavigate()
 
-  const { notes, isSuccess, isLoading, message } = useSelector(
+  const { notes, searchedNote, isSuccess, isLoading, message } = useSelector(
     (state) => state.notes
   )
 
   useEffect(() => {
     dispatch(fetchNotes({ currPage: page + 1, rowsPerPage: rowsPerPage }))
     console.log("page", page)
+
+    if (isSuccess) {
+      dispatch(reset())
+    }
   }, [dispatch, page, rowsPerPage])
 
   const handleRequestSort = (event, property) => {
@@ -236,10 +212,57 @@ export default function EnhancedTable() {
     setDense(event.target.checked)
   }
 
+  const noteHandler = (noteId) => {
+    navigate(`/notes/${noteId}`)
+  }
+
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - 3000) : 0
 
   const totalCount = 3000
+
+  const selectedNotes =
+    Object.keys(searchedNote).length > 0 && notes ? [searchedNote] : notes
+
+  //This will render the notes based on the data available
+  const renderNotes = () => {
+    if (isLoading && !notes && !searchedNote) {
+      return (
+        <TableBody>
+          <Spinner />
+        </TableBody>
+      )
+    } else {
+      return (
+        <TableBody>
+          {selectedNotes.map((note, index) => (
+            <TableRow key={note.id} hover>
+              <TableCell padding="checkbox">
+                <Checkbox color="primary" />
+              </TableCell>
+              <TableCell>
+                <img
+                  className="avatar"
+                  src={note.owner.avatar_url}
+                  alt="avatar"
+                />
+              </TableCell>
+              <TableCell>{note.owner.login}</TableCell>
+              <TableCell>{note.created_at}</TableCell>
+              <TableCell>{note.created_at}</TableCell>
+              <TableCell
+                className="select-cell"
+                onClick={() => noteHandler(note.id)}
+              >
+                {note.id}
+              </TableCell>
+              {/* <TableCell>AA</TableCell> */}
+            </TableRow>
+          ))}
+        </TableBody>
+      )
+    }
+  }
 
   return (
     <Box sx={{ width: "100%" }}>
@@ -259,27 +282,7 @@ export default function EnhancedTable() {
               onRequestSort={handleRequestSort}
               rowCount={notes.length}
             />
-            <TableBody>
-              {notes?.map((note, index) => (
-                <TableRow key={note.id} hover>
-                  <TableCell padding="checkbox">
-                    <Checkbox color="primary" />
-                  </TableCell>
-                  <TableCell>
-                    <img
-                      className="avatar"
-                      src={note.owner.avatar_url}
-                      alt="avatar"
-                    />
-                  </TableCell>
-                  <TableCell>{note.owner.login}</TableCell>
-                  <TableCell>{note.created_at}</TableCell>
-                  <TableCell>{note.created_at}</TableCell>
-                  <TableCell>{note.id}</TableCell>
-                  <TableCell>AA</TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
+            {renderNotes()}
           </Table>
         </TableContainer>
         <TablePagination

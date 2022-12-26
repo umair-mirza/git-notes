@@ -1,12 +1,13 @@
 import React, { useState, useEffect, useMemo } from "react"
 import { useSelector, useDispatch } from "react-redux"
 import { useNavigate } from "react-router-dom"
+import { Link } from "react-router-dom"
 import { login } from "../features/auth/authSlice"
-import { CiSearch } from "react-icons/ci"
+import AccountMenu from "./AccountMenu"
+import SearchBar from "./SearchBar"
 
 import "./Header.scss"
 import "../App.scss"
-import AccountMenu from "./AccountMenu"
 
 const Header = () => {
   const [tempCode, setTempCode] = useState("")
@@ -40,14 +41,11 @@ const Header = () => {
 
   return (
     <section className="header container">
-      <div className="logo">Emumba</div>
+      <div className="logo">
+        <Link to="/">Emumba</Link>
+      </div>
       <div className="top-right">
-        <div className="search">
-          <input className="searchbar" placeholder="Search Gists" />
-          <div className="search-icon">
-            <CiSearch size={20} />
-          </div>
-        </div>
+        <SearchBar />
         {user ? (
           <AccountMenu />
         ) : (

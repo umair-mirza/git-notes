@@ -4,6 +4,7 @@ import notesService from "./notesService"
 const initialState = {
   notes: [],
   note: {},
+  searchedNote: {},
   isSuccess: false,
   isLoading: false,
   isError: false,
@@ -19,6 +20,42 @@ export const fetchNotes = createAsyncThunk(
         pagesData.currPage,
         pagesData.rowsPerPage
       )
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString()
+      return thunkAPI.rejectWithValue(message)
+    }
+  }
+)
+
+//Fetch Single Note
+export const fetchNote = createAsyncThunk(
+  "notes/fetchNote",
+  async (noteId, thunkAPI) => {
+    try {
+      return await notesService.fetchNote(noteId)
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString()
+      return thunkAPI.rejectWithValue(message)
+    }
+  }
+)
+
+//Search a Note
+export const searchNote = createAsyncThunk(
+  "notes/searchNote",
+  async (noteId, thunkAPI) => {
+    try {
+      return await notesService.fetchNote(noteId)
     } catch (error) {
       const message =
         (error.response &&
@@ -53,6 +90,34 @@ export const notesSlice = createSlice({
         state.notes = action.payload
       })
       .addCase(fetchNotes.rejected, (state, action) => {
+        state.isLoading = false
+        state.isSuccess = false
+        state.isError = true
+        state.message = action.payload
+      })
+      .addCase(fetchNote.pending, (state) => {
+        state.isLoading = true
+      })
+      .addCase(fetchNote.fulfilled, (state, action) => {
+        state.isLoading = false
+        state.isSuccess = true
+        state.note = action.payload
+      })
+      .addCase(fetchNote.rejected, (state, action) => {
+        state.isLoading = false
+        state.isSuccess = false
+        state.isError = true
+        state.message = action.payload
+      })
+      .addCase(searchNote.pending, (state) => {
+        state.isLoading = true
+      })
+      .addCase(searchNote.fulfilled, (state, action) => {
+        state.isLoading = false
+        state.isSuccess = true
+        state.searchedNote = action.payload
+      })
+      .addCase(searchNote.rejected, (state, action) => {
         state.isLoading = false
         state.isSuccess = false
         state.isError = true

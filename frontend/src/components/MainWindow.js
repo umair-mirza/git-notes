@@ -1,4 +1,5 @@
 import React from "react"
+import { Routes, Route } from "react-router-dom"
 import NotesTable from "./NotesTable"
 
 import "../App.scss"
