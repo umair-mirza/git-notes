@@ -25,9 +25,22 @@ const fetchNote = async (id) => {
   }
 }
 
+//Fetch Loggedin user notes
+const fetchUserNotes = async (page, perPage, currentUser) => {
+  const response = await axios.get(
+    `https://api.github.com/users/${currentUser}/gists`
+  )
+
+  if (response.data) {
+    console.log("user gists list", response.data)
+    return response.data
+  }
+}
+
 const notesService = {
   fetchNotes,
   fetchNote,
+  fetchUserNotes,
 }
 
 export default notesService

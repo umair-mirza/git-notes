@@ -8,6 +8,7 @@ import PersonAdd from "@mui/icons-material/PersonAdd"
 import Logout from "@mui/icons-material/Logout"
 import ArticleIcon from "@mui/icons-material/Article"
 import StarIcon from "@mui/icons-material/Star"
+import NoteAddIcon from "@mui/icons-material/NoteAdd"
 import { useNavigate } from "react-router-dom"
 import { useSelector, useDispatch } from "react-redux"
 import { logout, reset } from "../features/auth/authSlice"
@@ -89,13 +90,13 @@ export default function AccountMenu() {
           <ListItemIcon>
             <ArticleIcon fontSize="small" />
           </ListItemIcon>
-          Your Gists
+          Your Notes
         </MenuItem>
         <MenuItem>
           <ListItemIcon>
-            <StarIcon fontSize="small" />
+            <NoteAddIcon fontSize="small" />
           </ListItemIcon>
-          Starred Gists
+          Create a Note
         </MenuItem>
         <Divider />
         <MenuItem>

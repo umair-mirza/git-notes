@@ -3,6 +3,7 @@ import notesService from "./notesService"
 
 const initialState = {
   notes: [],
+  userNotes: [],
   note: {},
   searchedNote: {},
   isSuccess: false,
@@ -68,11 +69,40 @@ export const searchNote = createAsyncThunk(
   }
 )
 
+// Fetch Logged in user notes
+export const fetchUserNotes = createAsyncThunk(
+  "notes/userNotes",
+  async (notesData, thunkAPI) => {
+    try {
+      return await notesService.fetchUserNotes(
+        notesData.currPage,
+        notesData.rowsPerPage,
+        notesData.currUser
+      )
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString()
+      return thunkAPI.rejectWithValue(message)
+    }
+  }
+)
+
 export const notesSlice = createSlice({
   name: "notes",
   initialState,
   reducers: {
-    reset: (state) => {
+    resetNotes: (state) => {
+      state.isLoading = false
+      state.isError = false
+      state.isSuccess = false
+      state.message = ""
+    },
+    resetSearch: (state) => {
+      state.searchedNote = {}
       state.isLoading = false
       state.isError = false
       state.isSuccess = false
@@ -123,8 +153,22 @@ export const notesSlice = createSlice({
         state.isError = true
         state.message = action.payload
       })
+      .addCase(fetchUserNotes.pending, (state) => {
+        state.isLoading = true
+      })
+      .addCase(fetchUserNotes.fulfilled, (state, action) => {
+        state.isLoading = false
+        state.isSuccess = true
+        state.userNotes = action.payload
+      })
+      .addCase(fetchUserNotes.rejected, (state, action) => {
+        state.isLoading = false
+        state.isSuccess = false
+        state.isError = true
+        state.message = action.payload
+      })
   },
 })
 
-export const { reset } = notesSlice.actions
+export const { resetNotes, resetSearch } = notesSlice.actions
 export default notesSlice.reducer

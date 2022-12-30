@@ -1,21 +1,21 @@
-import React, { useState, useEffect } from "react"
+import React, { useEffect } from "react"
 import { useSelector, useDispatch } from "react-redux"
 import { useParams } from "react-router-dom"
-import { format, formatDistance, subDays } from "date-fns"
+import { format } from "date-fns"
 import StarOutlineIcon from "@mui/icons-material/StarOutline"
 import ForkRightIcon from "@mui/icons-material/ForkRight"
 import CodeIcon from "@mui/icons-material/Code"
-import { fetchNote } from "../features/notes/notesSlice"
-import Spinner from "./Spinner"
+import { fetchNote, resetNotes } from "../features/notes/notesSlice"
+import Spinner from "../components/Spinner"
+import { toast } from "react-toastify"
 
 import "../App.scss"
 import "./Note.scss"
-import "./UserIcon.scss"
-import "./Spinner.scss"
+import "../components/UserIcon.scss"
+import "../components/Spinner.scss"
 
 const Note = () => {
   const dispatch = useDispatch()
-  const params = useParams()
 
   const { note, isSuccess, isLoading, isError, message } = useSelector(
     (state) => state.notes
@@ -25,14 +25,19 @@ const Note = () => {
 
   useEffect(() => {
     if (isError) {
-      console.log("message", message)
+      toast.error(message)
     }
-    dispatch(fetchNote(noteId))
-  }, [noteId, isError, isSuccess])
 
-  if (isLoading) {
-    return <Spinner />
-  }
+    if (isLoading) {
+      return <Spinner />
+    }
+
+    if (isSuccess) {
+      dispatch(resetNotes())
+    }
+
+    dispatch(fetchNote(noteId))
+  }, [noteId])
 
   return (
     <>
@@ -50,7 +55,9 @@ const Note = () => {
                 </div>
                 <div className="user-desc">
                   <div className="user-heading">
-                    {`${note.owner.login} / ${note.id}`}
+                    {`${note.owner.login} / ${
+                      Object.values(note.files)[0].filename
+                    }`}
                   </div>
                   <div className="user-sub-heading">
                     {format(new Date(note.created_at), "p, dd/MM/yyyy")}

@@ -1,48 +1,51 @@
 import React, { useState, useEffect, useMemo } from "react"
 import { useSelector, useDispatch } from "react-redux"
 import { useNavigate } from "react-router-dom"
-import { Link } from "react-router-dom"
 import { login } from "../features/auth/authSlice"
 import AccountMenu from "./AccountMenu"
 import SearchBar from "./SearchBar"
+import { reset } from "../features/auth/authSlice"
 
 import "./Header.scss"
 import "../App.scss"
 
 const Header = () => {
-  const [tempCode, setTempCode] = useState("")
+  const [tempCode, setTempCode] = useState(null)
 
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
-  const codeParam = useMemo(() => ({ code: tempCode }), [tempCode]) //useMemo ensures that the state’s reference value does not change during each render
-
   const { user, isSuccess, message } = useSelector((state) => state.auth)
 
+  //Constants
+  const clientId = process.env.REACT_APP_CLIENT_ID
+  const redirectURI = process.env.REACT_APP_REDIRECT_URI
+  const GITHUB_LOGIN_URL = `https://github.com/login/oauth/authorize?client_id=${clientId}&scope=user&redirect_uri=${redirectURI}`
+
   useEffect(() => {
-    if (isSuccess && user) {
-      navigate("/")
+    if (user) {
+      dispatch(reset())
     } else {
       const queryString = window.location.search
       const urlParams = new URLSearchParams(queryString)
       const codeExists = urlParams.get("code")
 
       if (codeExists) {
-        setTempCode(codeExists)
-        console.log(codeParam)
-        dispatch(login(codeParam))
+        setTempCode({ code: codeExists })
       }
+      dispatch(login(tempCode))
+      navigate("/")
     }
-  }, [tempCode, codeParam, user, isSuccess, message, dispatch, navigate])
+  }, [tempCode])
 
-  const clientId = process.env.REACT_APP_CLIENT_ID
-  const redirectURI = process.env.REACT_APP_REDIRECT_URI
-  const GITHUB_LOGIN_URL = `https://github.com/login/oauth/authorize?client_id=${clientId}&scope=user&redirect_uri=${redirectURI}`
+  const redirectHome = () => {
+    navigate("/")
+  }
 
   return (
     <section className="header container">
-      <div className="logo">
-        <Link to="/">Emumba</Link>
+      <div onClick={redirectHome} className="logo">
+        Emumba
       </div>
       <div className="top-right">
         <SearchBar />

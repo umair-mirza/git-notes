@@ -1,7 +1,9 @@
-import React, { useState } from "react"
-import { CiSearch } from "react-icons/ci"
+import React, { useState, useEffect } from "react"
 import { useSelector, useDispatch } from "react-redux"
-import { searchNote } from "../features/notes/notesSlice"
+import { useNavigate } from "react-router-dom"
+import { toast } from "react-toastify"
+import { CiSearch } from "react-icons/ci"
+import { searchNote, resetSearch } from "../features/notes/notesSlice"
 
 import "./Header.scss"
 
@@ -9,6 +11,17 @@ const SearchBar = () => {
   const [searchInput, setSearchInput] = useState("")
 
   const dispatch = useDispatch()
+  const navigate = useNavigate()
+
+  const { isError, message } = useSelector((state) => state.notes)
+
+  useEffect(() => {
+    if (isError) {
+      setSearchInput("")
+      toast.error(message)
+      dispatch(resetSearch())
+    }
+  }, [isError, message])
 
   const handleSearchInput = (e) => {
     setSearchInput(e.target.value)
@@ -16,6 +29,8 @@ const SearchBar = () => {
 
   const handleSearch = () => {
     dispatch(searchNote(searchInput))
+    navigate("/")
+    setSearchInput("")
   }
 
   return (
