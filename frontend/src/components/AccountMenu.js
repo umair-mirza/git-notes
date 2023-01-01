@@ -1,4 +1,5 @@
 import * as React from "react"
+import { Link } from "react-router-dom"
 import Menu from "@mui/material/Menu"
 import MenuItem from "@mui/material/MenuItem"
 import ListItemIcon from "@mui/material/ListItemIcon"
@@ -7,7 +8,6 @@ import Tooltip from "@mui/material/Tooltip"
 import PersonAdd from "@mui/icons-material/PersonAdd"
 import Logout from "@mui/icons-material/Logout"
 import ArticleIcon from "@mui/icons-material/Article"
-import StarIcon from "@mui/icons-material/Star"
 import NoteAddIcon from "@mui/icons-material/NoteAdd"
 import { useNavigate } from "react-router-dom"
 import { useSelector, useDispatch } from "react-redux"
@@ -87,16 +87,20 @@ export default function AccountMenu() {
         <MenuItem>{user.login}</MenuItem>
         <Divider />
         <MenuItem>
-          <ListItemIcon>
-            <ArticleIcon fontSize="small" />
-          </ListItemIcon>
-          Your Notes
+          <Link to="/my-notes">
+            <ListItemIcon>
+              <ArticleIcon fontSize="small" />
+            </ListItemIcon>
+            Your Notes
+          </Link>
         </MenuItem>
         <MenuItem>
-          <ListItemIcon>
-            <NoteAddIcon fontSize="small" />
-          </ListItemIcon>
-          Create a Note
+          <Link to="/create-note">
+            <ListItemIcon>
+              <NoteAddIcon fontSize="small" />
+            </ListItemIcon>
+            Create a Note
+          </Link>
         </MenuItem>
         <Divider />
         <MenuItem>

@@ -74,11 +74,32 @@ export const fetchUserNotes = createAsyncThunk(
   "notes/userNotes",
   async (notesData, thunkAPI) => {
     try {
+      const token = thunkAPI.getState().auth.user.accessToken
       return await notesService.fetchUserNotes(
         notesData.currPage,
         notesData.rowsPerPage,
-        notesData.currUser
+        notesData.currUser,
+        token
       )
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString()
+      return thunkAPI.rejectWithValue(message)
+    }
+  }
+)
+
+//Create new Note
+export const createNote = createAsyncThunk(
+  "notes/createNote",
+  async (noteData, thunkAPI) => {
+    try {
+      const token = thunkAPI.getState().auth.user.accessToken
+      return await notesService.createNote(noteData, token)
     } catch (error) {
       const message =
         (error.response &&
@@ -121,7 +142,6 @@ export const notesSlice = createSlice({
       })
       .addCase(fetchNotes.rejected, (state, action) => {
         state.isLoading = false
-        state.isSuccess = false
         state.isError = true
         state.message = action.payload
       })
@@ -135,7 +155,6 @@ export const notesSlice = createSlice({
       })
       .addCase(fetchNote.rejected, (state, action) => {
         state.isLoading = false
-        state.isSuccess = false
         state.isError = true
         state.message = action.payload
       })
@@ -149,7 +168,6 @@ export const notesSlice = createSlice({
       })
       .addCase(searchNote.rejected, (state, action) => {
         state.isLoading = false
-        state.isSuccess = false
         state.isError = true
         state.message = action.payload
       })
@@ -163,7 +181,18 @@ export const notesSlice = createSlice({
       })
       .addCase(fetchUserNotes.rejected, (state, action) => {
         state.isLoading = false
-        state.isSuccess = false
+        state.isError = true
+        state.message = action.payload
+      })
+      .addCase(createNote.pending, (state) => {
+        state.isLoading = true
+      })
+      .addCase(createNote.fulfilled, (state) => {
+        state.isLoading = false
+        state.isSuccess = true
+      })
+      .addCase(createNote.rejected, (state, action) => {
+        state.isLoading = false
         state.isError = true
         state.message = action.payload
       })

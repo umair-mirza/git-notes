@@ -1,6 +1,4 @@
-import React from "react"
-import { useSelector, useDispatch } from "react-redux"
-import { useNavigate } from "react-router-dom"
+import React, { useEffect } from "react"
 import PropTypes from "prop-types"
 import { alpha } from "@mui/material/styles"
 import Box from "@mui/material/Box"
@@ -17,11 +15,19 @@ import Typography from "@mui/material/Typography"
 import Paper from "@mui/material/Paper"
 import Checkbox from "@mui/material/Checkbox"
 import { visuallyHidden } from "@mui/utils"
-import Spinner from "./Spinner"
+
+import { useSelector, useDispatch } from "react-redux"
+import { useNavigate } from "react-router-dom"
+import {
+  fetchNotes,
+  resetNotes,
+  resetSearch,
+} from "../features/notes/notesSlice"
+import Spinner from "../components/Spinner"
 
 import "./NoteTable.scss"
-import "./UserIcon.scss"
-import "./Spinner.scss"
+import "../components/UserIcon.scss"
+import "../components/Spinner.scss"
 
 const headCells = [
   {
@@ -150,24 +156,30 @@ EnhancedTableToolbar.propTypes = {
   numSelected: PropTypes.number.isRequired,
 }
 
-//Main Component
-export default function EnhancedTable({
-  userNotes,
-  page,
-  rowsPerPage,
-  setPage,
-  setRowsPerPage,
-  isLoading,
-  totalCount,
-  resetSearch,
-  searchedNote,
-}) {
+//Main component
+export default function NotesTable() {
   const [order, setOrder] = React.useState("asc")
   const [orderBy, setOrderBy] = React.useState("calories")
   const [selected, setSelected] = React.useState([])
+  const [page, setPage] = React.useState(0)
+  const [rowsPerPage, setRowsPerPage] = React.useState(10)
 
   const dispatch = useDispatch()
   const navigate = useNavigate()
+
+  const { notes, searchedNote, isSuccess, isLoading, message } = useSelector(
+    (state) => state.notes
+  )
+
+  useEffect(() => {
+    dispatch(fetchNotes({ currPage: page + 1, rowsPerPage: rowsPerPage }))
+
+    return () => {
+      if (isSuccess) {
+        dispatch(resetNotes())
+      }
+    }
+  }, [dispatch, page, rowsPerPage])
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc"
@@ -177,7 +189,7 @@ export default function EnhancedTable({
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelected = userNotes.map((n) => n.login)
+      const newSelected = notes.map((n) => n.login)
       setSelected(newSelected)
       return
     }
@@ -197,8 +209,17 @@ export default function EnhancedTable({
     navigate(`/notes/${noteId}`)
   }
 
+  // Avoid a layout jump when reaching the last page with empty rows.
+  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - 3000) : 0
+
+  const totalCount = 3000
+
+  const selectedNotes =
+    Object.keys(searchedNote).length > 0 && notes ? [searchedNote] : notes
+
+  //This will render the notes based on the data available
   const renderNotes = () => {
-    if (isLoading && !userNotes && !searchedNote) {
+    if (isLoading && !notes && !searchedNote) {
       return (
         <TableBody>
           <Spinner />
@@ -207,7 +228,7 @@ export default function EnhancedTable({
     } else {
       return (
         <TableBody>
-          {userNotes.map((note, index) => (
+          {selectedNotes.map((note, index) => (
             <TableRow key={note.id} hover>
               <TableCell padding="checkbox">
                 <Checkbox color="primary" />
@@ -221,7 +242,7 @@ export default function EnhancedTable({
               </TableCell>
               <TableCell>{note.owner.login}</TableCell>
               <TableCell>{note.created_at}</TableCell>
-              <TableCell>{note.created_at}</TableCell>
+              <TableCell>{note.updated_at}</TableCell>
               <TableCell
                 className="select-cell"
                 onClick={() => noteHandler(note.id)}
@@ -241,47 +262,49 @@ export default function EnhancedTable({
   }
 
   return (
-    <Box sx={{ width: "100%" }}>
-      <Paper sx={{ width: "100%", mb: 2 }}>
-        <EnhancedTableToolbar numSelected={selected.length} />
-        <TableContainer>
-          <Table
-            sx={{ minWidth: 750 }}
-            aria-labelledby="tableTitle"
-            size={"medium"}
-          >
-            <EnhancedTableHead
-              numSelected={selected.length}
-              order={order}
-              orderBy={orderBy}
-              onSelectAllClick={handleSelectAllClick}
-              onRequestSort={handleRequestSort}
-              rowCount={userNotes.length}
+    <div className="container top-bottom-space">
+      <Box sx={{ width: "100%" }}>
+        <Paper sx={{ width: "100%", mb: 2 }}>
+          <EnhancedTableToolbar numSelected={selected.length} />
+          <TableContainer>
+            <Table
+              sx={{ minWidth: 750 }}
+              aria-labelledby="tableTitle"
+              size={"medium"}
+            >
+              <EnhancedTableHead
+                numSelected={selected.length}
+                order={order}
+                orderBy={orderBy}
+                onSelectAllClick={handleSelectAllClick}
+                onRequestSort={handleRequestSort}
+                rowCount={notes.length}
+              />
+              {renderNotes()}
+            </Table>
+          </TableContainer>
+          {selectedNotes.length > 1 && (
+            <TablePagination
+              rowsPerPageOptions={[10, 20, 30]}
+              component="div"
+              count={totalCount}
+              rowsPerPage={rowsPerPage}
+              page={page}
+              showFirstButton
+              showLastButton
+              onPageChange={handleChangePage}
+              onRowsPerPageChange={handleChangeRowsPerPage}
             />
-            {renderNotes()}
-          </Table>
-        </TableContainer>
-        {userNotes.length > 1 && (
-          <TablePagination
-            rowsPerPageOptions={[10, 20, 30]}
-            component="div"
-            count={totalCount}
-            rowsPerPage={rowsPerPage}
-            page={page}
-            showFirstButton
-            showLastButton
-            onPageChange={handleChangePage}
-            onRowsPerPageChange={handleChangeRowsPerPage}
-          />
+          )}
+        </Paper>
+        {Object.keys(searchedNote).length > 0 && (
+          <div>
+            <button onClick={allResultsHandler} className="primary-button">
+              Back to All Results
+            </button>
+          </div>
         )}
-      </Paper>
-      {Object.keys(searchedNote).length > 0 && (
-        <div>
-          <button onClick={allResultsHandler} className="primary-button">
-            Back to All Results
-          </button>
-        </div>
-      )}
-    </Box>
+      </Box>
+    </div>
   )
 }

@@ -26,10 +26,14 @@ const fetchNote = async (id) => {
 }
 
 //Fetch Loggedin user notes
-const fetchUserNotes = async (page, perPage, currentUser) => {
-  const response = await axios.get(
-    `https://api.github.com/users/${currentUser}/gists`
-  )
+const fetchUserNotes = async (page, perPage, user, token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  }
+
+  const response = await axios.get(API_URL, config)
 
   if (response.data) {
     console.log("user gists list", response.data)
@@ -37,10 +41,25 @@ const fetchUserNotes = async (page, perPage, currentUser) => {
   }
 }
 
+//Create a Note
+const createNote = async (noteData, token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  }
+
+  const response = await axios.post(API_URL, noteData, config)
+
+  console.log(response.data)
+  return response.data
+}
+
 const notesService = {
   fetchNotes,
   fetchNote,
   fetchUserNotes,
+  createNote,
 }
 
 export default notesService
