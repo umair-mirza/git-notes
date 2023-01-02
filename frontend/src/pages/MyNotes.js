@@ -1,11 +1,7 @@
 import React, { useEffect } from "react"
 import { useSelector, useDispatch } from "react-redux"
 import { Link, useNavigate } from "react-router-dom"
-import {
-  fetchUserNotes,
-  resetNotes,
-  fetchNotes,
-} from "../features/notes/notesSlice"
+import { fetchUserNotes, resetNotes } from "../features/notes/notesSlice"
 import Spinner from "../components/Spinner"
 import { toast } from "react-toastify"
 

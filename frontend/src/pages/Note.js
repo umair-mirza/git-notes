@@ -1,11 +1,14 @@
 import React, { useEffect } from "react"
 import { useSelector, useDispatch } from "react-redux"
 import { useParams } from "react-router-dom"
+import { fetchNote, resetNotes } from "../features/notes/notesSlice"
+
 import { format } from "date-fns"
 import StarOutlineIcon from "@mui/icons-material/StarOutline"
 import ForkRightIcon from "@mui/icons-material/ForkRight"
+import DeleteIcon from "@mui/icons-material/Delete"
 import CodeIcon from "@mui/icons-material/Code"
-import { fetchNote, resetNotes } from "../features/notes/notesSlice"
+
 import Spinner from "../components/Spinner"
 import { toast } from "react-toastify"
 
@@ -20,6 +23,8 @@ const Note = () => {
   const { note, isSuccess, isLoading, isError, message } = useSelector(
     (state) => state.notes
   )
+
+  const { user } = useSelector((state) => state.auth)
 
   const { noteId } = useParams()
 
@@ -38,6 +43,20 @@ const Note = () => {
 
     dispatch(fetchNote(noteId))
   }, [noteId])
+
+  //Handle Fork
+  const forkHandler = () => {
+    if (!user) {
+      toast.error("You are not logged in")
+    }
+  }
+
+  //Handle Star
+  const starHandler = () => {
+    if (!user) {
+      toast.error("You are not logged in")
+    }
+  }
 
   return (
     <>
@@ -66,12 +85,18 @@ const Note = () => {
                 </div>
               </div>
               <div className="note-features">
-                <div className="note-feature">
+                {user && user.login === note.owner.login && (
+                  <div className="note-feature">
+                    <DeleteIcon />
+                    <div>Delete</div>
+                  </div>
+                )}
+                <div onClick={starHandler} className="note-feature">
                   <StarOutlineIcon />
                   <div>Star</div>
                   <span className="feature-count">0</span>
                 </div>
-                <div className="note-feature">
+                <div onClick={forkHandler} className="note-feature">
                   <ForkRightIcon />
                   <div>Fork</div>
                   <span className="feature-count">0</span>
