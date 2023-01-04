@@ -1,8 +1,13 @@
 import React, { useEffect, useState } from "react"
 import { useSelector, useDispatch } from "react-redux"
-import { useNavigate } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import { toast } from "react-toastify"
-import { createNote, resetNotes } from "../features/notes/notesSlice"
+import {
+  createNote,
+  resetNotes,
+  fetchNote,
+  updateNote,
+} from "../features/notes/notesSlice"
 
 import Spinner from "../components/Spinner"
 import { Button, TextField } from "@mui/material"
@@ -21,13 +26,52 @@ const CreateNote = () => {
     },
   ])
 
-  const { user } = useSelector((state) => state.auth)
-  const { isLoading, isSuccess, isError, message } = useSelector(
+  const { note, isLoading, isSuccess, isError, message } = useSelector(
     (state) => state.notes
   )
 
   const dispatch = useDispatch()
   const navigate = useNavigate()
+
+  const { noteId } = useParams()
+
+  //For Editing / Updating
+  useEffect(() => {
+    if (noteId) {
+      dispatch(fetchNote(noteId))
+
+      setNoteDescription(note.description)
+
+      //Convert files object to array
+      const noteData = Object.values(note.files)
+
+      const noteArr = noteData.map((note) => {
+        return {
+          fileName: note.filename,
+          content: note.content,
+        }
+      })
+
+      setNoteData(noteArr)
+    }
+
+    dispatch(resetNotes())
+  }, [noteId])
+
+  useEffect(() => {
+    if (isError) {
+      toast.error(message)
+    }
+
+    if (isSuccess) {
+      if (!noteId) {
+        dispatch(resetNotes())
+        navigate("/")
+      }
+    }
+
+    dispatch(resetNotes())
+  }, [isError, dispatch, message, isSuccess, noteId])
 
   const handleChange = (index, e) => {
     let data = [...noteData]
@@ -49,6 +93,7 @@ const CreateNote = () => {
   }
 
   //Final Notes Data that will be posted to the API endpoint in the correct format
+
   const files = {}
 
   noteData.forEach((note) => {
@@ -62,28 +107,19 @@ const CreateNote = () => {
     files,
   }
 
-  useEffect(() => {
-    if (isError) {
-      toast.error()
-    }
-
-    if (isSuccess) {
-      dispatch(resetNotes())
-    }
-
-    if (isLoading) {
-      return <Spinner />
-    }
-
-    dispatch(resetNotes())
-  }, [isError, dispatch, message, isSuccess])
-
   //Form Submission
   const submitForm = (e) => {
     e.preventDefault()
-    console.log(finalData)
+    if (noteId) {
+      console.log(noteId, finalData)
+      dispatch(updateNote(noteId, finalData))
+    } else {
+      dispatch(createNote(finalData))
+    }
+  }
 
-    dispatch(createNote(finalData))
+  if (isLoading) {
+    return <Spinner />
   }
 
   return (
@@ -153,7 +189,7 @@ const CreateNote = () => {
           color="success"
           sx={{ my: "20px" }}
         >
-          Create new Note
+          {noteId ? "Update Note" : "Create New Note"}
         </Button>
       </form>
     </div>

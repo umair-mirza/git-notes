@@ -18,7 +18,11 @@ function App() {
           <Route path="/" element={<NotesTable />} />
           <Route path="/my-notes" element={<MyNotes />} />
           <Route path="/notes/:noteId" element={<Note />} />
-          <Route path="/create-note" element={<CreateNote />} />
+          <Route
+            path="/create-note"
+            element={<CreateNote key={window.location.pathname} />}
+          />
+          <Route path="/edit/:noteId" element={<CreateNote />} />
         </Routes>
       </Router>
       <ToastContainer />

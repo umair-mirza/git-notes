@@ -32,14 +32,12 @@ const MyNotes = () => {
   const { user } = useSelector((state) => state.auth)
 
   useEffect(() => {
-    return () => {
-      if (isSuccess) {
-        dispatch(resetNotes())
-      }
+    if (isSuccess) {
+      dispatch(resetNotes())
+    }
 
-      if (isError) {
-        toast.error(message)
-      }
+    if (isError) {
+      toast.error(message)
     }
   }, [dispatch, isSuccess, isError, message])
 
@@ -64,6 +62,10 @@ const MyNotes = () => {
 
   const noteHandler = (noteId) => {
     navigate(`/notes/${noteId}`)
+  }
+
+  if (isLoading) {
+    return <Spinner />
   }
 
   return (
@@ -112,7 +114,7 @@ const MyNotes = () => {
             </TableBody>
           </Table>
         </TableContainer>
-        {userNotes.length > 1 && (
+        {userNotes.length > rowsPerPage && (
           <TablePagination
             component="div"
             count={100}

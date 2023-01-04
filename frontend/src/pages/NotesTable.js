@@ -35,17 +35,19 @@ const NotesTable = () => {
 
   //UseEffect
   useEffect(() => {
-    dispatch(fetchNotes({ currPage: page + 1, rowsPerPage: rowsPerPage }))
-
-    return () => {
-      if (isSuccess) {
-        dispatch(resetNotes())
-      }
-
-      if (isError) {
-        toast.error(message)
-      }
+    if (isSuccess) {
+      dispatch(resetNotes())
     }
+
+    if (isError) {
+      toast.error(message)
+    }
+
+    dispatch(resetNotes())
+  }, [dispatch, page, rowsPerPage, isSuccess, isError, message])
+
+  useEffect(() => {
+    dispatch(fetchNotes({ currPage: page + 1, rowsPerPage: rowsPerPage }))
   }, [dispatch, page, rowsPerPage])
 
   //Page changer for pagination

@@ -55,11 +55,124 @@ const createNote = async (noteData, token) => {
   return response.data
 }
 
+//Delete a note
+const deleteNote = async (noteId, token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  }
+
+  const response = await axios.delete(`${API_URL}/${noteId}`, config)
+
+  console.log("deletion response", response.data)
+  return response.data
+}
+
+//Update a note
+const updateNote = async (noteId, updatedNote, token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  }
+
+  const response = await axios.patch(
+    `${API_URL}/${noteId}`,
+    { noteId: noteId, updatedNote: updatedNote },
+    config
+  )
+
+  console.log("response", response.data)
+
+  return response.data
+}
+
+//Check Starred Status
+const checkStar = async (noteId, token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  }
+
+  try {
+    const response = await axios.get(`${API_URL}/${noteId}/star`, config)
+
+    if (response.status === 204) {
+      return true
+    }
+  } catch (error) {
+    if (error.response.status === 404) {
+      return false
+    }
+  }
+}
+
+//Star a Note
+const starNote = async (noteId, token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Length": "0",
+    },
+  }
+
+  try {
+    const response = await axios.put(
+      `${API_URL}/${noteId}/star`,
+      { noteId: noteId },
+      config
+    )
+
+    console.log("request sent")
+
+    if (response.status === 204) {
+      console.log("working", response)
+      return true
+    }
+  } catch (error) {
+    if (error.response.status === 404) {
+      console.log(error)
+    }
+  }
+}
+
+//Unstar a note
+
+const unStarNote = async (noteId, token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  }
+
+  try {
+    const response = await axios.delete(`${API_URL}/${noteId}/star`, config)
+
+    console.log("request sent")
+
+    if (response.status === 204) {
+      console.log("unstar working", response)
+      return false
+    }
+  } catch (error) {
+    if (error.response.status === 404) {
+      console.log(error)
+    }
+  }
+}
+
 const notesService = {
   fetchNotes,
   fetchNote,
   fetchUserNotes,
   createNote,
+  deleteNote,
+  updateNote,
+  checkStar,
+  starNote,
+  unStarNote,
 }
 
 export default notesService

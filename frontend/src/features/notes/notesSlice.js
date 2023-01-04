@@ -9,6 +9,7 @@ const initialState = {
   isSuccess: false,
   isLoading: false,
   isError: false,
+  isStarred: false,
   message: "",
 }
 
@@ -112,6 +113,101 @@ export const createNote = createAsyncThunk(
   }
 )
 
+//Delete a Note
+export const deleteNote = createAsyncThunk(
+  "notes/deleteNote",
+  async (noteId, thunkAPI) => {
+    try {
+      const token = thunkAPI.getState().auth.user.accessToken
+      return await notesService.deleteNote(noteId, token)
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString()
+      return thunkAPI.rejectWithValue(message)
+    }
+  }
+)
+
+//Update a note
+export const updateNote = createAsyncThunk(
+  "notes/updateNote",
+  async (noteId, updatedNote, thunkAPI) => {
+    try {
+      const token = thunkAPI.getState().auth.user.accessToken
+      return await notesService.updateNote(noteId, updatedNote, token)
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString()
+      return thunkAPI.rejectWithValue(message)
+    }
+  }
+)
+
+//Check Star Status
+export const checkStar = createAsyncThunk(
+  "notes/checkStar",
+  async (noteId, thunkAPI) => {
+    try {
+      const token = thunkAPI.getState().auth.user.accessToken
+      return await notesService.checkStar(noteId, token)
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString()
+      return thunkAPI.rejectWithValue(message)
+    }
+  }
+)
+
+//Star a Note
+export const starNote = createAsyncThunk(
+  "notes/starNote",
+  async (noteId, thunkAPI) => {
+    try {
+      const token = thunkAPI.getState().auth.user.accessToken
+      return await notesService.starNote(noteId, token)
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString()
+      return thunkAPI.rejectWithValue(message)
+    }
+  }
+)
+
+//UnStar a Note
+export const unStarNote = createAsyncThunk(
+  "notes/unStarNote",
+  async (noteId, thunkAPI) => {
+    try {
+      const token = thunkAPI.getState().auth.user.accessToken
+      return await notesService.unStarNote(noteId, token)
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString()
+      return thunkAPI.rejectWithValue(message)
+    }
+  }
+)
+
 export const notesSlice = createSlice({
   name: "notes",
   initialState,
@@ -128,6 +224,11 @@ export const notesSlice = createSlice({
       state.isError = false
       state.isSuccess = false
       state.message = ""
+    },
+    removeNote: (state, action) => {
+      const noteId = action.payload
+      state.userNotes = state.userNotes.filter((note) => note.id !== noteId)
+      console.log(state.userNotes)
     },
   },
   extraReducers: (builder) => {
@@ -196,8 +297,71 @@ export const notesSlice = createSlice({
         state.isError = true
         state.message = action.payload
       })
+      .addCase(deleteNote.pending, (state) => {
+        state.isLoading = true
+      })
+      .addCase(deleteNote.fulfilled, (state) => {
+        state.isLoading = false
+        state.isSuccess = true
+      })
+      .addCase(deleteNote.rejected, (state, action) => {
+        state.isLoading = false
+        state.isError = true
+        state.message = action.payload
+      })
+      .addCase(checkStar.pending, (state) => {
+        state.isLoading = true
+      })
+      .addCase(checkStar.fulfilled, (state, action) => {
+        state.isLoading = false
+        state.isSuccess = true
+        state.isStarred = action.payload
+      })
+      .addCase(checkStar.rejected, (state, action) => {
+        state.isLoading = false
+        state.isError = true
+        state.message = action.payload
+      })
+      .addCase(starNote.pending, (state) => {
+        state.isLoading = true
+      })
+      .addCase(starNote.fulfilled, (state, action) => {
+        state.isLoading = false
+        state.isSuccess = true
+        state.isStarred = action.payload
+      })
+      .addCase(starNote.rejected, (state, action) => {
+        state.isLoading = false
+        state.isError = true
+        state.message = action.payload
+      })
+      .addCase(unStarNote.pending, (state) => {
+        state.isLoading = true
+      })
+      .addCase(unStarNote.fulfilled, (state, action) => {
+        state.isLoading = false
+        state.isSuccess = true
+        state.isStarred = action.payload
+      })
+      .addCase(unStarNote.rejected, (state, action) => {
+        state.isLoading = false
+        state.isError = true
+        state.message = action.payload
+      })
+      .addCase(updateNote.pending, (state) => {
+        state.isLoading = true
+      })
+      .addCase(updateNote.fulfilled, (state) => {
+        state.isLoading = false
+        state.isSuccess = true
+      })
+      .addCase(updateNote.rejected, (state, action) => {
+        state.isLoading = false
+        state.isError = true
+        state.message = action.payload
+      })
   },
 })
 
-export const { resetNotes, resetSearch } = notesSlice.actions
+export const { resetNotes, resetSearch, removeNote } = notesSlice.actions
 export default notesSlice.reducer
