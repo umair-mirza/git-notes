@@ -13,9 +13,9 @@ import TableContainer from "@mui/material/TableContainer"
 import TableHead from "@mui/material/TableHead"
 import TableRow from "@mui/material/TableRow"
 import Paper from "@mui/material/Paper"
-import TablePagination from "@mui/material/TablePagination"
+// import TablePagination from "@mui/material/TablePagination"
 
-import "../components/Spinner.scss"
+import "../components/Spinner.css"
 import "./MyNotes.scss"
 
 const MyNotes = () => {
@@ -114,7 +114,7 @@ const MyNotes = () => {
             </TableBody>
           </Table>
         </TableContainer>
-        {userNotes.length > rowsPerPage && (
+        {/* {userNotes.length > rowsPerPage && (
           <TablePagination
             component="div"
             count={100}
@@ -123,7 +123,7 @@ const MyNotes = () => {
             rowsPerPage={rowsPerPage}
             onRowsPerPageChange={handleChangeRowsPerPage}
           />
-        )}
+        )} */}
       </Box>
       <div className="back-button">
         <Link to="/">

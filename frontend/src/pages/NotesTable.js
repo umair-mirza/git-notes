@@ -21,7 +21,7 @@ import TablePagination from "@mui/material/TablePagination"
 
 import "./NoteTable.scss"
 import "../components/UserIcon.scss"
-import "../components/Spinner.scss"
+import "../components/Spinner.css"
 
 const NotesTable = () => {
   const [page, setPage] = React.useState(0)
@@ -78,6 +78,10 @@ const NotesTable = () => {
     navigate("/")
   }
 
+  if (isLoading) {
+    return <Spinner />
+  }
+
   return (
     <div className="container top-bottom-space">
       <Box sx={{ width: "100%" }}>
@@ -103,34 +107,30 @@ const NotesTable = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {isLoading ? (
-                <Spinner />
-              ) : (
-                selectedNotes.map((note) => (
-                  <TableRow
-                    key={note.id}
-                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+              {selectedNotes?.map((note) => (
+                <TableRow
+                  key={note.id}
+                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                >
+                  <TableCell align="left">
+                    <img
+                      className="avatar"
+                      src={note.owner.avatar_url}
+                      alt="avatar"
+                    />
+                  </TableCell>
+                  <TableCell align="left">{note.owner.login}</TableCell>
+                  <TableCell align="left">{note.created_at}</TableCell>
+                  <TableCell align="left">{note.updated_at}</TableCell>
+                  <TableCell
+                    align="left"
+                    className="select-cell"
+                    onClick={() => noteHandler(note.id)}
                   >
-                    <TableCell align="left">
-                      <img
-                        className="avatar"
-                        src={note.owner.avatar_url}
-                        alt="avatar"
-                      />
-                    </TableCell>
-                    <TableCell align="left">{note.owner.login}</TableCell>
-                    <TableCell align="left">{note.created_at}</TableCell>
-                    <TableCell align="left">{note.updated_at}</TableCell>
-                    <TableCell
-                      align="left"
-                      className="select-cell"
-                      onClick={() => noteHandler(note.id)}
-                    >
-                      {note.id}
-                    </TableCell>
-                  </TableRow>
-                ))
-              )}
+                    {note.id}
+                  </TableCell>
+                </TableRow>
+              ))}
             </TableBody>
           </Table>
         </TableContainer>

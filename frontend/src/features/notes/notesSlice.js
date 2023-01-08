@@ -10,6 +10,8 @@ const initialState = {
   isLoading: false,
   isError: false,
   isStarred: false,
+  isCreated: false,
+  isUpdated: false,
   message: "",
 }
 
@@ -135,10 +137,10 @@ export const deleteNote = createAsyncThunk(
 //Update a note
 export const updateNote = createAsyncThunk(
   "notes/updateNote",
-  async (noteId, updatedNote, thunkAPI) => {
+  async (updatedData, thunkAPI) => {
     try {
       const token = thunkAPI.getState().auth.user.accessToken
-      return await notesService.updateNote(noteId, updatedNote, token)
+      return await notesService.updateNote(updatedData, token)
     } catch (error) {
       const message =
         (error.response &&
@@ -217,6 +219,8 @@ export const notesSlice = createSlice({
       state.isError = false
       state.isSuccess = false
       state.message = ""
+      state.isUpdated = false
+      state.isCreated = false
     },
     resetSearch: (state) => {
       state.searchedNote = {}
@@ -290,7 +294,7 @@ export const notesSlice = createSlice({
       })
       .addCase(createNote.fulfilled, (state) => {
         state.isLoading = false
-        state.isSuccess = true
+        state.isCreated = true
       })
       .addCase(createNote.rejected, (state, action) => {
         state.isLoading = false
@@ -353,7 +357,7 @@ export const notesSlice = createSlice({
       })
       .addCase(updateNote.fulfilled, (state) => {
         state.isLoading = false
-        state.isSuccess = true
+        state.isUpdated = true
       })
       .addCase(updateNote.rejected, (state, action) => {
         state.isLoading = false

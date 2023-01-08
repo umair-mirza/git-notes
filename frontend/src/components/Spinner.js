@@ -1,9 +1,9 @@
-import "./Spinner.scss"
+import "./Spinner.css"
 
 const Spinner = () => {
   return (
-    <div className="loadingSpinnerContainer">
-      <div className="loadingSpipnner"></div>
+    <div className="spinner-container">
+      <div className="loading-spinner"></div>
     </div>
   )
 }

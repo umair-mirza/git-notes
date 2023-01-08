@@ -70,16 +70,25 @@ const deleteNote = async (noteId, token) => {
 }
 
 //Update a note
-const updateNote = async (noteId, updatedNote, token) => {
+const updateNote = async (updatedData, token) => {
   const config = {
     headers: {
       Authorization: `Bearer ${token}`,
     },
   }
 
+  const { noteId, ...updatedNote } = updatedData
+
+  console.log("noteId", noteId)
+  console.log("data", updatedNote)
+
   const response = await axios.patch(
     `${API_URL}/${noteId}`,
-    { noteId: noteId, updatedNote: updatedNote },
+    {
+      noteId: noteId,
+      description: updatedData.description,
+      files: updatedNote.files,
+    },
     config
   )
 

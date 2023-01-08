@@ -10,6 +10,7 @@ import {
   checkStar,
   starNote,
   unStarNote,
+  resetSearch,
 } from "../features/notes/notesSlice"
 
 import { format } from "date-fns"
@@ -26,7 +27,7 @@ import { toast } from "react-toastify"
 import "../App.scss"
 import "./Note.scss"
 import "../components/UserIcon.scss"
-import "../components/Spinner.scss"
+import "../components/Spinner.css"
 
 const Note = () => {
   const dispatch = useDispatch()
@@ -45,15 +46,18 @@ const Note = () => {
     }
 
     if (isSuccess) {
+      dispatch(resetSearch())
       dispatch(resetNotes())
     }
 
     dispatch(resetNotes())
-  }, [isSuccess, isError, message])
+  }, [dispatch, isSuccess, isError, message])
 
   useEffect(() => {
     dispatch(fetchNote(noteId))
-    dispatch(checkStar(noteId))
+    if (user) {
+      dispatch(checkStar(noteId))
+    }
   }, [dispatch, noteId])
 
   console.log("is starred?", isStarred)
@@ -95,6 +99,20 @@ const Note = () => {
 
   if (isLoading) {
     return <Spinner />
+  }
+
+  const noteContent = () => {
+    const files = Object.values(note.files)
+    return files.map((file, index) => (
+      <div key={index} className="note-content">
+        <div className="content-head">
+          <CodeIcon />
+          <span className="note-desc">{file.filename}</span>
+        </div>
+        <hr />
+        <div className="content-main">{file.content}</div>
+      </div>
+    ))
   }
 
   return (
@@ -143,33 +161,21 @@ const Note = () => {
                 <div onClick={starHandler} className="note-feature">
                   {isStarred ? <StarIcon /> : <StarOutlineIcon />}
                   <div>Star</div>
-                  {/* <span className="feature-count">0</span> */}
                 </div>
                 <div onClick={forkHandler} className="note-feature">
                   <ForkRightIcon />
                   <div>Fork</div>
-                  {/* <span className="feature-count">0</span> */}
                 </div>
               </div>
             </div>
-
-            <div className="note-content">
-              <div className="content-head">
-                <CodeIcon />
-                <span className="note-desc">
-                  {Object.values(note.files)[0].filename}
-                </span>
-              </div>
-              <hr />
-              <div className="content-main">
-                {Object.values(note.files)[0].content}
-              </div>
-            </div>
+            {noteContent()}
           </div>
 
           <div className="back-button">
             <Link to="/">
-              <button className="primary-button">Back to All Notes</button>
+              <button onClick={() => navigate("/")} className="primary-button">
+                Back to All Notes
+              </button>
             </Link>
           </div>
         </div>

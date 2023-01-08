@@ -15,7 +15,7 @@ import DeleteIcon from "@mui/icons-material/Delete"
 
 import "../App.scss"
 import "./CreateNote.scss"
-import "../components/Spinner.scss"
+import "../components/Spinner.css"
 
 const CreateNote = () => {
   const [noteDescription, setNoteDescription] = useState("")
@@ -25,10 +25,17 @@ const CreateNote = () => {
       content: "",
     },
   ])
+  const [deletedFileNames, setDeletedFileNames] = useState([])
 
-  const { note, isLoading, isSuccess, isError, message } = useSelector(
-    (state) => state.notes
-  )
+  const {
+    note = {},
+    isLoading,
+    isSuccess,
+    isCreated,
+    isUpdated,
+    isError,
+    message,
+  } = useSelector((state) => state.notes)
 
   const dispatch = useDispatch()
   const navigate = useNavigate()
@@ -43,7 +50,7 @@ const CreateNote = () => {
       setNoteDescription(note.description)
 
       //Convert files object to array
-      const noteData = Object.values(note.files)
+      const noteData = note?.files ? Object.values(note?.files) : []
 
       const noteArr = noteData.map((note) => {
         return {
@@ -63,18 +70,22 @@ const CreateNote = () => {
       toast.error(message)
     }
 
-    if (isSuccess) {
-      if (!noteId) {
-        dispatch(resetNotes())
-        navigate("/")
-      }
+    if (isCreated) {
+      dispatch(resetNotes())
+      toast.success("Successfully Created")
+      navigate("/")
     }
 
-    dispatch(resetNotes())
-  }, [isError, dispatch, message, isSuccess, noteId])
+    if (isUpdated) {
+      dispatch(resetNotes())
+      toast.success("Successfully Updated")
+      navigate("/my-notes")
+    }
+  }, [isError, dispatch, message, isSuccess, isUpdated, isCreated, noteId])
 
   const handleChange = (index, e) => {
     let data = [...noteData]
+
     data[index][e.target.name] = e.target.value
     setNoteData(data)
   }
@@ -88,6 +99,12 @@ const CreateNote = () => {
   //Remove a file from the form
   const removeFiles = (index) => {
     let data = [...noteData]
+
+    //For Deletion see Github Gist API Updating a Gist > Deleting a Gist File
+    if (noteId) {
+      setDeletedFileNames([...deletedFileNames, data[index].fileName])
+    }
+
     data.splice(index, 1)
     setNoteData(data)
   }
@@ -102,6 +119,13 @@ const CreateNote = () => {
     }
   })
 
+  //For file deletion. See Github Gist API Updating a Gist > Deleting a Gist File
+  if (deletedFileNames.length > 0) {
+    for (const fileName of deletedFileNames) {
+      files[fileName] = null
+    }
+  }
+
   const finalData = {
     description: noteDescription,
     files,
@@ -111,8 +135,9 @@ const CreateNote = () => {
   const submitForm = (e) => {
     e.preventDefault()
     if (noteId) {
-      console.log(noteId, finalData)
-      dispatch(updateNote(noteId, finalData))
+      const updatedData = { noteId, ...finalData }
+      console.log("submitted data", updatedData)
+      dispatch(updateNote(updatedData))
     } else {
       dispatch(createNote(finalData))
     }
@@ -124,7 +149,7 @@ const CreateNote = () => {
 
   return (
     <div className="container top-bottom-space">
-      <h2>Create a Note</h2>
+      <h2>{noteId ? "Update Note" : "Create New Note"}</h2>
       <form onSubmit={submitForm} className="form-margin">
         <TextField
           name="noteDescription"
