@@ -8,6 +8,7 @@ import CreateNote from "./pages/CreateNote"
 
 import "react-toastify/dist/ReactToastify.css"
 import "./App.scss"
+import NotFound from "./pages/NotFound"
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
             element={<CreateNote key={window.location.pathname} />}
           />
           <Route path="/edit/:noteId" element={<CreateNote />} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </Router>
       <ToastContainer />

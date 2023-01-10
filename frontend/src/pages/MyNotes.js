@@ -25,9 +25,8 @@ const MyNotes = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
-  const { userNotes, isSuccess, isError, isLoading, message } = useSelector(
-    (state) => state.notes
-  )
+  const { userNotes, isSuccess, isError, isLoading, message, deletedNote } =
+    useSelector((state) => state.notes)
 
   const { user } = useSelector((state) => state.auth)
 
@@ -64,6 +63,11 @@ const MyNotes = () => {
     navigate(`/notes/${noteId}`)
   }
 
+  //User notes without the deleted notes
+  const finalUserNotes = deletedNote
+    ? userNotes.filter((note) => note.id !== deletedNote)
+    : userNotes
+
   if (isLoading) {
     return <Spinner />
   }
@@ -86,7 +90,7 @@ const MyNotes = () => {
               {isLoading ? (
                 <Spinner />
               ) : (
-                userNotes.map((note) => (
+                finalUserNotes.map((note) => (
                   <TableRow
                     key={note.id}
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}

@@ -6,11 +6,12 @@ import {
   fetchNote,
   deleteNote,
   resetNotes,
+  resetSearch,
   removeNote,
   checkStar,
   starNote,
   unStarNote,
-  resetSearch,
+  forkNote,
 } from "../features/notes/notesSlice"
 
 import { format } from "date-fns"
@@ -33,7 +34,7 @@ const Note = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
-  const { note, isSuccess, isLoading, isError, message, isStarred } =
+  const { note, isSuccess, isLoading, isError, message, isStarred, isForked } =
     useSelector((state) => state.notes)
 
   const { user } = useSelector((state) => state.auth)
@@ -46,27 +47,32 @@ const Note = () => {
     }
 
     if (isSuccess) {
-      dispatch(resetSearch())
       dispatch(resetNotes())
     }
 
+    if (isForked) {
+      toast.success("Note Successfully Forked")
+    }
+
     dispatch(resetNotes())
-  }, [dispatch, isSuccess, isError, message])
+  }, [dispatch, isSuccess, isError, isForked, message])
 
   useEffect(() => {
-    dispatch(fetchNote(noteId))
     if (user) {
+      dispatch(fetchNote(noteId))
       dispatch(checkStar(noteId))
+    } else {
+      dispatch(fetchNote(noteId))
     }
   }, [dispatch, noteId])
-
-  console.log("is starred?", isStarred)
 
   //Handle Fork
   const forkHandler = () => {
     if (!user) {
       toast.error("You are not logged in")
     }
+
+    dispatch(forkNote(noteId))
   }
 
   //Handle Star
@@ -88,7 +94,7 @@ const Note = () => {
       dispatch(deleteNote(noteId))
       dispatch(removeNote(noteId))
       toast.success("Deleted Successfully")
-      navigate("/")
+      navigate("/my-notes")
     }
   }
 
@@ -99,6 +105,12 @@ const Note = () => {
 
   if (isLoading) {
     return <Spinner />
+  }
+
+  //Back to All Handler
+  const backToAllHandler = () => {
+    dispatch(resetSearch())
+    navigate("/")
   }
 
   const noteContent = () => {
@@ -172,11 +184,9 @@ const Note = () => {
           </div>
 
           <div className="back-button">
-            <Link to="/">
-              <button onClick={() => navigate("/")} className="primary-button">
-                Back to All Notes
-              </button>
-            </Link>
+            <button onClick={backToAllHandler} className="primary-button">
+              Back to All Notes
+            </button>
           </div>
         </div>
       )}

@@ -63,10 +63,9 @@ const deleteNote = async (noteId, token) => {
     },
   }
 
-  const response = await axios.delete(`${API_URL}/${noteId}`, config)
+  await axios.delete(`${API_URL}/${noteId}`, config)
 
-  console.log("deletion response", response.data)
-  return response.data
+  return noteId
 }
 
 //Update a note
@@ -130,7 +129,7 @@ const starNote = async (noteId, token) => {
   try {
     const response = await axios.put(
       `${API_URL}/${noteId}/star`,
-      { noteId: noteId },
+      { noteId },
       config
     )
 
@@ -172,6 +171,19 @@ const unStarNote = async (noteId, token) => {
   }
 }
 
+//Fork a Note
+const forkNote = async (noteId, token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  }
+
+  const response = await axios.post(`${API_URL}/${noteId}/forks`, null, config)
+
+  return response.data
+}
+
 const notesService = {
   fetchNotes,
   fetchNote,
@@ -182,6 +194,7 @@ const notesService = {
   checkStar,
   starNote,
   unStarNote,
+  forkNote,
 }
 
 export default notesService

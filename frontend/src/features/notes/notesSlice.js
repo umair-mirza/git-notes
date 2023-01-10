@@ -6,10 +6,13 @@ const initialState = {
   userNotes: [],
   note: {},
   searchedNote: {},
+  deletedNote: null,
   isSuccess: false,
   isLoading: false,
   isError: false,
+  isSearchError: false,
   isStarred: false,
+  isForked: false,
   isCreated: false,
   isUpdated: false,
   message: "",
@@ -210,6 +213,26 @@ export const unStarNote = createAsyncThunk(
   }
 )
 
+//Fork a Note
+export const forkNote = createAsyncThunk(
+  "notes/forkNote",
+  async (noteId, thunkAPI) => {
+    try {
+      const token = thunkAPI.getState().auth.user.accessToken
+
+      return await notesService.forkNote(noteId, token)
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString()
+      return thunkAPI.rejectWithValue(message)
+    }
+  }
+)
+
 export const notesSlice = createSlice({
   name: "notes",
   initialState,
@@ -221,13 +244,11 @@ export const notesSlice = createSlice({
       state.message = ""
       state.isUpdated = false
       state.isCreated = false
+      state.isForked = false
     },
     resetSearch: (state) => {
       state.searchedNote = {}
-      state.isLoading = false
-      state.isError = false
-      state.isSuccess = false
-      state.message = ""
+      state.isSearchError = false
     },
     removeNote: (state, action) => {
       const noteId = action.payload
@@ -268,13 +289,11 @@ export const notesSlice = createSlice({
       })
       .addCase(searchNote.fulfilled, (state, action) => {
         state.isLoading = false
-        state.isSuccess = true
         state.searchedNote = action.payload
       })
-      .addCase(searchNote.rejected, (state, action) => {
+      .addCase(searchNote.rejected, (state) => {
         state.isLoading = false
-        state.isError = true
-        state.message = action.payload
+        state.isSearchError = true
       })
       .addCase(fetchUserNotes.pending, (state) => {
         state.isLoading = true
@@ -304,9 +323,10 @@ export const notesSlice = createSlice({
       .addCase(deleteNote.pending, (state) => {
         state.isLoading = true
       })
-      .addCase(deleteNote.fulfilled, (state) => {
+      .addCase(deleteNote.fulfilled, (state, action) => {
         state.isLoading = false
         state.isSuccess = true
+        state.deletedNote = action.payload
       })
       .addCase(deleteNote.rejected, (state, action) => {
         state.isLoading = false
@@ -360,6 +380,18 @@ export const notesSlice = createSlice({
         state.isUpdated = true
       })
       .addCase(updateNote.rejected, (state, action) => {
+        state.isLoading = false
+        state.isError = true
+        state.message = action.payload
+      })
+      .addCase(forkNote.pending, (state) => {
+        state.isLoading = true
+      })
+      .addCase(forkNote.fulfilled, (state) => {
+        state.isLoading = false
+        state.isForked = true
+      })
+      .addCase(forkNote.rejected, (state, action) => {
         state.isLoading = false
         state.isError = true
         state.message = action.payload

@@ -30,8 +30,15 @@ const NotesTable = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
-  const { notes, searchedNote, isSuccess, isError, isLoading, message } =
-    useSelector((state) => state.notes)
+  const {
+    notes,
+    searchedNote,
+    isSuccess,
+    isError,
+    isLoading,
+    isSearchError,
+    message,
+  } = useSelector((state) => state.notes)
 
   //UseEffect
   useEffect(() => {
@@ -78,6 +85,48 @@ const NotesTable = () => {
     navigate("/")
   }
 
+  //Notes Renderer
+  const notesRenderer = () => {
+    if (isSearchError) {
+      return (
+        <TableBody>
+          <TableRow sx={{ textAlign: "center" }}>
+            <TableCell>No Results Found</TableCell>
+          </TableRow>
+        </TableBody>
+      )
+    } else {
+      return (
+        <TableBody>
+          {selectedNotes?.map((note) => (
+            <TableRow
+              key={note.id}
+              sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+            >
+              <TableCell align="left">
+                <img
+                  className="avatar"
+                  src={note.owner.avatar_url}
+                  alt="avatar"
+                />
+              </TableCell>
+              <TableCell align="left">{note.owner.login}</TableCell>
+              <TableCell align="left">{note.created_at}</TableCell>
+              <TableCell align="left">{note.updated_at}</TableCell>
+              <TableCell
+                align="left"
+                className="select-cell"
+                onClick={() => noteHandler(note.id)}
+              >
+                {note.id}
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      )
+    }
+  }
+
   if (isLoading) {
     return <Spinner />
   }
@@ -106,35 +155,10 @@ const NotesTable = () => {
                 </TableCell>
               </TableRow>
             </TableHead>
-            <TableBody>
-              {selectedNotes?.map((note) => (
-                <TableRow
-                  key={note.id}
-                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                >
-                  <TableCell align="left">
-                    <img
-                      className="avatar"
-                      src={note.owner.avatar_url}
-                      alt="avatar"
-                    />
-                  </TableCell>
-                  <TableCell align="left">{note.owner.login}</TableCell>
-                  <TableCell align="left">{note.created_at}</TableCell>
-                  <TableCell align="left">{note.updated_at}</TableCell>
-                  <TableCell
-                    align="left"
-                    className="select-cell"
-                    onClick={() => noteHandler(note.id)}
-                  >
-                    {note.id}
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
+            {notesRenderer()}
           </Table>
         </TableContainer>
-        {selectedNotes.length > 1 && (
+        {selectedNotes.length > 1 && !isSearchError && (
           <TablePagination
             rowsPerPageOptions={[10, 20, 30]}
             component="div"
@@ -148,7 +172,7 @@ const NotesTable = () => {
           />
         )}
       </Box>
-      {Object.keys(searchedNote).length > 0 && (
+      {(Object.keys(searchedNote).length > 0 || isSearchError) && (
         <div>
           <button
             onClick={allResultsHandler}
