@@ -255,6 +255,22 @@ export const notesSlice = createSlice({
       state.userNotes = state.userNotes.filter((note) => note.id !== noteId)
       console.log(state.userNotes)
     },
+    searchNoteDesc: (state, action) => {
+      const searchTerm = action.payload
+      const searchResult = state.notes.filter(
+        (note) => note.description === searchTerm
+      )
+
+      if (searchResult.length > 0) {
+        state.isSuccess = true
+        state.searchedNote = searchResult[0]
+      } else {
+        state.isSuccess = false
+        state.isSearchError = true
+        state.isError = true
+        state.message = "Note with description not Found"
+      }
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -399,5 +415,6 @@ export const notesSlice = createSlice({
   },
 })
 
-export const { resetNotes, resetSearch, removeNote } = notesSlice.actions
+export const { resetNotes, resetSearch, removeNote, searchNoteDesc } =
+  notesSlice.actions
 export default notesSlice.reducer

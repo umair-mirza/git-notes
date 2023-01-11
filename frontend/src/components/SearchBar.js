@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react"
 import { useSelector, useDispatch } from "react-redux"
 import { useNavigate } from "react-router-dom"
 import { CiSearch } from "react-icons/ci"
-import { searchNote } from "../features/notes/notesSlice"
+import { searchNote, searchNoteDesc } from "../features/notes/notesSlice"
 
 import "./Header.scss"
 
@@ -17,7 +17,13 @@ const SearchBar = () => {
   }
 
   const handleSearch = () => {
-    dispatch(searchNote(searchInput))
+    if (searchInput.length === 32) {
+      dispatch(searchNote(searchInput))
+    } else {
+      //Search note by description
+      dispatch(searchNoteDesc(searchInput))
+    }
+
     navigate("/")
     setSearchInput("")
   }
@@ -27,7 +33,7 @@ const SearchBar = () => {
       <input
         onChange={handleSearchInput}
         className="searchbar"
-        placeholder="Search Notes by Id"
+        placeholder="Search Notes by Id or Description"
         value={searchInput}
       />
       <div className="search-icon">

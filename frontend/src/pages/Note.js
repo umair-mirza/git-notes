@@ -28,7 +28,7 @@ import { toast } from "react-toastify"
 import "../App.scss"
 import "./Note.scss"
 import "../components/UserIcon.scss"
-import "../components/Spinner.css"
+import "../components/Spinner.scss"
 
 const Note = () => {
   const dispatch = useDispatch()
@@ -170,13 +170,15 @@ const Note = () => {
                     </div>
                   </div>
                 )}
-                <div onClick={starHandler} className="note-feature">
-                  {isStarred ? <StarIcon /> : <StarOutlineIcon />}
-                  <div>Star</div>
-                </div>
-                <div onClick={forkHandler} className="note-feature">
-                  <ForkRightIcon />
-                  <div>Fork</div>
+                <div className="edit-delete">
+                  <div onClick={starHandler} className="note-feature">
+                    {isStarred ? <StarIcon /> : <StarOutlineIcon />}
+                    <div>Star</div>
+                  </div>
+                  <div onClick={forkHandler} className="note-feature">
+                    <ForkRightIcon />
+                    <div>Fork</div>
+                  </div>
                 </div>
               </div>
             </div>

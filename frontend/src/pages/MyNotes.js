@@ -15,7 +15,7 @@ import TableRow from "@mui/material/TableRow"
 import Paper from "@mui/material/Paper"
 // import TablePagination from "@mui/material/TablePagination"
 
-import "../components/Spinner.css"
+import "../components/Spinner.scss"
 import "./MyNotes.scss"
 
 const MyNotes = () => {

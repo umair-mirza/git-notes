@@ -1,10 +1,12 @@
 import React, { useState, useEffect, useMemo } from "react"
 import { useSelector, useDispatch } from "react-redux"
 import { useNavigate } from "react-router-dom"
+import { GITHUB_LOGIN_URL } from "./constants/constants"
 import { login } from "../features/auth/authSlice"
+import { reset } from "../features/auth/authSlice"
+
 import AccountMenu from "./AccountMenu"
 import SearchBar from "./SearchBar"
-import { reset } from "../features/auth/authSlice"
 
 import "./Header.scss"
 import "../App.scss"
@@ -15,12 +17,7 @@ const Header = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
-  const { user, isSuccess, message } = useSelector((state) => state.auth)
-
-  //Constants
-  const clientId = process.env.REACT_APP_CLIENT_ID
-  const redirectURI = process.env.REACT_APP_REDIRECT_URI
-  const GITHUB_LOGIN_URL = `https://github.com/login/oauth/authorize?client_id=${clientId}&scope=user%20gist&redirect_uri=${redirectURI}`
+  const { user } = useSelector((state) => state.auth)
 
   useEffect(() => {
     if (user) {

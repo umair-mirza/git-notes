@@ -15,7 +15,7 @@ import DeleteIcon from "@mui/icons-material/Delete"
 
 import "../App.scss"
 import "./CreateNote.scss"
-import "../components/Spinner.css"
+import "../components/Spinner.scss"
 
 const CreateNote = () => {
   const [noteDescription, setNoteDescription] = useState("")
@@ -73,7 +73,7 @@ const CreateNote = () => {
     if (isCreated) {
       dispatch(resetNotes())
       toast.success("Successfully Created")
-      navigate("/")
+      navigate("/my-notes")
     }
 
     if (isUpdated) {

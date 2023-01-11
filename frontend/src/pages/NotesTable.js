@@ -21,7 +21,7 @@ import TablePagination from "@mui/material/TablePagination"
 
 import "./NoteTable.scss"
 import "../components/UserIcon.scss"
-import "../components/Spinner.css"
+import "../components/Spinner.scss"
 
 const NotesTable = () => {
   const [page, setPage] = React.useState(0)
