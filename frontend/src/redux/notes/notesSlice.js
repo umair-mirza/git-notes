@@ -29,11 +29,7 @@ export const fetchNotes = createAsyncThunk(
       )
     } catch (error) {
       const message =
-        (error.response &&
-          error.response.data &&
-          error.response.data.message) ||
-        error.message ||
-        error.toString()
+        error?.response?.data?.message || error.message || error.toString()
       return thunkAPI.rejectWithValue(message)
     }
   }
@@ -47,11 +43,7 @@ export const fetchNote = createAsyncThunk(
       return await notesService.fetchNote(noteId)
     } catch (error) {
       const message =
-        (error.response &&
-          error.response.data &&
-          error.response.data.message) ||
-        error.message ||
-        error.toString()
+        error?.response?.data?.message || error.message || error.toString()
       return thunkAPI.rejectWithValue(message)
     }
   }
@@ -65,11 +57,7 @@ export const searchNote = createAsyncThunk(
       return await notesService.fetchNote(noteId)
     } catch (error) {
       const message =
-        (error.response &&
-          error.response.data &&
-          error.response.data.message) ||
-        error.message ||
-        error.toString()
+        error?.response?.data?.message || error.message || error.toString()
       return thunkAPI.rejectWithValue(message)
     }
   }
@@ -89,11 +77,7 @@ export const fetchUserNotes = createAsyncThunk(
       )
     } catch (error) {
       const message =
-        (error.response &&
-          error.response.data &&
-          error.response.data.message) ||
-        error.message ||
-        error.toString()
+        error?.response?.data?.message || error.message || error.toString()
       return thunkAPI.rejectWithValue(message)
     }
   }
@@ -108,11 +92,7 @@ export const createNote = createAsyncThunk(
       return await notesService.createNote(noteData, token)
     } catch (error) {
       const message =
-        (error.response &&
-          error.response.data &&
-          error.response.data.message) ||
-        error.message ||
-        error.toString()
+        error?.response?.data?.message || error.message || error.toString()
       return thunkAPI.rejectWithValue(message)
     }
   }
@@ -127,11 +107,7 @@ export const deleteNote = createAsyncThunk(
       return await notesService.deleteNote(noteId, token)
     } catch (error) {
       const message =
-        (error.response &&
-          error.response.data &&
-          error.response.data.message) ||
-        error.message ||
-        error.toString()
+        error?.response?.data?.message || error.message || error.toString()
       return thunkAPI.rejectWithValue(message)
     }
   }
@@ -146,11 +122,7 @@ export const updateNote = createAsyncThunk(
       return await notesService.updateNote(updatedData, token)
     } catch (error) {
       const message =
-        (error.response &&
-          error.response.data &&
-          error.response.data.message) ||
-        error.message ||
-        error.toString()
+        error?.response?.data?.message || error.message || error.toString()
       return thunkAPI.rejectWithValue(message)
     }
   }
@@ -165,11 +137,7 @@ export const checkStar = createAsyncThunk(
       return await notesService.checkStar(noteId, token)
     } catch (error) {
       const message =
-        (error.response &&
-          error.response.data &&
-          error.response.data.message) ||
-        error.message ||
-        error.toString()
+        error?.response?.data?.message || error.message || error.toString()
       return thunkAPI.rejectWithValue(message)
     }
   }
@@ -184,11 +152,7 @@ export const starNote = createAsyncThunk(
       return await notesService.starNote(noteId, token)
     } catch (error) {
       const message =
-        (error.response &&
-          error.response.data &&
-          error.response.data.message) ||
-        error.message ||
-        error.toString()
+        error?.response?.data?.message || error.message || error.toString()
       return thunkAPI.rejectWithValue(message)
     }
   }
@@ -203,11 +167,7 @@ export const unStarNote = createAsyncThunk(
       return await notesService.unStarNote(noteId, token)
     } catch (error) {
       const message =
-        (error.response &&
-          error.response.data &&
-          error.response.data.message) ||
-        error.message ||
-        error.toString()
+        error?.response?.data?.message || error.message || error.toString()
       return thunkAPI.rejectWithValue(message)
     }
   }
@@ -223,11 +183,7 @@ export const forkNote = createAsyncThunk(
       return await notesService.forkNote(noteId, token)
     } catch (error) {
       const message =
-        (error.response &&
-          error.response.data &&
-          error.response.data.message) ||
-        error.message ||
-        error.toString()
+        error?.response?.data?.message || error.message || error.toString()
       return thunkAPI.rejectWithValue(message)
     }
   }
@@ -245,6 +201,9 @@ export const notesSlice = createSlice({
       state.isUpdated = false
       state.isCreated = false
       state.isForked = false
+    },
+    clearNote: (state) => {
+      state.note = {}
     },
     resetSearch: (state) => {
       state.searchedNote = {}
@@ -415,6 +374,11 @@ export const notesSlice = createSlice({
   },
 })
 
-export const { resetNotes, resetSearch, removeNote, searchNoteDesc } =
-  notesSlice.actions
+export const {
+  resetNotes,
+  clearNote,
+  resetSearch,
+  removeNote,
+  searchNoteDesc,
+} = notesSlice.actions
 export default notesSlice.reducer

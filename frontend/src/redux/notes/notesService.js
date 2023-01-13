@@ -78,9 +78,6 @@ const updateNote = async (updatedData, token) => {
 
   const { noteId, ...updatedNote } = updatedData
 
-  console.log("noteId", noteId)
-  console.log("data", updatedNote)
-
   const response = await axios.patch(
     `${API_URL}/${noteId}`,
     {

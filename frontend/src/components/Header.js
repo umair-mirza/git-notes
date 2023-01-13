@@ -1,9 +1,9 @@
-import React, { useState, useEffect, useMemo } from "react"
+import React, { useState, useEffect } from "react"
 import { useSelector, useDispatch } from "react-redux"
 import { useNavigate } from "react-router-dom"
 import { GITHUB_LOGIN_URL } from "./constants/constants"
-import { login } from "../features/auth/authSlice"
-import { reset } from "../features/auth/authSlice"
+import { login } from "../redux/auth/authSlice"
+import { reset } from "../redux/auth/authSlice"
 
 import AccountMenu from "./AccountMenu"
 import SearchBar from "./SearchBar"
@@ -33,7 +33,7 @@ const Header = () => {
       dispatch(login(tempCode))
       navigate("/")
     }
-  }, [tempCode])
+  }, [tempCode, dispatch])
 
   const redirectHome = () => {
     navigate("/")

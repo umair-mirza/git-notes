@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react"
-import { useSelector, useDispatch } from "react-redux"
+import React, { useState } from "react"
+import { useDispatch } from "react-redux"
 import { useNavigate } from "react-router-dom"
 import { CiSearch } from "react-icons/ci"
-import { searchNote, searchNoteDesc } from "../features/notes/notesSlice"
+import { searchNote, searchNoteDesc } from "../redux/notes/notesSlice"
 
 import "./Header.scss"
 

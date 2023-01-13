@@ -1,9 +1,14 @@
 import React, { useEffect } from "react"
 import { useSelector, useDispatch } from "react-redux"
 import { Link, useNavigate } from "react-router-dom"
-import { fetchUserNotes, resetNotes } from "../features/notes/notesSlice"
+import {
+  fetchUserNotes,
+  resetNotes,
+  clearNote,
+} from "../redux/notes/notesSlice"
 import Spinner from "../components/Spinner"
 import { toast } from "react-toastify"
+import { format } from "date-fns"
 
 import Box from "@mui/material/Box"
 import Table from "@mui/material/Table"
@@ -13,7 +18,6 @@ import TableContainer from "@mui/material/TableContainer"
 import TableHead from "@mui/material/TableHead"
 import TableRow from "@mui/material/TableRow"
 import Paper from "@mui/material/Paper"
-// import TablePagination from "@mui/material/TablePagination"
 
 import "../components/Spinner.scss"
 import "./MyNotes.scss"
@@ -33,6 +37,7 @@ const MyNotes = () => {
   useEffect(() => {
     if (isSuccess) {
       dispatch(resetNotes())
+      dispatch(clearNote())
     }
 
     if (isError) {
@@ -81,8 +86,8 @@ const MyNotes = () => {
               <TableRow>
                 <TableCell align="left">Avatar</TableCell>
                 <TableCell align="left">User</TableCell>
-                <TableCell align="left">Created Data</TableCell>
-                <TableCell align="left">Updated Date</TableCell>
+                <TableCell align="left">Description</TableCell>
+                <TableCell align="left">Created Date</TableCell>
                 <TableCell align="left">Note Id</TableCell>
               </TableRow>
             </TableHead>
@@ -103,8 +108,14 @@ const MyNotes = () => {
                       />
                     </TableCell>
                     <TableCell align="left">{note.owner.login}</TableCell>
-                    <TableCell align="left">{note.created_at}</TableCell>
-                    <TableCell align="left">{note.updated_at}</TableCell>
+                    <TableCell align="left">
+                      {note.description.length > 0
+                        ? note.description.slice(0, 20)
+                        : "no description"}
+                    </TableCell>
+                    <TableCell align="left">
+                      {format(new Date(note.created_at), "p, dd/MM/yyyy")}
+                    </TableCell>
                     <TableCell
                       align="left"
                       className="select-cell"
@@ -118,16 +129,6 @@ const MyNotes = () => {
             </TableBody>
           </Table>
         </TableContainer>
-        {/* {userNotes.length > rowsPerPage && (
-          <TablePagination
-            component="div"
-            count={100}
-            page={page}
-            onPageChange={handleChangePage}
-            rowsPerPage={rowsPerPage}
-            onRowsPerPageChange={handleChangeRowsPerPage}
-          />
-        )} */}
       </Box>
       <div className="back-button">
         <Link to="/">

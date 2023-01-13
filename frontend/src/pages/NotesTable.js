@@ -1,13 +1,15 @@
 import React, { useEffect } from "react"
 import { useSelector, useDispatch } from "react-redux"
-import { Link, useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 import {
   fetchNotes,
   resetNotes,
   resetSearch,
-} from "../features/notes/notesSlice"
+  clearNote,
+} from "../redux/notes/notesSlice"
 import Spinner from "../components/Spinner"
 import { toast } from "react-toastify"
+import { format } from "date-fns"
 
 import Box from "@mui/material/Box"
 import Table from "@mui/material/Table"
@@ -44,6 +46,7 @@ const NotesTable = () => {
   useEffect(() => {
     if (isSuccess) {
       dispatch(resetNotes())
+      dispatch(clearNote())
     }
 
     if (isError) {
@@ -111,8 +114,14 @@ const NotesTable = () => {
                 />
               </TableCell>
               <TableCell align="left">{note.owner.login}</TableCell>
-              <TableCell align="left">{note.created_at}</TableCell>
-              <TableCell align="left">{note.updated_at}</TableCell>
+              <TableCell align="left">
+                {note?.description?.length > 0
+                  ? note.description.slice(0, 20)
+                  : "no description"}
+              </TableCell>
+              <TableCell align="left">
+                {format(new Date(note.created_at), "p, dd/MM/yyyy")}
+              </TableCell>
               <TableCell
                 align="left"
                 className="select-cell"
@@ -145,10 +154,10 @@ const NotesTable = () => {
                   User
                 </TableCell>
                 <TableCell className="bold-headings" align="left">
-                  Created Data
+                  Description
                 </TableCell>
                 <TableCell className="bold-headings" align="left">
-                  Updated Date
+                  Created Date
                 </TableCell>
                 <TableCell className="bold-headings" align="left">
                   Note Id

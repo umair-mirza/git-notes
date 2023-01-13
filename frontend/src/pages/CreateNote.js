@@ -7,7 +7,7 @@ import {
   resetNotes,
   fetchNote,
   updateNote,
-} from "../features/notes/notesSlice"
+} from "../redux/notes/notesSlice"
 
 import Spinner from "../components/Spinner"
 import { Button, TextField } from "@mui/material"
@@ -63,7 +63,7 @@ const CreateNote = () => {
     }
 
     dispatch(resetNotes())
-  }, [noteId])
+  }, [dispatch, noteId])
 
   useEffect(() => {
     if (isError) {
@@ -81,7 +81,16 @@ const CreateNote = () => {
       toast.success("Successfully Updated")
       navigate("/my-notes")
     }
-  }, [isError, dispatch, message, isSuccess, isUpdated, isCreated, noteId])
+  }, [
+    isError,
+    dispatch,
+    message,
+    isSuccess,
+    isUpdated,
+    isCreated,
+    noteId,
+    navigate,
+  ])
 
   const handleChange = (index, e) => {
     let data = [...noteData]

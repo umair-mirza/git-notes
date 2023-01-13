@@ -1,6 +1,6 @@
 import React, { useEffect } from "react"
 import { useSelector, useDispatch } from "react-redux"
-import { Link, useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 import { useParams } from "react-router-dom"
 import {
   fetchNote,
@@ -12,8 +12,10 @@ import {
   starNote,
   unStarNote,
   forkNote,
-} from "../features/notes/notesSlice"
+} from "../redux/notes/notesSlice"
 
+import Spinner from "../components/Spinner"
+import { toast } from "react-toastify"
 import { format } from "date-fns"
 import StarOutlineIcon from "@mui/icons-material/StarOutline"
 import StarIcon from "@mui/icons-material/Star"
@@ -21,9 +23,6 @@ import ForkRightIcon from "@mui/icons-material/ForkRight"
 import EditIcon from "@mui/icons-material/Edit"
 import DeleteIcon from "@mui/icons-material/Delete"
 import CodeIcon from "@mui/icons-material/Code"
-
-import Spinner from "../components/Spinner"
-import { toast } from "react-toastify"
 
 import "../App.scss"
 import "./Note.scss"
