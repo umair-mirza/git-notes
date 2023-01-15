@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom"
 import { CiSearch } from "react-icons/ci"
 import { searchNote, searchNoteDesc } from "../redux/notes/notesSlice"
 
-import "./Header.scss"
+import "./scss/Header.scss"
 
 const SearchBar = () => {
   const [searchInput, setSearchInput] = useState("")

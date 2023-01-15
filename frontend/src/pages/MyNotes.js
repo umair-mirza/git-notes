@@ -19,8 +19,8 @@ import TableHead from "@mui/material/TableHead"
 import TableRow from "@mui/material/TableRow"
 import Paper from "@mui/material/Paper"
 
-import "../components/Spinner.scss"
-import "./MyNotes.scss"
+import "../components/scss/Spinner.scss"
+import "./scss/MyNotes.scss"
 
 const MyNotes = () => {
   const [page, setPage] = React.useState(0)

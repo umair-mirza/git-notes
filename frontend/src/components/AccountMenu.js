@@ -14,7 +14,7 @@ import { useSelector, useDispatch } from "react-redux"
 import { logout, reset } from "../redux/auth/authSlice"
 import { paperProps } from "./constants/constants"
 
-import "./UserIcon.scss"
+import "./scss/UserIcon.scss"
 
 export default function AccountMenu() {
   const [anchorEl, setAnchorEl] = React.useState(null)

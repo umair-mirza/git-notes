@@ -25,9 +25,9 @@ import DeleteIcon from "@mui/icons-material/Delete"
 import CodeIcon from "@mui/icons-material/Code"
 
 import "../App.scss"
-import "./Note.scss"
-import "../components/UserIcon.scss"
-import "../components/Spinner.scss"
+import "./scss/Note.scss"
+import "../components/scss/UserIcon.scss"
+import "../components/scss/Spinner.scss"
 
 const Note = () => {
   const dispatch = useDispatch()

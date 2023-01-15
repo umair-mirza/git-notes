@@ -8,8 +8,7 @@ import { reset } from "../redux/auth/authSlice"
 import AccountMenu from "./AccountMenu"
 import SearchBar from "./SearchBar"
 
-import "./Header.scss"
-import "../App.scss"
+import "./scss/Header.scss"
 
 const Header = () => {
   const [tempCode, setTempCode] = useState(null)

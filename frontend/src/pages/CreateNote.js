@@ -14,8 +14,8 @@ import { Button, TextField } from "@mui/material"
 import DeleteIcon from "@mui/icons-material/Delete"
 
 import "../App.scss"
-import "./CreateNote.scss"
-import "../components/Spinner.scss"
+import "./scss/CreateNote.scss"
+import "../components/scss/Spinner.scss"
 
 const CreateNote = () => {
   const [noteDescription, setNoteDescription] = useState("")
@@ -213,7 +213,12 @@ const CreateNote = () => {
             </div>
           )
         })}
-        <Button onClick={addFiles} variant="contained" color="success">
+        <Button
+          onClick={addFiles}
+          variant="contained"
+          color="success"
+          sx={{ width: "200px" }}
+        >
           Add File
         </Button>
         <br />
@@ -221,7 +226,7 @@ const CreateNote = () => {
           onClick={submitForm}
           variant="contained"
           color="success"
-          sx={{ my: "20px" }}
+          sx={{ my: "20px", width: "200px" }}
         >
           {noteId ? "Update Note" : "Create New Note"}
         </Button>
