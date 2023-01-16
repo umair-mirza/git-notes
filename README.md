@@ -43,7 +43,7 @@ npm start
 
 ## Environment Variables
 
-* Github OAuth Client ID
-* Github OAuth Client Secret
-* Redirect URI - http://localhost:3000/
-* Proxy URI - http://localhost:5000/authenticate
+* REACT_APP_CLIENT_ID
+* REACT_APP_CLIENT_SECRET
+* REACT_APP_REDIRECT_URI - http://localhost:3000/
+* REACT_APP_PROXY_URL - http://localhost:5000/authenticate
