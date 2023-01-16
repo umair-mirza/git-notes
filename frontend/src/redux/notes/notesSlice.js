@@ -6,6 +6,7 @@ const initialState = {
   userNotes: [],
   note: {},
   searchedNote: {},
+  forks: null,
   deletedNote: null,
   isSuccess: false,
   isLoading: false,
@@ -182,6 +183,22 @@ export const forkNote = createAsyncThunk(
 
       return await notesService.forkNote(noteId, token)
     } catch (error) {
+      const message =
+        error?.response?.data?.message || error.message || error.toString()
+      return thunkAPI.rejectWithValue(message)
+    }
+  }
+)
+
+//Get Number of Forks
+export const getForks = createAsyncThunk(
+  "notes/getForks",
+  async (noteId, thunkAPI) => {
+    try {
+      const token = thunkAPI.getState().auth.user.accessToken
+
+      return await notesService.getForks(noteId, token)
+    } catch(error) {
       const message =
         error?.response?.data?.message || error.message || error.toString()
       return thunkAPI.rejectWithValue(message)
@@ -370,6 +387,11 @@ export const notesSlice = createSlice({
         state.isLoading = false
         state.isError = true
         state.message = action.payload
+      })
+      .addCase(getForks.fulfilled, (state, action) => {
+        state.isLoading = false
+        state.isError = false
+        state.forks = action.payload
       })
   },
 })

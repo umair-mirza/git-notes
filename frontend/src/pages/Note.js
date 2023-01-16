@@ -177,6 +177,7 @@ const Note = () => {
                   <div onClick={forkHandler} className="note-feature">
                     <ForkRightIcon />
                     <div>Fork</div>
+                    <div>{note?.forks?.length || 0}</div>
                   </div>
                 </div>
               </div>

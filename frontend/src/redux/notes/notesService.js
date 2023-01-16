@@ -181,6 +181,19 @@ const forkNote = async (noteId, token) => {
   return response.data
 }
 
+//Get Number of Forks
+const getForks = async (noteId, token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  }
+
+  const response = await axios.get(`${API_URL}/${noteId}/forks`, config)
+
+  return response.data.length
+}
+
 const notesService = {
   fetchNotes,
   fetchNote,
@@ -192,6 +205,7 @@ const notesService = {
   starNote,
   unStarNote,
   forkNote,
+  getForks,
 }
 
 export default notesService
