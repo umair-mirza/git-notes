@@ -12,6 +12,7 @@ import {
   starNote,
   unStarNote,
   forkNote,
+  getForks,
 } from "../redux/notes/notesSlice"
 
 import Spinner from "../components/Spinner"
@@ -33,7 +34,7 @@ const Note = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
-  const { note, isSuccess, isLoading, isError, message, isStarred, isForked } =
+  const { note, forks, isSuccess, isLoading, isError, message, isStarred, isForked } =
     useSelector((state) => state.notes)
 
   const { user } = useSelector((state) => state.auth)
@@ -63,7 +64,8 @@ const Note = () => {
     } else {
       dispatch(fetchNote(noteId))
     }
-  }, [dispatch, noteId])
+    dispatch(getForks(noteId))
+  }, [dispatch, noteId, forks])
 
   //Handle Fork
   const forkHandler = () => {
@@ -177,7 +179,7 @@ const Note = () => {
                   <div onClick={forkHandler} className="note-feature">
                     <ForkRightIcon />
                     <div>Fork</div>
-                    <div>{note?.forks?.length || 0}</div>
+                    <span>{forks}</span>
                   </div>
                 </div>
               </div>

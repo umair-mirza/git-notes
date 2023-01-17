@@ -36,6 +36,7 @@
 
 .note-features {
     display: flex;
+    align-items: center;
     gap: 30px;
     color: #1176ff;
 }
@@ -43,6 +44,7 @@
 .note-feature {
     display: flex;
     cursor: pointer;
+    align-items: center;
 
     &>* {
         margin: 0px 4px;

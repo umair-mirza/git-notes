@@ -6,7 +6,7 @@ const initialState = {
   userNotes: [],
   note: {},
   searchedNote: {},
-  forks: null,
+  forks: 0,
   deletedNote: null,
   isSuccess: false,
   isLoading: false,
@@ -195,9 +195,7 @@ export const getForks = createAsyncThunk(
   "notes/getForks",
   async (noteId, thunkAPI) => {
     try {
-      const token = thunkAPI.getState().auth.user.accessToken
-
-      return await notesService.getForks(noteId, token)
+      return await notesService.getForks(noteId)
     } catch(error) {
       const message =
         error?.response?.data?.message || error.message || error.toString()
