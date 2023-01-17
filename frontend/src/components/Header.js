@@ -41,7 +41,7 @@ const Header = () => {
   return (
     <section className="header container">
       <div onClick={redirectHome} className="logo">
-        Emumba
+        GIT NOTES
       </div>
       <div className="top-right">
         <SearchBar />
