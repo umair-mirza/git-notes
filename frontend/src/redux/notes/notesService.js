@@ -182,9 +182,14 @@ const forkNote = async (noteId, token) => {
 }
 
 //Get Number of Forks
-const getForks = async (noteId) => {
+const getForks = async (noteId, token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  }
 
-  const response = await axios.get(`${API_URL}/${noteId}/forks`)
+  const response = await axios.get(`${API_URL}/${noteId}/forks`, config)
 
   return response.data.length
 }

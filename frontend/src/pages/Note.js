@@ -52,6 +52,7 @@ const Note = () => {
 
     if (isForked) {
       toast.success("Note Successfully Forked")
+      dispatch(getForks(noteId))
     }
 
     dispatch(resetNotes())
