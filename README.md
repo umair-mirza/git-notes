@@ -22,7 +22,7 @@ It has the following features:
 
 **Note:** The reason for configuring a dedicated proxy server for this project is so that the frontend does not know about or expose the Client Secret used for getting Access Token from Github OAuth API. The Proxy server will send a request to the OAuth API and send the Client Secret to get the Access Token.
 
-![Github Login Flow](https://imgur.com/a/s4Azq8c)
+![Github Login Flow]([img]https://i.imgur.com/JynCmMp.png)
 
 ## Authors
 
