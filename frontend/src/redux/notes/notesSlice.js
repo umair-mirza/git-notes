@@ -198,7 +198,7 @@ export const getForks = createAsyncThunk(
       const token = thunkAPI.getState().auth.user.accessToken
 
       return await notesService.getForks(noteId, token)
-    } catch(error) {
+    } catch (error) {
       const message =
         error?.response?.data?.message || error.message || error.toString()
       return thunkAPI.rejectWithValue(message)
@@ -221,6 +221,12 @@ export const notesSlice = createSlice({
     },
     clearNote: (state) => {
       state.note = {}
+    },
+    clearNotes: (state) => {
+      state.notes = []
+    },
+    clearUserNotes: (state) => {
+      state.userNotes = []
     },
     resetSearch: (state) => {
       state.searchedNote = {}
@@ -245,6 +251,23 @@ export const notesSlice = createSlice({
         state.isSearchError = true
         state.isError = true
         state.message = "Note with description not Found"
+      }
+    },
+    updateNoteFrontend: (state, action) => {
+      const { noteId, ...updatedData } = action.payload
+
+      const selectedNote = state.userNotes.find((note) => note.id === noteId)
+      const selectedNoteIndex = state.userNotes.indexOf(selectedNote)
+
+      if (selectedNote) {
+        selectedNote.description = updatedData.description
+        if (selectedNote.files) {
+          selectedNote.files = updatedData.files
+        }
+
+        if (selectedNoteIndex !== -1) {
+          state.userNotes[selectedNoteIndex] = selectedNote
+        }
       }
     },
   },
@@ -406,8 +429,11 @@ export const notesSlice = createSlice({
 export const {
   resetNotes,
   clearNote,
+  clearNotes,
+  clearUserNotes,
   resetSearch,
   removeNote,
   searchNoteDesc,
+  updateNoteFrontend,
 } = notesSlice.actions
 export default notesSlice.reducer

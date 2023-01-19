@@ -13,6 +13,7 @@ import {
   unStarNote,
   forkNote,
   getForks,
+  clearNote,
 } from "../redux/notes/notesSlice"
 
 import Spinner from "../components/Spinner"
@@ -34,8 +35,16 @@ const Note = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
-  const { note, forks, isSuccess, isLoading, isError, message, isStarred, isForked } =
-    useSelector((state) => state.notes)
+  const {
+    note,
+    forks,
+    isSuccess,
+    isLoading,
+    isError,
+    message,
+    isStarred,
+    isForked,
+  } = useSelector((state) => state.notes)
 
   const { user } = useSelector((state) => state.auth)
 
@@ -54,8 +63,6 @@ const Note = () => {
       toast.success("Note Successfully Forked")
       dispatch(getForks(noteId))
     }
-
-    dispatch(resetNotes())
   }, [dispatch, isSuccess, isError, isForked, message])
 
   useEffect(() => {
@@ -66,7 +73,12 @@ const Note = () => {
       dispatch(fetchNote(noteId))
     }
     dispatch(getForks(noteId))
-  }, [dispatch, noteId, forks])
+  }, [dispatch, noteId])
+
+  //Cleanup on Unmount
+  useEffect(() => {
+    return () => dispatch(clearNote())
+  }, [])
 
   //Handle Fork
   const forkHandler = () => {
@@ -139,32 +151,32 @@ const Note = () => {
                 <div className="avatar">
                   <img
                     className="avatar"
-                    src={note.owner.avatar_url}
+                    src={note?.owner?.avatar_url}
                     alt="avatar"
                   />
                 </div>
                 <div className="user-desc">
                   <div className="user-heading">
-                    {`${note.owner.login} / ${note.description}`}
+                    {`${note?.owner?.login} / ${note?.description}`}
                   </div>
                   <div className="user-sub-heading">
-                    {format(new Date(note.created_at), "p, dd/MM/yyyy")}
+                    {format(new Date(note?.created_at), "p, dd/MM/yyyy")}
                   </div>
-                  <div className="note-id">{note.id}</div>
+                  <div className="note-id">{note?.id}</div>
                 </div>
               </div>
               <div className="note-features">
-                {user && user.login === note.owner.login && (
+                {user && user?.login === note?.owner.login && (
                   <div className="edit-delete">
                     <div
-                      onClick={() => updateHandler(note.id)}
+                      onClick={() => updateHandler(note?.id)}
                       className="note-feature"
                     >
                       <EditIcon />
                       <div>Edit</div>
                     </div>
                     <div
-                      onClick={() => deleteHandler(note.id)}
+                      onClick={() => deleteHandler(note?.id)}
                       className="note-feature"
                     >
                       <DeleteIcon />

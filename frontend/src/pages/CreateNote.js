@@ -7,6 +7,7 @@ import {
   resetNotes,
   fetchNote,
   updateNote,
+  updateNoteFrontend,
 } from "../redux/notes/notesSlice"
 
 import Spinner from "../components/Spinner"
@@ -118,8 +119,7 @@ const CreateNote = () => {
     setNoteData(data)
   }
 
-  //Final Notes Data that will be posted to the API endpoint in the correct format
-
+  //Convert noteData to the correct format as per API specification
   const files = {}
 
   noteData.forEach((note) => {
@@ -135,6 +135,7 @@ const CreateNote = () => {
     }
   }
 
+  //Final data that will be submitted to the API
   const finalData = {
     description: noteDescription,
     files,
@@ -147,6 +148,7 @@ const CreateNote = () => {
       const updatedData = { noteId, ...finalData }
       console.log("submitted data", updatedData)
       dispatch(updateNote(updatedData))
+      // dispatch(updateNoteFrontend(updatedData))
     } else {
       dispatch(createNote(finalData))
     }

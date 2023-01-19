@@ -6,6 +6,7 @@ import {
   resetNotes,
   resetSearch,
   clearNote,
+  clearNotes,
 } from "../redux/notes/notesSlice"
 import Spinner from "../components/Spinner"
 import { toast } from "react-toastify"
@@ -46,7 +47,6 @@ const NotesTable = () => {
   useEffect(() => {
     if (isSuccess) {
       dispatch(resetNotes())
-      dispatch(clearNote())
     }
 
     if (isError) {
@@ -59,6 +59,11 @@ const NotesTable = () => {
   useEffect(() => {
     dispatch(fetchNotes({ currPage: page + 1, rowsPerPage: rowsPerPage }))
   }, [dispatch, page, rowsPerPage])
+
+  //Cleanup on Unmount
+  useEffect(() => {
+    return () => dispatch(clearNotes())
+  }, [])
 
   //Page changer for pagination
   const handleChangePage = (event, newPage) => {

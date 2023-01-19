@@ -5,6 +5,7 @@ import {
   fetchUserNotes,
   resetNotes,
   clearNote,
+  clearUserNotes,
 } from "../redux/notes/notesSlice"
 import Spinner from "../components/Spinner"
 import { toast } from "react-toastify"
@@ -54,6 +55,11 @@ const MyNotes = () => {
       })
     )
   }, [dispatch, page, rowsPerPage])
+
+  //Cleanup on Unmount
+  useEffect(() => {
+    return () => dispatch(clearUserNotes())
+  }, [])
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage)
