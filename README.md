@@ -26,9 +26,13 @@ It has the following features:
 
 ![Github Login Flow](https://i.imgur.com/JynCmMp.png)
 
-## Authors
+## Author
 
 * [Umair Mirza - @umair-mirza](https://github.com/umair-mirza)
+
+## Mentor
+
+* [Hussain Haider - @hussainhaider492](https://github.com/hussainhaider492)
 
 ## Tech Stack
 
