@@ -41,7 +41,8 @@ export const fetchNote = createAsyncThunk(
   "notes/fetchNote",
   async (noteId, thunkAPI) => {
     try {
-      return await notesService.fetchNote(noteId)
+      const token = thunkAPI.getState().auth.user.accessToken
+      return await notesService.fetchNote(noteId, token)
     } catch (error) {
       const message =
         error?.response?.data?.message || error.message || error.toString()
@@ -55,7 +56,8 @@ export const searchNote = createAsyncThunk(
   "notes/searchNote",
   async (noteId, thunkAPI) => {
     try {
-      return await notesService.fetchNote(noteId)
+      const token = thunkAPI.getState().auth.user.accessToken
+      return await notesService.fetchNote(noteId, token)
     } catch (error) {
       const message =
         error?.response?.data?.message || error.message || error.toString()
@@ -73,7 +75,6 @@ export const fetchUserNotes = createAsyncThunk(
       return await notesService.fetchUserNotes(
         notesData.currPage,
         notesData.rowsPerPage,
-        notesData.currUser,
         token
       )
     } catch (error) {
@@ -253,23 +254,6 @@ export const notesSlice = createSlice({
         state.message = "Note with description not Found"
       }
     },
-    updateNoteFrontend: (state, action) => {
-      const { noteId, ...updatedData } = action.payload
-
-      const selectedNote = state.userNotes.find((note) => note.id === noteId)
-      const selectedNoteIndex = state.userNotes.indexOf(selectedNote)
-
-      if (selectedNote) {
-        selectedNote.description = updatedData.description
-        if (selectedNote.files) {
-          selectedNote.files = updatedData.files
-        }
-
-        if (selectedNoteIndex !== -1) {
-          state.userNotes[selectedNoteIndex] = selectedNote
-        }
-      }
-    },
   },
   extraReducers: (builder) => {
     builder
@@ -434,6 +418,5 @@ export const {
   resetSearch,
   removeNote,
   searchNoteDesc,
-  updateNoteFrontend,
 } = notesSlice.actions
 export default notesSlice.reducer

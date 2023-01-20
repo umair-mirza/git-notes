@@ -5,9 +5,8 @@ import { toast } from "react-toastify"
 import {
   createNote,
   resetNotes,
-  fetchNote,
   updateNote,
-  updateNoteFrontend,
+  clearNote,
 } from "../redux/notes/notesSlice"
 
 import Spinner from "../components/Spinner"
@@ -28,15 +27,8 @@ const CreateNote = () => {
   ])
   const [deletedFileNames, setDeletedFileNames] = useState([])
 
-  const {
-    note = {},
-    isLoading,
-    isSuccess,
-    isCreated,
-    isUpdated,
-    isError,
-    message,
-  } = useSelector((state) => state.notes)
+  const { note, isLoading, isSuccess, isCreated, isUpdated, isError, message } =
+    useSelector((state) => state.notes)
 
   const dispatch = useDispatch()
   const navigate = useNavigate()
@@ -45,10 +37,8 @@ const CreateNote = () => {
 
   //For Editing / Updating
   useEffect(() => {
-    if (noteId) {
-      dispatch(fetchNote(noteId))
-
-      setNoteDescription(note.description)
+    if (noteId && note.id === noteId) {
+      setNoteDescription(note?.description)
 
       //Convert files object to array
       const noteData = note?.files ? Object.values(note?.files) : []
@@ -79,6 +69,7 @@ const CreateNote = () => {
 
     if (isUpdated) {
       dispatch(resetNotes())
+      dispatch(clearNote())
       toast.success("Successfully Updated")
       navigate("/my-notes")
     }
@@ -148,7 +139,6 @@ const CreateNote = () => {
       const updatedData = { noteId, ...finalData }
       console.log("submitted data", updatedData)
       dispatch(updateNote(updatedData))
-      // dispatch(updateNoteFrontend(updatedData))
     } else {
       dispatch(createNote(finalData))
     }

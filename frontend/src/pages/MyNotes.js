@@ -4,7 +4,6 @@ import { Link, useNavigate } from "react-router-dom"
 import {
   fetchUserNotes,
   resetNotes,
-  clearNote,
   clearUserNotes,
 } from "../redux/notes/notesSlice"
 import Spinner from "../components/Spinner"
@@ -33,12 +32,9 @@ const MyNotes = () => {
   const { userNotes, isSuccess, isError, isLoading, message, deletedNote } =
     useSelector((state) => state.notes)
 
-  const { user } = useSelector((state) => state.auth)
-
   useEffect(() => {
     if (isSuccess) {
       dispatch(resetNotes())
-      dispatch(clearNote())
     }
 
     if (isError) {
@@ -51,7 +47,6 @@ const MyNotes = () => {
       fetchUserNotes({
         currPage: page + 1,
         rowsPerPage: rowsPerPage,
-        currUser: user,
       })
     )
   }, [dispatch, page, rowsPerPage])
@@ -59,7 +54,7 @@ const MyNotes = () => {
   //Cleanup on Unmount
   useEffect(() => {
     return () => dispatch(clearUserNotes())
-  }, [])
+  }, [dispatch])
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage)
@@ -76,7 +71,7 @@ const MyNotes = () => {
 
   //User notes without the deleted notes
   const finalUserNotes = deletedNote
-    ? userNotes.filter((note) => note.id !== deletedNote)
+    ? userNotes?.filter((note) => note.id !== deletedNote)
     : userNotes
 
   if (isLoading) {
@@ -101,7 +96,7 @@ const MyNotes = () => {
               {isLoading ? (
                 <Spinner />
               ) : (
-                finalUserNotes.map((note) => (
+                finalUserNotes?.map((note) => (
                   <TableRow
                     key={note.id}
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
@@ -109,25 +104,25 @@ const MyNotes = () => {
                     <TableCell align="left">
                       <img
                         className="avatar"
-                        src={note.owner.avatar_url}
+                        src={note?.owner?.avatar_url}
                         alt="avatar"
                       />
                     </TableCell>
-                    <TableCell align="left">{note.owner.login}</TableCell>
+                    <TableCell align="left">{note?.owner?.login}</TableCell>
                     <TableCell align="left">
-                      {note.description.length > 0
-                        ? note.description.slice(0, 20)
+                      {note?.description?.length > 0
+                        ? note?.description?.slice(0, 20)
                         : "no description"}
                     </TableCell>
                     <TableCell align="left">
-                      {format(new Date(note.created_at), "p, dd/MM/yyyy")}
+                      {format(new Date(note?.created_at), "p, dd/MM/yyyy")}
                     </TableCell>
                     <TableCell
                       align="left"
                       className="select-cell"
-                      onClick={() => noteHandler(note.id)}
+                      onClick={() => noteHandler(note?.id)}
                     >
-                      {note.id}
+                      {note?.id}
                     </TableCell>
                   </TableRow>
                 ))

@@ -7,7 +7,6 @@ import {
   deleteNote,
   resetNotes,
   resetSearch,
-  removeNote,
   checkStar,
   starNote,
   unStarNote,
@@ -63,7 +62,7 @@ const Note = () => {
       toast.success("Note Successfully Forked")
       dispatch(getForks(noteId))
     }
-  }, [dispatch, isSuccess, isError, isForked, message])
+  }, [dispatch, isSuccess, isError, isForked, message, noteId])
 
   useEffect(() => {
     if (user) {
@@ -78,7 +77,7 @@ const Note = () => {
   //Cleanup on Unmount
   useEffect(() => {
     return () => dispatch(clearNote())
-  }, [])
+  }, [dispatch])
 
   //Handle Fork
   const forkHandler = () => {
@@ -106,7 +105,6 @@ const Note = () => {
   const deleteHandler = (noteId) => {
     if (window.confirm("Are you sure you want to delete this Note?")) {
       dispatch(deleteNote(noteId))
-      dispatch(removeNote(noteId))
       toast.success("Deleted Successfully")
       navigate("/my-notes")
     }
@@ -124,7 +122,11 @@ const Note = () => {
   //Back to All Handler
   const backToAllHandler = () => {
     dispatch(resetSearch())
-    navigate("/")
+    if (note?.owner?.login === user?.login) {
+      navigate("/my-notes")
+    } else {
+      navigate("/")
+    }
   }
 
   const noteContent = () => {

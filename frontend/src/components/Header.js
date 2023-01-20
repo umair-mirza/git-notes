@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react"
 import { useSelector, useDispatch } from "react-redux"
-import { useNavigate } from "react-router-dom"
+import { useNavigate, useLocation } from "react-router-dom"
 import { GITHUB_LOGIN_URL } from "./constants/constants"
 import { login, reset } from "../redux/auth/authSlice"
 
@@ -14,6 +14,7 @@ const Header = () => {
 
   const dispatch = useDispatch()
   const navigate = useNavigate()
+  const location = useLocation()
 
   const { user } = useSelector((state) => state.auth)
 
@@ -43,7 +44,7 @@ const Header = () => {
         GIT NOTES
       </div>
       <div className="top-right">
-        <SearchBar />
+        {location.pathname === "/" && <SearchBar />}
         {user ? (
           <AccountMenu />
         ) : (

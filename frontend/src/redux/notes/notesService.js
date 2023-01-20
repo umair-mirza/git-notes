@@ -16,8 +16,14 @@ const fetchNotes = async (page, perPage) => {
 }
 
 // Fetch Single Note
-const fetchNote = async (id) => {
-  const response = await axios.get(`${API_URL}/${id}`)
+const fetchNote = async (id, token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  }
+
+  const response = await axios.get(`${API_URL}/${id}`, config)
 
   if (response.data) {
     console.log("gist:", response.data)
@@ -26,7 +32,7 @@ const fetchNote = async (id) => {
 }
 
 //Fetch Loggedin user notes
-const fetchUserNotes = async (page, perPage, user, token) => {
+const fetchUserNotes = async (page, perPage, token) => {
   const config = {
     headers: {
       Authorization: `Bearer ${token}`,
