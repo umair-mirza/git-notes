@@ -19,7 +19,7 @@ const SearchBar = () => {
   const handleSearch = () => {
     if (searchInput.length === 32) {
       dispatch(searchNote(searchInput))
-    } else {
+    } else if (searchInput.length > 0 && searchInput.length !== 32) {
       //Search note by description
       dispatch(searchNoteDesc(searchInput))
     }
