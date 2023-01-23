@@ -23,10 +23,12 @@ const initialState = {
 export const fetchNotes = createAsyncThunk(
   "notes/fetchNotes",
   async (pagesData, thunkAPI) => {
+    const token = thunkAPI.getState().auth?.user?.accessToken
     try {
       return await notesService.fetchNotes(
         pagesData.currPage,
-        pagesData.rowsPerPage
+        pagesData.rowsPerPage,
+        token
       )
     } catch (error) {
       const message =

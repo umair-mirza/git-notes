@@ -3,10 +3,16 @@ import axios from "axios"
 const API_URL = "https://api.github.com/gists"
 
 //Fetch Public notes
-const fetchNotes = async (page, perPage) => {
-  console.log("details", page, perPage)
+const fetchNotes = async (page, perPage, token) => {
+  const config = {
+    headers: {
+      Authorization: token ? `Bearer ${token}` : null,
+    },
+  }
+
   const response = await axios.get(
-    `${API_URL}?page=${page}&per_page=${perPage}&sort=updated`
+    `${API_URL}/public?page=${page}&per_page=${perPage}&sort=updated`,
+    config
   )
 
   if (response.data) {
