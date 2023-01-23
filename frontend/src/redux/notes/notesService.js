@@ -19,7 +19,7 @@ const fetchNotes = async (page, perPage) => {
 const fetchNote = async (id, token) => {
   const config = {
     headers: {
-      Authorization: `Bearer ${token}`,
+      Authorization: token ? `Bearer ${token}` : null,
     },
   }
 
@@ -188,14 +188,8 @@ const forkNote = async (noteId, token) => {
 }
 
 //Get Number of Forks
-const getForks = async (noteId, token) => {
-  const config = {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  }
-
-  const response = await axios.get(`${API_URL}/${noteId}/forks`, config)
+const getForks = async (noteId) => {
+  const response = await axios.get(`${API_URL}/${noteId}/forks`)
 
   return response.data.length
 }

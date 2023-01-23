@@ -40,8 +40,8 @@ export const fetchNotes = createAsyncThunk(
 export const fetchNote = createAsyncThunk(
   "notes/fetchNote",
   async (noteId, thunkAPI) => {
+    const token = thunkAPI.getState().auth?.user?.accessToken
     try {
-      const token = thunkAPI.getState().auth.user.accessToken
       return await notesService.fetchNote(noteId, token)
     } catch (error) {
       const message =
@@ -55,8 +55,8 @@ export const fetchNote = createAsyncThunk(
 export const searchNote = createAsyncThunk(
   "notes/searchNote",
   async (noteId, thunkAPI) => {
+    const token = thunkAPI.getState().auth?.user?.accessToken
     try {
-      const token = thunkAPI.getState().auth.user.accessToken
       return await notesService.fetchNote(noteId, token)
     } catch (error) {
       const message =
@@ -131,7 +131,7 @@ export const checkStar = createAsyncThunk(
   "notes/checkStar",
   async (noteId, thunkAPI) => {
     try {
-      const token = thunkAPI.getState().auth.user.accessToken
+      const token = thunkAPI.getState().auth?.user?.accessToken
       return await notesService.checkStar(noteId, token)
     } catch (error) {
       const message =
@@ -177,7 +177,6 @@ export const forkNote = createAsyncThunk(
   async (noteId, thunkAPI) => {
     try {
       const token = thunkAPI.getState().auth.user.accessToken
-
       return await notesService.forkNote(noteId, token)
     } catch (error) {
       const message =
@@ -192,9 +191,7 @@ export const getForks = createAsyncThunk(
   "notes/getForks",
   async (noteId, thunkAPI) => {
     try {
-      const token = thunkAPI.getState().auth.user.accessToken
-
-      return await notesService.getForks(noteId, token)
+      return await notesService.getForks(noteId)
     } catch (error) {
       const message =
         error?.response?.data?.message || error.message || error.toString()

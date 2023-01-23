@@ -83,9 +83,9 @@ const Note = () => {
   const forkHandler = () => {
     if (!user) {
       toast.error("You are not logged in")
+    } else {
+      dispatch(forkNote(noteId))
     }
-
-    dispatch(forkNote(noteId))
   }
 
   //Handle Star
@@ -135,10 +135,10 @@ const Note = () => {
       <div key={index} className="note-content">
         <div className="content-head">
           <CodeIcon />
-          <span className="note-desc">{file.filename}</span>
+          <span className="note-desc">{file?.filename}</span>
         </div>
         <hr />
-        <div className="content-main">{file.content}</div>
+        <div className="content-main">{file?.content}</div>
       </div>
     ))
   }
