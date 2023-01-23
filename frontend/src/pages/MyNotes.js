@@ -65,7 +65,17 @@ const MyNotes = () => {
 
   return (
     <div className="container top-bottom-space">
-      <Box sx={{ width: "100%" }}>
+      <Box
+        sx={{
+          width: "100%",
+          "& th": {
+            color: "white",
+            backgroundColor: "#5acba1",
+            opacity: 0.7,
+            fontWeight: "bold",
+          },
+        }}
+      >
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
             <TableHead>
