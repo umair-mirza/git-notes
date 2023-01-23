@@ -115,10 +115,6 @@ const Note = () => {
     navigate(`/edit/${noteId}`)
   }
 
-  if (isLoading) {
-    return <Spinner />
-  }
-
   //Back to All Handler
   const backToAllHandler = () => {
     dispatch(resetSearch())
@@ -127,6 +123,10 @@ const Note = () => {
     } else {
       navigate("/")
     }
+  }
+
+  if (isLoading) {
+    return <Spinner />
   }
 
   const noteContent = () => {
@@ -145,7 +145,7 @@ const Note = () => {
 
   return (
     <>
-      {Object.keys(note).length > 0 && (
+      {Object.keys(note)?.length > 0 && (
         <div className="container top-bottom-space">
           <div className="note-area">
             <div className="header-area">
@@ -199,7 +199,7 @@ const Note = () => {
                 </div>
               </div>
             </div>
-            {noteContent()}
+            {isLoading ? <Spinner /> : noteContent()}
           </div>
 
           <div className="back-button">
