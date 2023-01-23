@@ -69,14 +69,10 @@ export const searchNote = createAsyncThunk(
 // Fetch Logged in user notes
 export const fetchUserNotes = createAsyncThunk(
   "notes/userNotes",
-  async (notesData, thunkAPI) => {
+  async (user, thunkAPI) => {
     try {
       const token = thunkAPI.getState().auth.user.accessToken
-      return await notesService.fetchUserNotes(
-        notesData.currPage,
-        notesData.rowsPerPage,
-        token
-      )
+      return await notesService.fetchUserNotes(user, token)
     } catch (error) {
       const message =
         error?.response?.data?.message || error.message || error.toString()

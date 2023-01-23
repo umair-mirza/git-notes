@@ -32,7 +32,7 @@ const fetchNote = async (id, token) => {
 }
 
 //Fetch Loggedin user notes
-const fetchUserNotes = async (page, perPage, token) => {
+const fetchUserNotes = async (user, token) => {
   const config = {
     headers: {
       Authorization: `Bearer ${token}`,

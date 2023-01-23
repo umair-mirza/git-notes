@@ -1,4 +1,4 @@
-import React, { useEffect } from "react"
+import React, { useEffect, useState } from "react"
 import { useSelector, useDispatch } from "react-redux"
 import { Link, useNavigate } from "react-router-dom"
 import {
@@ -23,14 +23,13 @@ import "../components/scss/Spinner.scss"
 import "./scss/MyNotes.scss"
 
 const MyNotes = () => {
-  const [page, setPage] = React.useState(0)
-  const [rowsPerPage, setRowsPerPage] = React.useState(10)
-
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
   const { userNotes, isSuccess, isError, isLoading, message, deletedNote } =
     useSelector((state) => state.notes)
+
+  const { user } = useSelector((state) => state.auth)
 
   useEffect(() => {
     if (isSuccess) {
@@ -43,27 +42,13 @@ const MyNotes = () => {
   }, [dispatch, isSuccess, isError, message])
 
   useEffect(() => {
-    dispatch(
-      fetchUserNotes({
-        currPage: page + 1,
-        rowsPerPage: rowsPerPage,
-      })
-    )
-  }, [dispatch, page, rowsPerPage])
+    dispatch(fetchUserNotes(user))
+  }, [dispatch])
 
   //Cleanup on Unmount
   useEffect(() => {
     return () => dispatch(clearUserNotes())
   }, [dispatch])
-
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage)
-  }
-
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 10))
-    setPage(0)
-  }
 
   const noteHandler = (noteId) => {
     navigate(`/notes/${noteId}`)
