@@ -339,7 +339,6 @@ export const notesSlice = createSlice({
       .addCase(checkStar.rejected, (state, action) => {
         state.isLoading = false
         state.isError = true
-        state.message = action.payload
       })
       .addCase(starNote.pending, (state) => {
         state.isLoading = true
@@ -401,7 +400,6 @@ export const notesSlice = createSlice({
       .addCase(getForks.rejected, (state, action) => {
         state.isLoading = false
         state.isError = true
-        state.message = action.payload
       })
   },
 })
