@@ -8,6 +8,8 @@ import {
   updateNote,
   clearNote,
 } from "../../redux/notes/notesSlice"
+import useUpdatedData from "../../hooks/useUpdatedData"
+import { noteDataToFilesObject } from "./utils"
 
 import Spinner from "../../components/spinner/spinner"
 import { Button, TextField } from "@mui/material"
@@ -35,26 +37,8 @@ const CreateNote = () => {
 
   const { noteId } = useParams()
 
-  //For Editing / Updating
-  useEffect(() => {
-    if (noteId && note.id === noteId) {
-      setNoteDescription(note?.description)
-
-      //Convert files object to array
-      const noteData = note?.files ? Object.values(note?.files) : []
-
-      const noteArr = noteData.map((note) => {
-        return {
-          fileName: note.filename,
-          content: note.content,
-        }
-      })
-
-      setNoteData(noteArr)
-    }
-
-    dispatch(resetNotes())
-  }, [dispatch, noteId])
+  //Fetch Updated Data
+  useUpdatedData(setNoteDescription, setNoteData)
 
   useEffect(() => {
     if (isError) {
@@ -110,27 +94,12 @@ const CreateNote = () => {
     setNoteData(data)
   }
 
-  //Convert noteData to the correct format as per API specification
-  const files = {}
-
-  noteData.forEach((note) => {
-    files[note.fileName] = {
-      content: note.content,
-    }
-  })
-
-  //For file deletion. See Github Gist API Updating a Gist > Deleting a Gist File
-  if (deletedFileNames.length > 0) {
-    for (const fileName of deletedFileNames) {
-      files[fileName] = null
-    }
-  }
-
-  //Final data that will be submitted to the API
-  const finalData = {
-    description: noteDescription,
-    files,
-  }
+  //Extract finalData to be sent to the API endpoint
+  const finalData = noteDataToFilesObject(
+    noteDescription,
+    noteData,
+    deletedFileNames
+  )
 
   //Form Submission
   const submitForm = (e) => {

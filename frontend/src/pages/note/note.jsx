@@ -113,6 +113,7 @@ const Note = () => {
   //Handle Update
   const updateHandler = (noteId) => {
     navigate(`/edit/${noteId}`)
+    dispatch(fetchNote(noteId))
   }
 
   //Back to All Handler
