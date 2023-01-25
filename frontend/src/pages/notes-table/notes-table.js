@@ -7,8 +7,8 @@ import {
   resetSearch,
   clearNote,
   clearNotes,
-} from "../redux/notes/notesSlice"
-import Spinner from "../components/Spinner"
+} from "../../redux/notes/notesSlice"
+import Spinner from "../../components/spinner/spinner"
 import { toast } from "react-toastify"
 import { format } from "date-fns"
 
@@ -22,9 +22,9 @@ import TableRow from "@mui/material/TableRow"
 import Paper from "@mui/material/Paper"
 import TablePagination from "@mui/material/TablePagination"
 
-import "./scss/NoteTable.scss"
-import "../components/scss/UserIcon.scss"
-import "../components/scss/Spinner.scss"
+import "./note-table.scss"
+import "../../components/account-menu/account-menu.scss"
+import "../../components/spinner/spinner.scss"
 
 const NotesTable = () => {
   const [page, setPage] = React.useState(0)

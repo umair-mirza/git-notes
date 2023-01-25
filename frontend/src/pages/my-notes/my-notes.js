@@ -5,8 +5,8 @@ import {
   fetchUserNotes,
   resetNotes,
   clearUserNotes,
-} from "../redux/notes/notesSlice"
-import Spinner from "../components/Spinner"
+} from "../../redux/notes/notesSlice"
+import Spinner from "../../components/spinner/spinner"
 import { toast } from "react-toastify"
 import { format } from "date-fns"
 
@@ -19,8 +19,8 @@ import TableHead from "@mui/material/TableHead"
 import TableRow from "@mui/material/TableRow"
 import Paper from "@mui/material/Paper"
 
-import "../components/scss/Spinner.scss"
-import "./scss/MyNotes.scss"
+import "../../components/spinner/spinner.scss"
+import "./my-notes.scss"
 
 const MyNotes = () => {
   const dispatch = useDispatch()

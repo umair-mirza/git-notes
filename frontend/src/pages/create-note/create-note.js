@@ -7,15 +7,15 @@ import {
   resetNotes,
   updateNote,
   clearNote,
-} from "../redux/notes/notesSlice"
+} from "../../redux/notes/notesSlice"
 
-import Spinner from "../components/Spinner"
+import Spinner from "../../components/spinner/spinner"
 import { Button, TextField } from "@mui/material"
 import DeleteIcon from "@mui/icons-material/Delete"
 
-import "../App.scss"
-import "./scss/CreateNote.scss"
-import "../components/scss/Spinner.scss"
+import "../../app.scss"
+import "./create-note.scss"
+import "../../components/spinner/spinner.scss"
 
 const CreateNote = () => {
   const [noteDescription, setNoteDescription] = useState("")

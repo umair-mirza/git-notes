@@ -13,9 +13,9 @@ import {
   forkNote,
   getForks,
   clearNote,
-} from "../redux/notes/notesSlice"
+} from "../../redux/notes/notesSlice"
 
-import Spinner from "../components/Spinner"
+import Spinner from "../../components/spinner/spinner"
 import { toast } from "react-toastify"
 import { format } from "date-fns"
 import StarOutlineIcon from "@mui/icons-material/StarOutline"
@@ -25,10 +25,10 @@ import EditIcon from "@mui/icons-material/Edit"
 import DeleteIcon from "@mui/icons-material/Delete"
 import CodeIcon from "@mui/icons-material/Code"
 
-import "../App.scss"
-import "./scss/Note.scss"
-import "../components/scss/UserIcon.scss"
-import "../components/scss/Spinner.scss"
+import "../../app.scss"
+import "./note.scss"
+import "../../components/account-menu/account-menu.scss"
+import "../../components/spinner/spinner.scss"
 
 const Note = () => {
   const dispatch = useDispatch()

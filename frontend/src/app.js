@@ -1,14 +1,14 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
 import { ToastContainer } from "react-toastify"
-import Header from "./components/Header"
-import Note from "./pages/Note"
-import MyNotes from "./pages/MyNotes"
-import NotesTable from "./pages/NotesTable"
-import CreateNote from "./pages/CreateNote"
+import Header from "./components/header/header"
+import Note from "./pages/note/note"
+import MyNotes from "./pages/my-notes/my-notes"
+import NotesTable from "./pages/notes-table/notes-table"
+import CreateNote from "./pages/create-note/create-note"
 
 import "react-toastify/dist/ReactToastify.css"
-import "./App.scss"
-import NotFound from "./pages/NotFound"
+import "./app.scss"
+import NotFound from "./pages/not-found/not-found"
 
 function App() {
   return (

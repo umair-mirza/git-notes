@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react"
 import { useSelector, useDispatch } from "react-redux"
 import { useNavigate, useLocation } from "react-router-dom"
-import { GITHUB_LOGIN_URL } from "./constants/constants"
-import { login, reset } from "../redux/auth/authSlice"
+import { GITHUB_LOGIN_URL } from "./constants"
+import { login, reset } from "../../redux/auth/authSlice"
 
-import AccountMenu from "./AccountMenu"
-import SearchBar from "./SearchBar"
+import AccountMenu from "../account-menu/account-menu"
+import SearchBar from "../search-bar/search-bar"
 
-import "./scss/Header.scss"
+import "./header.scss"
 
 const Header = () => {
   const [tempCode, setTempCode] = useState(null)

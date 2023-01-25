@@ -11,10 +11,10 @@ import ArticleIcon from "@mui/icons-material/Article"
 import NoteAddIcon from "@mui/icons-material/NoteAdd"
 import { useNavigate } from "react-router-dom"
 import { useSelector, useDispatch } from "react-redux"
-import { logout, reset } from "../redux/auth/authSlice"
-import { paperProps } from "./constants/constants"
+import { logout, reset } from "../../redux/auth/authSlice"
+import { paperProps } from "./constants"
 
-import "./scss/UserIcon.scss"
+import "./account-menu.scss"
 
 export default function AccountMenu() {
   const [anchorEl, setAnchorEl] = React.useState(null)
