@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect } from "react"
 import { useSelector, useDispatch } from "react-redux"
 import { Link, useNavigate } from "react-router-dom"
 import {
@@ -6,6 +6,7 @@ import {
   resetNotes,
   clearUserNotes,
 } from "../../redux/notes/notesSlice"
+import useDeleteOnRender from "../../hooks/useDeleteOnRender"
 import Spinner from "../../components/spinner/spinner"
 import { toast } from "react-toastify"
 import { format } from "date-fns"
@@ -50,14 +51,17 @@ const MyNotes = () => {
     return () => dispatch(clearUserNotes())
   }, [dispatch])
 
+  //Custom Hook to remove deleted note from list
+  const finalUserNotes = useDeleteOnRender()
+
   const noteHandler = (noteId) => {
     navigate(`/notes/${noteId}`)
   }
 
   //User notes without the deleted notes
-  const finalUserNotes = deletedNote
-    ? userNotes?.filter((note) => note.id !== deletedNote)
-    : userNotes
+  // const finalUserNotes = deletedNote
+  //   ? userNotes?.filter((note) => note.id !== deletedNote)
+  //   : userNotes
 
   if (isLoading) {
     return <Spinner />
