@@ -7,7 +7,7 @@ import {
   resetSearch,
   clearNote,
   clearNotes,
-} from "../../redux/notes/notesSlice"
+} from "../../store/notes/notesSlice"
 import Spinner from "../../components/spinner/spinner"
 import { toast } from "react-toastify"
 import { format } from "date-fns"
@@ -22,9 +22,7 @@ import TableRow from "@mui/material/TableRow"
 import Paper from "@mui/material/Paper"
 import TablePagination from "@mui/material/TablePagination"
 
-import "./note-table.scss"
-import "../../components/account-menu/account-menu.scss"
-import "../../components/spinner/spinner.scss"
+import { Button } from "@mui/material"
 
 const NotesTable = () => {
   const [page, setPage] = React.useState(0)
@@ -112,10 +110,15 @@ const NotesTable = () => {
               sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
             >
               <TableCell align="left">
-                <img
-                  className="avatar"
+                <Box
+                  component="img"
                   src={note.owner.avatar_url}
                   alt="avatar"
+                  sx={{
+                    height: "50px",
+                    width: "50px",
+                    borderRadius: "50%",
+                  }}
                 />
               </TableCell>
               <TableCell align="left">{note.owner.login}</TableCell>
@@ -129,8 +132,8 @@ const NotesTable = () => {
               </TableCell>
               <TableCell
                 align="left"
-                className="select-cell"
                 onClick={() => noteHandler(note.id)}
+                sx={{ cursor: "pointer" }}
               >
                 {note.id}
               </TableCell>
@@ -146,13 +149,14 @@ const NotesTable = () => {
   }
 
   return (
-    <div className="container top-bottom-space">
+    <div>
       <Box
         sx={{
+          my: "30px",
           width: "100%",
           "& th": {
             color: "white",
-            backgroundColor: "#5acba1",
+            backgroundColor: "primary.main",
             opacity: 0.7,
             fontWeight: "bold",
           },
@@ -162,19 +166,19 @@ const NotesTable = () => {
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
             <TableHead>
               <TableRow>
-                <TableCell className="bold-headings" align="left">
+                <TableCell fontWeight="bold" align="left">
                   Avatar
                 </TableCell>
-                <TableCell className="bold-headings" align="left">
+                <TableCell fontWeight="bold" align="left">
                   User
                 </TableCell>
-                <TableCell className="bold-headings" align="left">
+                <TableCell fontWeight="bold" align="left">
                   Description
                 </TableCell>
-                <TableCell className="bold-headings" align="left">
+                <TableCell fontWeight="bold" align="left">
                   Created Date
                 </TableCell>
-                <TableCell className="bold-headings" align="left">
+                <TableCell fontWeight="bold" align="left">
                   Note Id
                 </TableCell>
               </TableRow>
@@ -198,12 +202,14 @@ const NotesTable = () => {
       </Box>
       {(Object.keys(searchedNote).length > 0 || isSearchError) && (
         <div>
-          <button
+          <Button
+            variant="contained"
+            color="primary"
             onClick={allResultsHandler}
-            className="primary-button back-button"
+            sx={{ color: "white" }}
           >
             Back to All Results
-          </button>
+          </Button>
         </div>
       )}
     </div>

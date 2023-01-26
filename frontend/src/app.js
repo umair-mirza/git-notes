@@ -6,29 +6,35 @@ import MyNotes from "./pages/my-notes/my-notes"
 import NotesTable from "./pages/notes-table/notes-table"
 import CreateNote from "./pages/create-note/create-note"
 
+import { theme } from "./theme"
+import { ThemeProvider } from "@mui/material/styles"
 import "react-toastify/dist/ReactToastify.css"
-import "./app.scss"
 import NotFound from "./pages/not-found/not-found"
+import { Box, Container } from "@mui/material"
 
 function App() {
   return (
-    <div>
-      <Router>
-        <Header />
-        <Routes>
-          <Route path="/" element={<NotesTable />} />
-          <Route path="/my-notes" element={<MyNotes />} />
-          <Route path="/notes/:noteId" element={<Note />} />
-          <Route
-            path="/create-note"
-            element={<CreateNote key={window.location.pathname} />}
-          />
-          <Route path="/edit/:noteId" element={<CreateNote />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </Router>
-      <ToastContainer />
-    </div>
+    <ThemeProvider theme={theme}>
+      <Box>
+        <Router>
+          <Header />
+          <Container>
+            <Routes>
+              <Route path="/" element={<NotesTable />} />
+              <Route path="/my-notes" element={<MyNotes />} />
+              <Route path="/notes/:noteId" element={<Note />} />
+              <Route
+                path="/create-note"
+                element={<CreateNote key={window.location.pathname} />}
+              />
+              <Route path="/edit/:noteId" element={<CreateNote />} />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </Container>
+        </Router>
+        <ToastContainer />
+      </Box>
+    </ThemeProvider>
   )
 }
 

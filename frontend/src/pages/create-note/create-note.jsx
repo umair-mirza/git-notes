@@ -7,17 +7,13 @@ import {
   resetNotes,
   updateNote,
   clearNote,
-} from "../../redux/notes/notesSlice"
+} from "../../store/notes/notesSlice"
 import useUpdatedData from "../../hooks/useUpdatedData"
 import { noteDataToFilesObject } from "./utils"
 
 import Spinner from "../../components/spinner/spinner"
-import { Button, TextField } from "@mui/material"
+import { Box, Button, TextField, Typography } from "@mui/material"
 import DeleteIcon from "@mui/icons-material/Delete"
-
-import "../../app.scss"
-import "./create-note.scss"
-import "../../components/spinner/spinner.scss"
 
 const CreateNote = () => {
   const [noteDescription, setNoteDescription] = useState("")
@@ -29,7 +25,7 @@ const CreateNote = () => {
   ])
   const [deletedFileNames, setDeletedFileNames] = useState([])
 
-  const { note, isLoading, isSuccess, isCreated, isUpdated, isError, message } =
+  const { isLoading, isSuccess, isCreated, isUpdated, isError, message } =
     useSelector((state) => state.notes)
 
   const dispatch = useDispatch()
@@ -118,9 +114,11 @@ const CreateNote = () => {
   }
 
   return (
-    <div className="container top-bottom-space">
-      <h2>{noteId ? "Update Note" : "Create New Note"}</h2>
-      <form onSubmit={submitForm} className="form-margin">
+    <Box sx={{ my: "20px" }}>
+      <Typography color="gray" variant="h4" component="h2">
+        {noteId ? "Update Note" : "Create New Note"}
+      </Typography>
+      <form onSubmit={submitForm}>
         <TextField
           name="noteDescription"
           label="Description"
@@ -177,8 +175,8 @@ const CreateNote = () => {
         <Button
           onClick={addFiles}
           variant="contained"
-          color="success"
-          sx={{ width: "200px" }}
+          color="primary"
+          sx={{ color: "white", width: "200px", my: "5px" }}
         >
           Add File
         </Button>
@@ -186,13 +184,13 @@ const CreateNote = () => {
         <Button
           onClick={submitForm}
           variant="contained"
-          color="success"
-          sx={{ my: "20px", width: "200px" }}
+          color="primary"
+          sx={{ color: "white", width: "200px", my: "5px" }}
         >
           {noteId ? "Update Note" : "Create New Note"}
         </Button>
       </form>
-    </div>
+    </Box>
   )
 }
 

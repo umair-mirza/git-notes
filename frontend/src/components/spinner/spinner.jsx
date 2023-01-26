@@ -1,10 +1,11 @@
-import "./spinner.scss"
+import CircularProgress from "@mui/material/CircularProgress"
+import Box from "@mui/material/Box"
 
 const Spinner = () => {
   return (
-    <div className="spinner-container">
-      <div className="loading-spinner"></div>
-    </div>
+    <Box sx={{ position: "fixed", top: "40%", left: "50%" }}>
+      <CircularProgress size={80} />
+    </Box>
   )
 }
 

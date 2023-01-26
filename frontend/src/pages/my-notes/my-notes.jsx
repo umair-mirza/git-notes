@@ -5,7 +5,7 @@ import {
   fetchUserNotes,
   resetNotes,
   clearUserNotes,
-} from "../../redux/notes/notesSlice"
+} from "../../store/notes/notesSlice"
 import useDeleteOnRender from "../../hooks/useDeleteOnRender"
 import Spinner from "../../components/spinner/spinner"
 import { toast } from "react-toastify"
@@ -20,8 +20,7 @@ import TableHead from "@mui/material/TableHead"
 import TableRow from "@mui/material/TableRow"
 import Paper from "@mui/material/Paper"
 
-import "../../components/spinner/spinner.scss"
-import "./my-notes.scss"
+import { Button } from "@mui/material"
 
 const MyNotes = () => {
   const dispatch = useDispatch()
@@ -58,23 +57,18 @@ const MyNotes = () => {
     navigate(`/notes/${noteId}`)
   }
 
-  //User notes without the deleted notes
-  // const finalUserNotes = deletedNote
-  //   ? userNotes?.filter((note) => note.id !== deletedNote)
-  //   : userNotes
-
   if (isLoading) {
     return <Spinner />
   }
 
   return (
-    <div className="container top-bottom-space">
+    <Box sx={{ my: "20px" }}>
       <Box
         sx={{
           width: "100%",
           "& th": {
             color: "white",
-            backgroundColor: "#5acba1",
+            backgroundColor: "primary.main",
             opacity: 0.7,
             fontWeight: "bold",
           },
@@ -101,10 +95,15 @@ const MyNotes = () => {
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   >
                     <TableCell align="left">
-                      <img
-                        className="avatar"
+                      <Box
+                        component="img"
                         src={note?.owner?.avatar_url}
                         alt="avatar"
+                        sx={{
+                          height: "50px",
+                          width: "50px",
+                          borderRadius: "50%",
+                        }}
                       />
                     </TableCell>
                     <TableCell align="left">{note?.owner?.login}</TableCell>
@@ -118,8 +117,8 @@ const MyNotes = () => {
                     </TableCell>
                     <TableCell
                       align="left"
-                      className="select-cell"
                       onClick={() => noteHandler(note?.id)}
+                      sx={{ cursor: "pointer" }}
                     >
                       {note?.id}
                     </TableCell>
@@ -130,12 +129,14 @@ const MyNotes = () => {
           </Table>
         </TableContainer>
       </Box>
-      <div className="back-button">
+      <Box sx={{ marginTop: "20px" }}>
         <Link to="/">
-          <button className="primary-button">Back to Home</button>
+          <Button variant="contained" color="primary" sx={{ color: "white" }}>
+            Back to Home
+          </Button>
         </Link>
-      </div>
-    </div>
+      </Box>
+    </Box>
   )
 }
 

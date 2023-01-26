@@ -2,9 +2,10 @@ import React, { useState } from "react"
 import { useDispatch } from "react-redux"
 import { useNavigate } from "react-router-dom"
 import { CiSearch } from "react-icons/ci"
-import { searchNote, searchNoteDesc } from "../../redux/notes/notesSlice"
+import { searchNote, searchNoteDesc } from "../../store/notes/notesSlice"
 
-import "../header/header.scss"
+import { Stack, TextField } from "@mui/material"
+import SearchIcon from "@mui/icons-material/Search"
 
 const SearchBar = () => {
   const [searchInput, setSearchInput] = useState("")
@@ -29,17 +30,25 @@ const SearchBar = () => {
   }
 
   return (
-    <div className="search">
-      <input
-        onChange={handleSearchInput}
-        className="searchbar"
+    <Stack direction="row" gap={1} alignItems="center">
+      <TextField
+        sx={{
+          width: { xs: "300px", sm: "400px" },
+          bgcolor: "white",
+          borderRadius: "5px",
+        }}
+        size="small"
+        variant="outlined"
         placeholder="Search Notes by Id or Description"
+        onChange={handleSearchInput}
         value={searchInput}
       />
-      <div className="search-icon">
-        <CiSearch onClick={handleSearch} size={20} />
-      </div>
-    </div>
+      <SearchIcon
+        onClick={handleSearch}
+        fontSize="large"
+        sx={{ color: "white", cursor: "pointer" }}
+      />
+    </Stack>
   )
 }
 

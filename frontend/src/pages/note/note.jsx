@@ -13,7 +13,7 @@ import {
   forkNote,
   getForks,
   clearNote,
-} from "../../redux/notes/notesSlice"
+} from "../../store/notes/notesSlice"
 
 import Spinner from "../../components/spinner/spinner"
 import { toast } from "react-toastify"
@@ -25,10 +25,7 @@ import EditIcon from "@mui/icons-material/Edit"
 import DeleteIcon from "@mui/icons-material/Delete"
 import CodeIcon from "@mui/icons-material/Code"
 
-import "../../app.scss"
-import "./note.scss"
-import "../../components/account-menu/account-menu.scss"
-import "../../components/spinner/spinner.scss"
+import { Box, Button, Stack, Typography } from "@mui/material"
 
 const Note = () => {
   const dispatch = useDispatch()
@@ -147,67 +144,111 @@ const Note = () => {
   return (
     <>
       {Object.keys(note)?.length > 0 && (
-        <div className="container top-bottom-space">
-          <div className="note-area">
-            <div className="header-area">
-              <div className="user-details">
-                <div className="avatar">
-                  <img
-                    className="avatar"
-                    src={note?.owner?.avatar_url}
-                    alt="avatar"
-                  />
-                </div>
-                <div className="user-desc">
-                  <div className="user-heading">
+        <div>
+          <Box sx={{ padding: "20px" }}>
+            <Stack
+              direction="row"
+              justifyContent="space-between"
+              alignItems="center"
+            >
+              <Stack direction="row" gap={2}>
+                <Box
+                  component="img"
+                  src={note?.owner?.avatar_url}
+                  alt="avatar"
+                  sx={{
+                    height: "50px",
+                    width: "50px",
+                    borderRadius: "50%",
+                  }}
+                />
+                <Stack direction="column">
+                  <Typography color="primary" fontWeight="bold">
                     {`${note?.owner?.login} / ${note?.description}`}
-                  </div>
-                  <div className="user-sub-heading">
+                  </Typography>
+                  <Typography fontSize="0.8rem" color="gray">
                     {format(new Date(note?.created_at), "p, dd/MM/yyyy")}
-                  </div>
-                  <div className="note-id">{note?.id}</div>
-                </div>
-              </div>
-              <div className="note-features">
+                  </Typography>
+                  <Typography fontSize="0.6rem" color="gray">
+                    {note?.id}
+                  </Typography>
+                </Stack>
+              </Stack>
+              <Stack direction="row" alignItems="center" gap={8}>
                 {user && user?.login === note?.owner.login && (
-                  <div className="edit-delete">
-                    <div
+                  <Stack direction="row" gap={1}>
+                    <Box
                       onClick={() => updateHandler(note?.id)}
-                      className="note-feature"
+                      sx={{
+                        color: "primary.main",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "3px",
+                        cursor: "pointer",
+                      }}
                     >
                       <EditIcon />
                       <div>Edit</div>
-                    </div>
-                    <div
+                    </Box>
+                    <Box
                       onClick={() => deleteHandler(note?.id)}
-                      className="note-feature"
+                      sx={{
+                        color: "primary.main",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "3px",
+                        cursor: "pointer",
+                      }}
                     >
                       <DeleteIcon />
                       <div>Delete</div>
-                    </div>
-                  </div>
+                    </Box>
+                  </Stack>
                 )}
-                <div className="edit-delete">
-                  <div onClick={starHandler} className="note-feature">
+                <Stack direction="row" gap={1}>
+                  <Box
+                    onClick={starHandler}
+                    sx={{
+                      color: "primary.main",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "3px",
+                      cursor: "pointer",
+                    }}
+                  >
                     {isStarred ? <StarIcon /> : <StarOutlineIcon />}
                     <div>Star</div>
-                  </div>
-                  <div onClick={forkHandler} className="note-feature">
+                  </Box>
+                  <Box
+                    onClick={forkHandler}
+                    sx={{
+                      color: "primary.main",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "3px",
+                      cursor: "pointer",
+                    }}
+                  >
                     <ForkRightIcon />
                     <div>Fork</div>
                     <span>{forks}</span>
-                  </div>
-                </div>
-              </div>
-            </div>
+                  </Box>
+                </Stack>
+              </Stack>
+            </Stack>
             {isLoading ? <Spinner /> : noteContent()}
-          </div>
+          </Box>
 
-          <div className="back-button">
-            <button onClick={backToAllHandler} className="primary-button">
+          <Box sx={{ my: "20px" }}>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={backToAllHandler}
+              sx={{ color: "white" }}
+            >
               Back to All Notes
-            </button>
-          </div>
+            </Button>
+          </Box>
         </div>
       )}
     </>

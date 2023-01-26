@@ -11,10 +11,9 @@ import ArticleIcon from "@mui/icons-material/Article"
 import NoteAddIcon from "@mui/icons-material/NoteAdd"
 import { useNavigate } from "react-router-dom"
 import { useSelector, useDispatch } from "react-redux"
-import { logout, reset } from "../../redux/auth/authSlice"
+import { logout, reset } from "../../store/auth/authSlice"
 import { paperProps } from "./constants"
-
-import "./account-menu.scss"
+import { Box } from "@mui/material"
 
 export default function AccountMenu() {
   const [anchorEl, setAnchorEl] = React.useState(null)
@@ -41,11 +40,17 @@ export default function AccountMenu() {
   return (
     <React.Fragment>
       <Tooltip title="Account settings">
-        <img
+        <Box
+          component="img"
           onClick={handleClick}
-          className="avatar"
           src={user.avatar_url}
           alt="avatar"
+          sx={{
+            height: "50px",
+            width: "50px",
+            borderRadius: "50%",
+            cursor: "pointer",
+          }}
         />
       </Tooltip>
 
