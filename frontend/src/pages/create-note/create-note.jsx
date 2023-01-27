@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react"
 import { useSelector, useDispatch } from "react-redux"
 import { useNavigate, useParams } from "react-router-dom"
-import { toast } from "react-toastify"
 import {
   createNote,
   resetNotes,
   updateNote,
   clearNote,
+  showSnackbar,
 } from "../../store/notes/notesSlice"
 import useUpdatedData from "../../hooks/useUpdatedData"
 import { noteDataToFilesObject } from "./utils"
@@ -38,19 +38,18 @@ const CreateNote = () => {
 
   useEffect(() => {
     if (isError) {
-      toast.error(message)
+      dispatch(showSnackbar([message, "error", true]))
     }
 
     if (isCreated) {
-      dispatch(resetNotes())
-      toast.success("Successfully Created")
       navigate("/my-notes")
+      dispatch(showSnackbar(["Created Successfully", "success", true]))
     }
 
     if (isUpdated) {
       dispatch(resetNotes())
       dispatch(clearNote())
-      toast.success("Successfully Updated")
+      dispatch(showSnackbar(["Successfully Updated", "success", true]))
       navigate("/my-notes")
     }
   }, [

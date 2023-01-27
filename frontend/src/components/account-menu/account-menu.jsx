@@ -13,7 +13,7 @@ import { useNavigate } from "react-router-dom"
 import { useSelector, useDispatch } from "react-redux"
 import { logout, reset } from "../../store/auth/authSlice"
 import { paperProps } from "./constants"
-import { Box } from "@mui/material"
+import { Box, styled } from "@mui/material"
 
 export default function AccountMenu() {
   const [anchorEl, setAnchorEl] = React.useState(null)
@@ -36,6 +36,13 @@ export default function AccountMenu() {
     dispatch(reset())
     navigate("/")
   }
+
+  const CustomLink = styled(Link)({
+    textDecoration: "none",
+    color: "inherit",
+    display: "flex",
+    alignItems: "center",
+  })
 
   return (
     <React.Fragment>
@@ -68,29 +75,35 @@ export default function AccountMenu() {
         <MenuItem>{user.login}</MenuItem>
         <Divider />
         <MenuItem>
-          <Link to="/my-notes">
+          <CustomLink to="/my-notes">
             <ListItemIcon>
               <ArticleIcon fontSize="small" />
             </ListItemIcon>
             Your Notes
-          </Link>
+          </CustomLink>
         </MenuItem>
         <MenuItem>
-          <Link to="/create-note">
+          <CustomLink to="/create-note">
             <ListItemIcon>
               <NoteAddIcon fontSize="small" />
             </ListItemIcon>
             Create a Note
-          </Link>
+          </CustomLink>
         </MenuItem>
         <Divider />
         <MenuItem>
           <ListItemIcon>
             <PersonAdd fontSize="small" />
           </ListItemIcon>
-          <a href={user.html_url} target="_blank" rel="noreferrer">
+          <Box
+            component="a"
+            href={user.html_url}
+            target="_blank"
+            rel="noreferrer"
+            sx={{ textDecoration: "none", color: "inherit" }}
+          >
             Your Github Profile
-          </a>
+          </Box>
         </MenuItem>
         <MenuItem onClick={onLogout}>
           <ListItemIcon>

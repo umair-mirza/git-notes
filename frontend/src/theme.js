@@ -9,6 +9,9 @@ export const theme = createTheme({
     secondary: {
       main: "#35a77d",
     },
+    tertiary: {
+      main: "#1176ff",
+    },
   },
   breakpoints: {
     values: {

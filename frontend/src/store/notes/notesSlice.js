@@ -6,6 +6,7 @@ const initialState = {
   userNotes: [],
   note: {},
   searchedNote: {},
+  snackbar: { message: "", type: "success", isOpen: false },
   forks: 0,
   deletedNote: null,
   isSuccess: false,
@@ -250,6 +251,17 @@ export const notesSlice = createSlice({
         state.message = "Note with description not Found"
       }
     },
+    showSnackbar: (state, action) => {
+      const [message, type, isOpen] = action.payload
+      state.snackbar = {
+        message: message,
+        type: type,
+        isOpen: isOpen,
+      }
+    },
+    resetSnackbar: (state) => {
+      state.snackbar = { message: "", type: "success", isOpen: false }
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -412,5 +424,7 @@ export const {
   resetSearch,
   removeNote,
   searchNoteDesc,
+  showSnackbar,
+  resetSnackbar,
 } = notesSlice.actions
 export default notesSlice.reducer

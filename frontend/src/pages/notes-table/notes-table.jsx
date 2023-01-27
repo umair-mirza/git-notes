@@ -5,11 +5,10 @@ import {
   fetchNotes,
   resetNotes,
   resetSearch,
-  clearNote,
   clearNotes,
+  showSnackbar,
 } from "../../store/notes/notesSlice"
 import Spinner from "../../components/spinner/spinner"
-import { toast } from "react-toastify"
 import { format } from "date-fns"
 
 import Box from "@mui/material/Box"
@@ -22,7 +21,7 @@ import TableRow from "@mui/material/TableRow"
 import Paper from "@mui/material/Paper"
 import TablePagination from "@mui/material/TablePagination"
 
-import { Button } from "@mui/material"
+import CustomButton from "../../components/custom-button/custom-button"
 
 const NotesTable = () => {
   const [page, setPage] = React.useState(0)
@@ -48,7 +47,7 @@ const NotesTable = () => {
     }
 
     if (isError) {
-      toast.error(message)
+      dispatch(showSnackbar([message, "error", true]))
     }
 
     dispatch(resetNotes())
@@ -61,7 +60,7 @@ const NotesTable = () => {
   //Cleanup on Unmount
   useEffect(() => {
     return () => dispatch(clearNotes())
-  }, [])
+  }, [dispatch])
 
   //Page changer for pagination
   const handleChangePage = (event, newPage) => {
@@ -202,14 +201,14 @@ const NotesTable = () => {
       </Box>
       {(Object.keys(searchedNote).length > 0 || isSearchError) && (
         <div>
-          <Button
+          <CustomButton
             variant="contained"
             color="primary"
             onClick={allResultsHandler}
             sx={{ color: "white" }}
           >
             Back to All Results
-          </Button>
+          </CustomButton>
         </div>
       )}
     </div>

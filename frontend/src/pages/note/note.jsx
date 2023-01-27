@@ -13,10 +13,10 @@ import {
   forkNote,
   getForks,
   clearNote,
+  showSnackbar,
 } from "../../store/notes/notesSlice"
 
 import Spinner from "../../components/spinner/spinner"
-import { toast } from "react-toastify"
 import { format } from "date-fns"
 import StarOutlineIcon from "@mui/icons-material/StarOutline"
 import StarIcon from "@mui/icons-material/Star"
@@ -25,7 +25,8 @@ import EditIcon from "@mui/icons-material/Edit"
 import DeleteIcon from "@mui/icons-material/Delete"
 import CodeIcon from "@mui/icons-material/Code"
 
-import { Box, Button, Stack, Typography } from "@mui/material"
+import { Box, Stack, styled, Typography } from "@mui/material"
+import CustomButton from "../../components/custom-button/custom-button"
 
 const Note = () => {
   const dispatch = useDispatch()
@@ -48,7 +49,7 @@ const Note = () => {
 
   useEffect(() => {
     if (isError) {
-      toast.error(message)
+      dispatch(showSnackbar([message, "error", true]))
     }
 
     if (isSuccess) {
@@ -56,7 +57,7 @@ const Note = () => {
     }
 
     if (isForked) {
-      toast.success("Note Successfully Forked")
+      dispatch(showSnackbar(["Note Successfully Forked", "success", true]))
       dispatch(getForks(noteId))
     }
   }, [dispatch, isSuccess, isError, isForked, message, noteId])
@@ -79,7 +80,7 @@ const Note = () => {
   //Handle Fork
   const forkHandler = () => {
     if (!user) {
-      toast.error("You are not logged in")
+      dispatch(showSnackbar(["You are not logged in", "error", true]))
     } else {
       dispatch(forkNote(noteId))
     }
@@ -88,7 +89,7 @@ const Note = () => {
   //Handle Star
   const starHandler = () => {
     if (!user) {
-      toast.error("You are not logged in")
+      dispatch(showSnackbar(["You are not logged in", "error", true]))
       return
     }
     if (isStarred) {
@@ -102,7 +103,7 @@ const Note = () => {
   const deleteHandler = (noteId) => {
     if (window.confirm("Are you sure you want to delete this Note?")) {
       dispatch(deleteNote(noteId))
-      toast.success("Deleted Successfully")
+      dispatch(showSnackbar(["Deleted Successfully", "success", true]))
       navigate("/my-notes")
     }
   }
@@ -130,16 +131,46 @@ const Note = () => {
   const noteContent = () => {
     const files = Object.values(note.files)
     return files.map((file, index) => (
-      <div key={index} className="note-content">
-        <div className="content-head">
+      <Box
+        key={index}
+        sx={{
+          mt: "20px",
+          width: "100%",
+          height: "100%",
+          padding: "5px 10px",
+          outline: "2px solid lightgray",
+          boxShadow: "3px 5px 10px #888888",
+          overflow: "none",
+        }}
+      >
+        <Stack
+          direction="row"
+          alignItems="center"
+          paddingBottom="5px"
+          sx={{ color: "tertiary.main" }}
+        >
           <CodeIcon />
-          <span className="note-desc">{file?.filename}</span>
-        </div>
+          <Box component="span" sx={{ marginLeft: "10px" }}>
+            {file?.filename}
+          </Box>
+        </Stack>
         <hr />
-        <div className="content-main">{file?.content}</div>
-      </div>
+        <Box
+          sx={{ padding: "10px 5px", overflow: "none", wordWrap: "break-word" }}
+        >
+          {file?.content}
+        </Box>
+      </Box>
     ))
   }
+
+  const CustomBox = styled(Box)(({ theme }) => ({
+    color: theme.palette.primary.main,
+    display: "flex",
+    alignItems: "center",
+    gap: "3px",
+    cursor: "pointer",
+  }))
 
   return (
     <>
@@ -177,62 +208,26 @@ const Note = () => {
               <Stack direction="row" alignItems="center" gap={8}>
                 {user && user?.login === note?.owner.login && (
                   <Stack direction="row" gap={1}>
-                    <Box
-                      onClick={() => updateHandler(note?.id)}
-                      sx={{
-                        color: "primary.main",
-                        display: "flex",
-                        alignItems: "center",
-                        gap: "3px",
-                        cursor: "pointer",
-                      }}
-                    >
+                    <CustomBox onClick={() => updateHandler(note?.id)}>
                       <EditIcon />
                       <div>Edit</div>
-                    </Box>
-                    <Box
-                      onClick={() => deleteHandler(note?.id)}
-                      sx={{
-                        color: "primary.main",
-                        display: "flex",
-                        alignItems: "center",
-                        gap: "3px",
-                        cursor: "pointer",
-                      }}
-                    >
+                    </CustomBox>
+                    <CustomBox onClick={() => deleteHandler(note?.id)}>
                       <DeleteIcon />
                       <div>Delete</div>
-                    </Box>
+                    </CustomBox>
                   </Stack>
                 )}
                 <Stack direction="row" gap={1}>
-                  <Box
-                    onClick={starHandler}
-                    sx={{
-                      color: "primary.main",
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "3px",
-                      cursor: "pointer",
-                    }}
-                  >
+                  <CustomBox onClick={starHandler}>
                     {isStarred ? <StarIcon /> : <StarOutlineIcon />}
                     <div>Star</div>
-                  </Box>
-                  <Box
-                    onClick={forkHandler}
-                    sx={{
-                      color: "primary.main",
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "3px",
-                      cursor: "pointer",
-                    }}
-                  >
+                  </CustomBox>
+                  <CustomBox onClick={forkHandler}>
                     <ForkRightIcon />
                     <div>Fork</div>
                     <span>{forks}</span>
-                  </Box>
+                  </CustomBox>
                 </Stack>
               </Stack>
             </Stack>
@@ -240,14 +235,9 @@ const Note = () => {
           </Box>
 
           <Box sx={{ my: "20px" }}>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={backToAllHandler}
-              sx={{ color: "white" }}
-            >
+            <CustomButton onClick={backToAllHandler}>
               Back to All Notes
-            </Button>
+            </CustomButton>
           </Box>
         </div>
       )}

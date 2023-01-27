@@ -62,8 +62,19 @@ const Header = () => {
               {user ? (
                 <AccountMenu />
               ) : (
-                <Box>
-                  <a href={GITHUB_LOGIN_URL}>Login</a>
+                <Box
+                  component="a"
+                  backgroundColor="white"
+                  color="primary"
+                  sx={{
+                    textDecoration: "none",
+                    color: "primary.main",
+                    padding: "4px 8px",
+                    borderRadius: "3px",
+                  }}
+                  href={GITHUB_LOGIN_URL}
+                >
+                  Login
                 </Box>
               )}
             </Stack>

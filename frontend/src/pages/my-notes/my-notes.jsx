@@ -5,10 +5,10 @@ import {
   fetchUserNotes,
   resetNotes,
   clearUserNotes,
+  showSnackbar,
 } from "../../store/notes/notesSlice"
 import useDeleteOnRender from "../../hooks/useDeleteOnRender"
 import Spinner from "../../components/spinner/spinner"
-import { toast } from "react-toastify"
 import { format } from "date-fns"
 
 import Box from "@mui/material/Box"
@@ -20,7 +20,7 @@ import TableHead from "@mui/material/TableHead"
 import TableRow from "@mui/material/TableRow"
 import Paper from "@mui/material/Paper"
 
-import { Button } from "@mui/material"
+import CustomButton from "../../components/custom-button/custom-button"
 
 const MyNotes = () => {
   const dispatch = useDispatch()
@@ -37,7 +37,7 @@ const MyNotes = () => {
     }
 
     if (isError) {
-      toast.error(message)
+      dispatch(showSnackbar([message, "error", true]))
     }
   }, [dispatch, isSuccess, isError, message])
 
@@ -130,10 +130,8 @@ const MyNotes = () => {
         </TableContainer>
       </Box>
       <Box sx={{ marginTop: "20px" }}>
-        <Link to="/">
-          <Button variant="contained" color="primary" sx={{ color: "white" }}>
-            Back to Home
-          </Button>
+        <Link to="/" style={{ textDecoration: "none" }}>
+          <CustomButton>Back to Home</CustomButton>
         </Link>
       </Box>
     </Box>
