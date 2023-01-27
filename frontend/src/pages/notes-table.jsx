@@ -7,8 +7,8 @@ import {
   resetSearch,
   clearNotes,
   showSnackbar,
-} from "../../store/notes/notesSlice"
-import Spinner from "../../components/spinner/spinner"
+} from "../store/notes/notesSlice"
+import Spinner from "../components/spinner"
 import { format } from "date-fns"
 
 import Box from "@mui/material/Box"
@@ -21,7 +21,7 @@ import TableRow from "@mui/material/TableRow"
 import Paper from "@mui/material/Paper"
 import TablePagination from "@mui/material/TablePagination"
 
-import CustomButton from "../../components/custom-button/custom-button"
+import GitButton from "../components/buttons/git-button"
 
 const NotesTable = () => {
   const [page, setPage] = React.useState(0)
@@ -90,6 +90,27 @@ const NotesTable = () => {
     navigate("/")
   }
 
+  /*-------------------------MUI---------------------------*/
+
+  const tableHeadingSX = {
+    my: "30px",
+    width: "100%",
+    "& th": {
+      color: "white",
+      backgroundColor: "primary.main",
+      opacity: 0.7,
+      fontWeight: "bold",
+    },
+  }
+
+  const avatarSX = {
+    height: "50px",
+    width: "50px",
+    borderRadius: "50%",
+  }
+
+  /*-------------------------MUI---------------------------*/
+
   //Notes Renderer
   const notesRenderer = () => {
     if (isSearchError) {
@@ -113,11 +134,7 @@ const NotesTable = () => {
                   component="img"
                   src={note.owner.avatar_url}
                   alt="avatar"
-                  sx={{
-                    height: "50px",
-                    width: "50px",
-                    borderRadius: "50%",
-                  }}
+                  sx={avatarSX}
                 />
               </TableCell>
               <TableCell align="left">{note.owner.login}</TableCell>
@@ -149,18 +166,7 @@ const NotesTable = () => {
 
   return (
     <div>
-      <Box
-        sx={{
-          my: "30px",
-          width: "100%",
-          "& th": {
-            color: "white",
-            backgroundColor: "primary.main",
-            opacity: 0.7,
-            fontWeight: "bold",
-          },
-        }}
-      >
+      <Box sx={tableHeadingSX}>
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
             <TableHead>
@@ -201,14 +207,14 @@ const NotesTable = () => {
       </Box>
       {(Object.keys(searchedNote).length > 0 || isSearchError) && (
         <div>
-          <CustomButton
+          <GitButton
             variant="contained"
             color="primary"
             onClick={allResultsHandler}
             sx={{ color: "white" }}
           >
             Back to All Results
-          </CustomButton>
+          </GitButton>
         </div>
       )}
     </div>

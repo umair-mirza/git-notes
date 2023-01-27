@@ -1,5 +1,9 @@
-//Convert noteData to the correct format as per API specification
+/*----------------------------Object to Array converter---------------------------*/
+const filesObjectToArray = (obj) => {
+  return Object.values(obj)
+}
 
+/*----------------------------Convert noteData to the correct format as per API specification---------------------------*/
 const noteDataToFilesObject = (noteDescription, noteData, deletedFileNames) => {
   const files = {}
 
@@ -25,4 +29,4 @@ const noteDataToFilesObject = (noteDescription, noteData, deletedFileNames) => {
   return finalData
 }
 
-export { noteDataToFilesObject }
+export { filesObjectToArray, noteDataToFilesObject }

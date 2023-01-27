@@ -1,15 +1,9 @@
 import { useSelector } from "react-redux"
 
-const useDeleteOnRender = () => {
+const useDeleteFromState = () => {
   const { userNotes, deletedNote } = useSelector((state) => state.notes)
-
   const filteredNotes = userNotes.filter((note) => note.id !== deletedNote)
-
-  if (deletedNote) {
-    return filteredNotes
-  } else {
-    return userNotes
-  }
+  return deletedNote ? filteredNotes : userNotes
 }
 
-export default useDeleteOnRender
+export default useDeleteFromState

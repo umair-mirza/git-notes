@@ -6,9 +6,9 @@ import {
   resetNotes,
   clearUserNotes,
   showSnackbar,
-} from "../../store/notes/notesSlice"
-import useDeleteOnRender from "../../hooks/useDeleteOnRender"
-import Spinner from "../../components/spinner/spinner"
+} from "../store/notes/notesSlice"
+import useDeleteFromState from "../hooks/useDeleteFromState"
+import Spinner from "../components/spinner"
 import { format } from "date-fns"
 
 import Box from "@mui/material/Box"
@@ -20,7 +20,7 @@ import TableHead from "@mui/material/TableHead"
 import TableRow from "@mui/material/TableRow"
 import Paper from "@mui/material/Paper"
 
-import CustomButton from "../../components/custom-button/custom-button"
+import CustomButton from "../components/buttons/git-button"
 
 const MyNotes = () => {
   const dispatch = useDispatch()
@@ -51,7 +51,7 @@ const MyNotes = () => {
   }, [dispatch])
 
   //Custom Hook to remove deleted note from list
-  const finalUserNotes = useDeleteOnRender()
+  const finalUserNotes = useDeleteFromState()
 
   const noteHandler = (noteId) => {
     navigate(`/notes/${noteId}`)

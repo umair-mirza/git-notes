@@ -14,9 +14,9 @@ import {
   getForks,
   clearNote,
   showSnackbar,
-} from "../../store/notes/notesSlice"
+} from "../store/notes/notesSlice"
 
-import Spinner from "../../components/spinner/spinner"
+import Spinner from "../components/spinner"
 import { format } from "date-fns"
 import StarOutlineIcon from "@mui/icons-material/StarOutline"
 import StarIcon from "@mui/icons-material/Star"
@@ -26,7 +26,7 @@ import DeleteIcon from "@mui/icons-material/Delete"
 import CodeIcon from "@mui/icons-material/Code"
 
 import { Box, Stack, styled, Typography } from "@mui/material"
-import CustomButton from "../../components/custom-button/custom-button"
+import CustomButton from "../components/buttons/git-button"
 
 const Note = () => {
   const dispatch = useDispatch()
@@ -124,6 +124,28 @@ const Note = () => {
     }
   }
 
+  /*-------------------------MUI---------------------------*/
+
+  const CustomBox = styled(Box)(({ theme }) => ({
+    color: theme.palette.primary.main,
+    display: "flex",
+    alignItems: "center",
+    gap: "3px",
+    cursor: "pointer",
+  }))
+
+  const noteContentSX = {
+    mt: "20px",
+    width: "100%",
+    height: "100%",
+    padding: "5px 10px",
+    outline: "2px solid lightgray",
+    boxShadow: "3px 5px 10px #888888",
+    overflow: "none",
+  }
+
+  /*-------------------------MUI---------------------------*/
+
   if (isLoading) {
     return <Spinner />
   }
@@ -131,18 +153,7 @@ const Note = () => {
   const noteContent = () => {
     const files = Object.values(note.files)
     return files.map((file, index) => (
-      <Box
-        key={index}
-        sx={{
-          mt: "20px",
-          width: "100%",
-          height: "100%",
-          padding: "5px 10px",
-          outline: "2px solid lightgray",
-          boxShadow: "3px 5px 10px #888888",
-          overflow: "none",
-        }}
-      >
+      <Box key={index} sx={noteContentSX}>
         <Stack
           direction="row"
           alignItems="center"
@@ -163,14 +174,6 @@ const Note = () => {
       </Box>
     ))
   }
-
-  const CustomBox = styled(Box)(({ theme }) => ({
-    color: theme.palette.primary.main,
-    display: "flex",
-    alignItems: "center",
-    gap: "3px",
-    cursor: "pointer",
-  }))
 
   return (
     <>

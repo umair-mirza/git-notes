@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from "react"
 import { useSelector, useDispatch } from "react-redux"
 import { useNavigate, useLocation } from "react-router-dom"
-import { GITHUB_LOGIN_URL } from "./constants"
-import { login, reset } from "../../store/auth/authSlice"
+import { GITHUB_LOGIN_URL } from "../constants"
+import { login, reset } from "../store/auth/authSlice"
 
-import AccountMenu from "../account-menu/account-menu"
-import SearchBar from "../search-bar/search-bar"
+import AccountMenu from "./account-menu"
+import SearchBar from "./search-bar"
 
 import { Box, Container, Stack, Typography } from "@mui/material"
+import LoginButton from "./buttons/login-button"
 
 const Header = () => {
   const [tempCode, setTempCode] = useState(null)
@@ -62,20 +63,7 @@ const Header = () => {
               {user ? (
                 <AccountMenu />
               ) : (
-                <Box
-                  component="a"
-                  backgroundColor="white"
-                  color="primary"
-                  sx={{
-                    textDecoration: "none",
-                    color: "primary.main",
-                    padding: "4px 8px",
-                    borderRadius: "3px",
-                  }}
-                  href={GITHUB_LOGIN_URL}
-                >
-                  Login
-                </Box>
+                <LoginButton url={GITHUB_LOGIN_URL}>Login</LoginButton>
               )}
             </Stack>
           </Box>

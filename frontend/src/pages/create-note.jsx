@@ -7,12 +7,13 @@ import {
   updateNote,
   clearNote,
   showSnackbar,
-} from "../../store/notes/notesSlice"
-import useUpdatedData from "../../hooks/useUpdatedData"
-import { noteDataToFilesObject } from "./utils"
+  resetSnackbar,
+} from "../store/notes/notesSlice"
+import useUpdatedData from "../hooks/useUpdatedData"
+import { noteDataToFilesObject } from "../utils"
 
-import Spinner from "../../components/spinner/spinner"
-import { Box, Button, TextField, Typography } from "@mui/material"
+import Spinner from "../components/spinner"
+import { Box, Button, styled, TextField, Typography } from "@mui/material"
 import DeleteIcon from "@mui/icons-material/Delete"
 
 const CreateNote = () => {
@@ -52,6 +53,8 @@ const CreateNote = () => {
       dispatch(showSnackbar(["Successfully Updated", "success", true]))
       navigate("/my-notes")
     }
+
+    dispatch(resetNotes())
   }, [
     isError,
     dispatch,
@@ -107,6 +110,25 @@ const CreateNote = () => {
       dispatch(createNote(finalData))
     }
   }
+
+  /*-------------------------MUI---------------------------*/
+
+  const CustomButton = (props) => (
+    <Button
+      variant="contained"
+      color="primary"
+      sx={{
+        width: "200px",
+        my: "5px",
+        color: "white",
+      }}
+      onClick={props.onClick}
+    >
+      {props.children}
+    </Button>
+  )
+
+  /*-------------------------MUI---------------------------*/
 
   if (isLoading) {
     return <Spinner />
@@ -171,23 +193,11 @@ const CreateNote = () => {
             </div>
           )
         })}
-        <Button
-          onClick={addFiles}
-          variant="contained"
-          color="primary"
-          sx={{ color: "white", width: "200px", my: "5px" }}
-        >
-          Add File
-        </Button>
+        <CustomButton onClick={addFiles}>Add File</CustomButton>
         <br />
-        <Button
-          onClick={submitForm}
-          variant="contained"
-          color="primary"
-          sx={{ color: "white", width: "200px", my: "5px" }}
-        >
+        <CustomButton onClick={submitForm}>
           {noteId ? "Update Note" : "Create New Note"}
-        </Button>
+        </CustomButton>
       </form>
     </Box>
   )

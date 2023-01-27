@@ -11,8 +11,7 @@ import ArticleIcon from "@mui/icons-material/Article"
 import NoteAddIcon from "@mui/icons-material/NoteAdd"
 import { useNavigate } from "react-router-dom"
 import { useSelector, useDispatch } from "react-redux"
-import { logout, reset } from "../../store/auth/authSlice"
-import { paperProps } from "./constants"
+import { logout, reset } from "../store/auth/authSlice"
 import { Box, styled } from "@mui/material"
 
 export default function AccountMenu() {
@@ -37,6 +36,8 @@ export default function AccountMenu() {
     navigate("/")
   }
 
+  /*-------------------------MUI---------------------------*/
+
   const CustomLink = styled(Link)({
     textDecoration: "none",
     color: "inherit",
@@ -44,20 +45,48 @@ export default function AccountMenu() {
     alignItems: "center",
   })
 
+  const PaperProps = {
+    elevation: 0,
+    sx: {
+      overflow: "visible",
+      filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
+      mt: 1.5,
+      "& .MuiAvatar-root": {
+        width: 32,
+        height: 32,
+        ml: -0.5,
+        mr: 1,
+      },
+      "&:before": {
+        content: '""',
+        display: "block",
+        position: "absolute",
+        top: 0,
+        right: 14,
+        width: 10,
+        height: 10,
+        bgcolor: "background.paper",
+        transform: "translateY(-50%) rotate(45deg)",
+        zIndex: 0,
+      },
+    },
+  }
+
+  /*-------------------------MUI---------------------------*/
+
   return (
-    <React.Fragment>
+    <>
       <Tooltip title="Account settings">
         <Box
           component="img"
           onClick={handleClick}
           src={user.avatar_url}
           alt="avatar"
-          sx={{
-            height: "50px",
-            width: "50px",
-            borderRadius: "50%",
-            cursor: "pointer",
-          }}
+          height="50px"
+          width="50px"
+          borderRadius="50%"
+          cursor="pointer"
+          sx={{ cursor: "pointer" }}
         />
       </Tooltip>
 
@@ -67,7 +96,7 @@ export default function AccountMenu() {
         open={open}
         onClose={handleClose}
         onClick={handleClose}
-        PaperProps={paperProps}
+        PaperProps={PaperProps}
         transformOrigin={{ horizontal: "right", vertical: "top" }}
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
       >
@@ -112,6 +141,6 @@ export default function AccountMenu() {
           Logout
         </MenuItem>
       </Menu>
-    </React.Fragment>
+    </>
   )
 }

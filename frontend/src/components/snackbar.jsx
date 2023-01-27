@@ -1,14 +1,14 @@
-import React, { useState } from "react"
+import React from "react"
 import Snackbar from "@mui/material/Snackbar"
 import MuiAlert from "@mui/material/Alert"
 import { useSelector, useDispatch } from "react-redux"
-import { resetSnackbar } from "../../store/notes/notesSlice"
+import { resetSnackbar } from "../store/notes/notesSlice"
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />
 })
 
-const CustomSnackbar = () => {
+const GitSnackbar = () => {
   const dispatch = useDispatch()
   const { snackbar } = useSelector((state) => state.notes)
 
@@ -38,4 +38,4 @@ const CustomSnackbar = () => {
   )
 }
 
-export default CustomSnackbar
+export default GitSnackbar

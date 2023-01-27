@@ -1,7 +1,8 @@
 import { useEffect } from "react"
 import { useParams } from "react-router-dom"
-import { filesObjectToArray } from "../utils/utils"
 import { useSelector } from "react-redux"
+
+import { filesObjectToArray } from "../utils"
 
 const useUpdatedData = (setNoteDescription, setNoteData) => {
   const { note } = useSelector((state) => state.notes)
