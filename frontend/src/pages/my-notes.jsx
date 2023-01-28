@@ -22,6 +22,20 @@ import Paper from "@mui/material/Paper"
 
 import CustomButton from "../components/buttons/git-button"
 
+/*-------------------------MUI---------------------------*/
+
+const tableHeadingSX = {
+  width: "100%",
+  "& th": {
+    color: "white",
+    backgroundColor: "primary.main",
+    opacity: 0.7,
+    fontWeight: "bold",
+  },
+}
+
+/*-------------------------MUI---------------------------*/
+
 const MyNotes = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
@@ -63,17 +77,7 @@ const MyNotes = () => {
 
   return (
     <Box sx={{ my: "20px" }}>
-      <Box
-        sx={{
-          width: "100%",
-          "& th": {
-            color: "white",
-            backgroundColor: "primary.main",
-            opacity: 0.7,
-            fontWeight: "bold",
-          },
-        }}
-      >
+      <Box sx={tableHeadingSX}>
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
             <TableHead>

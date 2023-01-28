@@ -7,6 +7,18 @@ import { searchNote, searchNoteDesc } from "../store/notes/notesSlice"
 import { Stack, TextField } from "@mui/material"
 import SearchIcon from "@mui/icons-material/Search"
 
+/*-------------------------MUI---------------------------*/
+
+const textFieldSX = {
+  width: { xs: "300px", sm: "400px" },
+  bgcolor: "white",
+  borderRadius: "5px",
+}
+
+const searchIconSX = { color: "white", cursor: "pointer" }
+
+/*-------------------------MUI---------------------------*/
+
 const SearchBar = () => {
   const [searchInput, setSearchInput] = useState("")
 
@@ -28,18 +40,6 @@ const SearchBar = () => {
     navigate("/")
     setSearchInput("")
   }
-
-  /*-------------------------MUI---------------------------*/
-
-  const textFieldSX = {
-    width: { xs: "300px", sm: "400px" },
-    bgcolor: "white",
-    borderRadius: "5px",
-  }
-
-  const searchIconSX = { color: "white", cursor: "pointer" }
-
-  /*-------------------------MUI---------------------------*/
 
   return (
     <Stack direction="row" gap={1} alignItems="center">

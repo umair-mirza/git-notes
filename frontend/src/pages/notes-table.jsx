@@ -23,6 +23,27 @@ import TablePagination from "@mui/material/TablePagination"
 
 import GitButton from "../components/buttons/git-button"
 
+/*-------------------------MUI---------------------------*/
+
+const tableHeadingSX = {
+  my: "30px",
+  width: "100%",
+  "& th": {
+    color: "white",
+    backgroundColor: "primary.main",
+    opacity: 0.7,
+    fontWeight: "bold",
+  },
+}
+
+const avatarSX = {
+  height: "50px",
+  width: "50px",
+  borderRadius: "50%",
+}
+
+/*-------------------------MUI---------------------------*/
+
 const NotesTable = () => {
   const [page, setPage] = React.useState(0)
   const [rowsPerPage, setRowsPerPage] = React.useState(10)
@@ -89,27 +110,6 @@ const NotesTable = () => {
     dispatch(resetSearch())
     navigate("/")
   }
-
-  /*-------------------------MUI---------------------------*/
-
-  const tableHeadingSX = {
-    my: "30px",
-    width: "100%",
-    "& th": {
-      color: "white",
-      backgroundColor: "primary.main",
-      opacity: 0.7,
-      fontWeight: "bold",
-    },
-  }
-
-  const avatarSX = {
-    height: "50px",
-    width: "50px",
-    borderRadius: "50%",
-  }
-
-  /*-------------------------MUI---------------------------*/
 
   //Notes Renderer
   const notesRenderer = () => {

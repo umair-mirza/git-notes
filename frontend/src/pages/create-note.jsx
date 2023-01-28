@@ -16,6 +16,25 @@ import Spinner from "../components/spinner"
 import { Box, Button, styled, TextField, Typography } from "@mui/material"
 import DeleteIcon from "@mui/icons-material/Delete"
 
+/*-------------------------MUI---------------------------*/
+
+const CustomButton = (props) => (
+  <Button
+    variant="contained"
+    color="primary"
+    sx={{
+      width: "200px",
+      my: "5px",
+      color: "white",
+    }}
+    onClick={props.onClick}
+  >
+    {props.children}
+  </Button>
+)
+
+/*-------------------------MUI---------------------------*/
+
 const CreateNote = () => {
   const [noteDescription, setNoteDescription] = useState("")
   const [noteData, setNoteData] = useState([
@@ -110,25 +129,6 @@ const CreateNote = () => {
       dispatch(createNote(finalData))
     }
   }
-
-  /*-------------------------MUI---------------------------*/
-
-  const CustomButton = (props) => (
-    <Button
-      variant="contained"
-      color="primary"
-      sx={{
-        width: "200px",
-        my: "5px",
-        color: "white",
-      }}
-      onClick={props.onClick}
-    >
-      {props.children}
-    </Button>
-  )
-
-  /*-------------------------MUI---------------------------*/
 
   if (isLoading) {
     return <Spinner />

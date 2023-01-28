@@ -28,6 +28,28 @@ import CodeIcon from "@mui/icons-material/Code"
 import { Box, Stack, styled, Typography } from "@mui/material"
 import CustomButton from "../components/buttons/git-button"
 
+/*-------------------------MUI---------------------------*/
+
+const CustomBox = styled(Box)(({ theme }) => ({
+  color: theme.palette.primary.main,
+  display: "flex",
+  alignItems: "center",
+  gap: "3px",
+  cursor: "pointer",
+}))
+
+const noteContentSX = {
+  mt: "20px",
+  width: "100%",
+  height: "100%",
+  padding: "5px 10px",
+  outline: "2px solid lightgray",
+  boxShadow: "3px 5px 10px #888888",
+  overflow: "none",
+}
+
+/*-------------------------MUI---------------------------*/
+
 const Note = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
@@ -123,28 +145,6 @@ const Note = () => {
       navigate("/")
     }
   }
-
-  /*-------------------------MUI---------------------------*/
-
-  const CustomBox = styled(Box)(({ theme }) => ({
-    color: theme.palette.primary.main,
-    display: "flex",
-    alignItems: "center",
-    gap: "3px",
-    cursor: "pointer",
-  }))
-
-  const noteContentSX = {
-    mt: "20px",
-    width: "100%",
-    height: "100%",
-    padding: "5px 10px",
-    outline: "2px solid lightgray",
-    boxShadow: "3px 5px 10px #888888",
-    overflow: "none",
-  }
-
-  /*-------------------------MUI---------------------------*/
 
   if (isLoading) {
     return <Spinner />
