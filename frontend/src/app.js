@@ -1,15 +1,17 @@
+import React from "react"
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
-import Header from "./components/header"
-import Note from "./pages/note"
-import MyNotes from "./pages/my-notes"
-import NotesTable from "./pages/notes-table"
-import CreateNote from "./pages/create-note"
-import GitSnackbar from "./components/snackbar"
-
+import Spinner from "./components/spinner"
 import { theme } from "./theme"
 import { ThemeProvider } from "@mui/material/styles"
-import NotFound from "./pages/not-found"
 import { Box, Container } from "@mui/material"
+import Header from "./components/header"
+
+const Note = React.lazy(() => import("./pages/note"))
+const MyNotes = React.lazy(() => import("./pages/my-notes"))
+const NotesTable = React.lazy(() => import("./pages/notes-table"))
+const CreateNote = React.lazy(() => import("./pages/create-note"))
+const GitSnackbar = React.lazy(() => import("./components/snackbar"))
+const NotFound = React.lazy(() => import("./pages/not-found"))
 
 function App() {
   return (
@@ -17,19 +19,21 @@ function App() {
       <Box>
         <Router>
           <Header />
-          <Container>
-            <Routes>
-              <Route path="/" element={<NotesTable />} />
-              <Route path="/my-notes" element={<MyNotes />} />
-              <Route path="/notes/:noteId" element={<Note />} />
-              <Route
-                path="/create-note"
-                element={<CreateNote key={window.location.pathname} />}
-              />
-              <Route path="/edit/:noteId" element={<CreateNote />} />
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </Container>
+          <React.Suspense fallback={<Spinner />}>
+            <Container>
+              <Routes>
+                <Route path="/" element={<NotesTable />} />
+                <Route path="/my-notes" element={<MyNotes />} />
+                <Route path="/notes/:noteId" element={<Note />} />
+                <Route
+                  path="/create-note"
+                  element={<CreateNote key={window.location.pathname} />}
+                />
+                <Route path="/edit/:noteId" element={<CreateNote />} />
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </Container>
+          </React.Suspense>
           <GitSnackbar />
         </Router>
       </Box>

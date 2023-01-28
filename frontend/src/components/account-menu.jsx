@@ -101,7 +101,7 @@ export default function AccountMenu() {
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
       >
         <MenuItem>Signed In As</MenuItem>
-        <MenuItem>{user.login}</MenuItem>
+        <MenuItem>{user?.login}</MenuItem>
         <Divider />
         <MenuItem>
           <CustomLink to="/my-notes">
@@ -126,7 +126,7 @@ export default function AccountMenu() {
           </ListItemIcon>
           <Box
             component="a"
-            href={user.html_url}
+            href={user?.html_url}
             target="_blank"
             rel="noreferrer"
             sx={{ textDecoration: "none", color: "inherit" }}

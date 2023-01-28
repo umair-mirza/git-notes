@@ -4,11 +4,11 @@ import { useNavigate, useLocation } from "react-router-dom"
 import { GITHUB_LOGIN_URL } from "../constants"
 import { login, reset } from "../store/auth/authSlice"
 
-import AccountMenu from "./account-menu"
-import SearchBar from "./search-bar"
-
 import { Box, Container, Stack, Typography } from "@mui/material"
 import LoginButton from "./buttons/login-button"
+
+import AccountMenu from "./account-menu"
+import SearchBar from "./search-bar"
 
 const Header = () => {
   const [tempCode, setTempCode] = useState(null)

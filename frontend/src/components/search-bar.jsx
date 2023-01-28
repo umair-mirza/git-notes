@@ -1,7 +1,6 @@
 import React, { useState } from "react"
 import { useDispatch } from "react-redux"
 import { useNavigate } from "react-router-dom"
-import { CiSearch } from "react-icons/ci"
 import { searchNote, searchNoteDesc } from "../store/notes/notesSlice"
 
 import { Stack, TextField } from "@mui/material"
