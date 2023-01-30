@@ -1,9 +1,5 @@
 /*----------------------------Object to Array converter---------------------------*/
-type Obj = {
-  files: {
-    fileName: {}
-  }
-}
+type Obj = {}
 
 interface FileInterface {
   fileName: string

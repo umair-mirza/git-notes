@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit"
+import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit"
 import notesService from "./notesService"
 import { Note } from "../../interfaces/Note"
 import { AppDispatch, RootState } from "../store"
