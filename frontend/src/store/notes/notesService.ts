@@ -1,9 +1,11 @@
 import axios from "axios"
+import { Note } from "../../interfaces/Note"
+import { User } from "../../interfaces/User"
 
-const API_URL = "https://api.github.com/gists"
+const API_URL: string = "https://api.github.com/gists"
 
 //Fetch Public notes
-const fetchNotes = async (page, perPage, token) => {
+const fetchNotes = async (page: number, perPage: number, token?: string) => {
   const config = {
     headers: {
       Authorization: token ? `Bearer ${token}` : null,
@@ -22,7 +24,7 @@ const fetchNotes = async (page, perPage, token) => {
 }
 
 // Fetch Single Note
-const fetchNote = async (id, token) => {
+const fetchNote = async (id: string, token?: string) => {
   const config = {
     headers: {
       Authorization: token ? `Bearer ${token}` : null,
@@ -38,7 +40,7 @@ const fetchNote = async (id, token) => {
 }
 
 //Fetch Loggedin user notes
-const fetchUserNotes = async (user, token) => {
+const fetchUserNotes = async (user: User, token?: string) => {
   const config = {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -54,7 +56,7 @@ const fetchUserNotes = async (user, token) => {
 }
 
 //Create a Note
-const createNote = async (noteData, token) => {
+const createNote = async (noteData: Note, token?: string) => {
   const config = {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -68,7 +70,7 @@ const createNote = async (noteData, token) => {
 }
 
 //Delete a note
-const deleteNote = async (noteId, token) => {
+const deleteNote = async (noteId: string, token?: string) => {
   const config = {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -81,7 +83,7 @@ const deleteNote = async (noteId, token) => {
 }
 
 //Update a note
-const updateNote = async (updatedData, token) => {
+const updateNote = async (updatedData, token?: string) => {
   const config = {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -106,7 +108,7 @@ const updateNote = async (updatedData, token) => {
 }
 
 //Check Starred Status
-const checkStar = async (noteId, token) => {
+const checkStar = async (noteId: string, token?: string) => {
   const config = {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -127,7 +129,7 @@ const checkStar = async (noteId, token) => {
 }
 
 //Star a Note
-const starNote = async (noteId, token) => {
+const starNote = async (noteId: string, token?: string) => {
   const config = {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -157,7 +159,7 @@ const starNote = async (noteId, token) => {
 
 //Unstar a note
 
-const unStarNote = async (noteId, token) => {
+const unStarNote = async (noteId: string, token?: string) => {
   const config = {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -181,7 +183,7 @@ const unStarNote = async (noteId, token) => {
 }
 
 //Fork a Note
-const forkNote = async (noteId, token) => {
+const forkNote = async (noteId: string, token?: string) => {
   const config = {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -194,7 +196,7 @@ const forkNote = async (noteId, token) => {
 }
 
 //Get Number of Forks
-const getForks = async (noteId, token) => {
+const getForks = async (noteId: string, token?: string) => {
   const config = {
     headers: {
       Authorization: token ? `Bearer ${token}` : null,

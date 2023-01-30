@@ -1,18 +1,39 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit"
 import authService from "./authService"
+import { User } from "../../interfaces/User"
+import { AppDispatch, RootState } from "../store"
 
-const initialState = {
+interface UserState {
+  isSuccess: Boolean
+  user: User | null
+  isLoading: Boolean
+  isError: Boolean
+  message: string | undefined
+}
+
+const initialState: UserState = {
   isSuccess: false,
-  user: JSON.parse(localStorage.getItem("user")) || null,
+  user: JSON.parse(localStorage.getItem("user")!) || null,
   isLoading: false,
   isError: false,
   message: "",
 }
 
+const createAppAsyncThunk = createAsyncThunk.withTypes<{
+  state: RootState
+  dispatch: AppDispatch
+  rejectValue: string
+  extra: { s: string; n: number }
+}>()
+
+type CodeParam = {
+  code: string
+}
+
 //Login User
-export const login = createAsyncThunk(
+export const login = createAppAsyncThunk(
   "auth/login",
-  async (codeParam, thunkAPI) => {
+  async (codeParam: CodeParam, thunkAPI) => {
     try {
       return await authService.login(codeParam)
     } catch (error) {
@@ -29,7 +50,7 @@ export const login = createAsyncThunk(
 )
 
 //Logout User
-export const logout = createAsyncThunk("auth/logout", async () => {
+export const logout = createAppAsyncThunk("auth/logout", async () => {
   await authService.logout()
 })
 

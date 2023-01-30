@@ -1,7 +1,33 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit"
 import notesService from "./notesService"
+import { Note } from "../../interfaces/Note"
+import { AppDispatch, RootState } from "../store"
+import { User } from "../../interfaces/User"
 
-const initialState = {
+interface NoteState {
+  notes: Note[] | []
+  userNotes: Note[] | []
+  note: Note | {}
+  searchedNote: Note | {}
+  snackbar: {
+    message: string
+    type: string
+    isOpen: boolean
+  }
+  forks: number
+  deletedNote: string | null
+  isSuccess: boolean
+  isLoading: boolean
+  isError: boolean
+  isSearchError: boolean
+  isStarred: boolean | undefined
+  isForked: boolean | undefined
+  isCreated: boolean
+  isUpdated: boolean
+  message: string | undefined
+}
+
+const initialState: NoteState = {
   notes: [],
   userNotes: [],
   note: {},
@@ -20,11 +46,24 @@ const initialState = {
   message: "",
 }
 
+type PagesDataType = {
+  currPage: number
+  rowsPerPage: number
+}
+
+const createAppAsyncThunk = createAsyncThunk.withTypes<{
+  state: RootState
+  dispatch: AppDispatch
+  rejectValue: string
+  extra: { s: string; n: number }
+}>()
+
 //Fetch Public Notes
-export const fetchNotes = createAsyncThunk(
+export const fetchNotes = createAppAsyncThunk(
   "notes/fetchNotes",
-  async (pagesData, thunkAPI) => {
-    const token = thunkAPI.getState().auth?.user?.accessToken
+  async (pagesData: PagesDataType, thunkAPI) => {
+    const state = thunkAPI.getState() as RootState
+    const token = state.auth?.user?.accessToken
     try {
       return await notesService.fetchNotes(
         pagesData.currPage,
@@ -32,7 +71,7 @@ export const fetchNotes = createAsyncThunk(
         token
       )
     } catch (error) {
-      const message =
+      const message: string =
         error?.response?.data?.message || error.message || error.toString()
       return thunkAPI.rejectWithValue(message)
     }
@@ -40,29 +79,31 @@ export const fetchNotes = createAsyncThunk(
 )
 
 //Fetch Single Note
-export const fetchNote = createAsyncThunk(
+export const fetchNote = createAppAsyncThunk(
   "notes/fetchNote",
-  async (noteId, thunkAPI) => {
-    const token = thunkAPI.getState().auth?.user?.accessToken
+  async (noteId: string, thunkAPI) => {
+    const state = thunkAPI.getState() as RootState
+    const token = state.auth?.user?.accessToken
     try {
       return await notesService.fetchNote(noteId, token)
     } catch (error) {
-      const message =
-        error?.response?.data?.message || error.message || error.toString()
+      const message: string =
+        error?.response?.data?.message || error.message || error.toString()!
       return thunkAPI.rejectWithValue(message)
     }
   }
 )
 
 //Search a Note
-export const searchNote = createAsyncThunk(
+export const searchNote = createAppAsyncThunk(
   "notes/searchNote",
-  async (noteId, thunkAPI) => {
-    const token = thunkAPI.getState().auth?.user?.accessToken
+  async (noteId: string, thunkAPI) => {
+    const state = thunkAPI.getState() as RootState
+    const token = state.auth?.user?.accessToken
     try {
       return await notesService.fetchNote(noteId, token)
     } catch (error) {
-      const message =
+      const message: string =
         error?.response?.data?.message || error.message || error.toString()
       return thunkAPI.rejectWithValue(message)
     }
@@ -70,14 +111,15 @@ export const searchNote = createAsyncThunk(
 )
 
 // Fetch Logged in user notes
-export const fetchUserNotes = createAsyncThunk(
+export const fetchUserNotes = createAppAsyncThunk(
   "notes/userNotes",
-  async (user, thunkAPI) => {
+  async (user: User, thunkAPI) => {
     try {
-      const token = thunkAPI.getState().auth?.user?.accessToken
+      const state = thunkAPI.getState() as RootState
+      const token = state.auth?.user?.accessToken
       return await notesService.fetchUserNotes(user, token)
     } catch (error) {
-      const message =
+      const message: string =
         error?.response?.data?.message || error.message || error.toString()
       return thunkAPI.rejectWithValue(message)
     }
@@ -85,14 +127,15 @@ export const fetchUserNotes = createAsyncThunk(
 )
 
 //Create new Note
-export const createNote = createAsyncThunk(
+export const createNote = createAppAsyncThunk(
   "notes/createNote",
-  async (noteData, thunkAPI) => {
+  async (noteData: Note, thunkAPI) => {
     try {
-      const token = thunkAPI.getState().auth?.user?.accessToken
+      const state = thunkAPI.getState() as RootState
+      const token = state.auth?.user?.accessToken
       return await notesService.createNote(noteData, token)
     } catch (error) {
-      const message =
+      const message: string =
         error?.response?.data?.message || error.message || error.toString()
       return thunkAPI.rejectWithValue(message)
     }
@@ -100,14 +143,15 @@ export const createNote = createAsyncThunk(
 )
 
 //Delete a Note
-export const deleteNote = createAsyncThunk(
+export const deleteNote = createAppAsyncThunk(
   "notes/deleteNote",
-  async (noteId, thunkAPI) => {
+  async (noteId: string, thunkAPI) => {
     try {
-      const token = thunkAPI.getState().auth?.user?.accessToken
+      const state = thunkAPI.getState() as RootState
+      const token = state.auth?.user?.accessToken
       return await notesService.deleteNote(noteId, token)
     } catch (error) {
-      const message =
+      const message: string =
         error?.response?.data?.message || error.message || error.toString()
       return thunkAPI.rejectWithValue(message)
     }
@@ -115,14 +159,15 @@ export const deleteNote = createAsyncThunk(
 )
 
 //Update a note
-export const updateNote = createAsyncThunk(
+export const updateNote = createAppAsyncThunk(
   "notes/updateNote",
-  async (updatedData, thunkAPI) => {
+  async (updatedData: Note, thunkAPI) => {
     try {
-      const token = thunkAPI.getState().auth?.user?.accessToken
+      const state = thunkAPI.getState() as RootState
+      const token = state.auth?.user?.accessToken
       return await notesService.updateNote(updatedData, token)
     } catch (error) {
-      const message =
+      const message: string =
         error?.response?.data?.message || error.message || error.toString()
       return thunkAPI.rejectWithValue(message)
     }
@@ -130,14 +175,15 @@ export const updateNote = createAsyncThunk(
 )
 
 //Check Star Status
-export const checkStar = createAsyncThunk(
+export const checkStar = createAppAsyncThunk(
   "notes/checkStar",
-  async (noteId, thunkAPI) => {
+  async (noteId: string, thunkAPI) => {
     try {
-      const token = thunkAPI.getState().auth?.user?.accessToken
+      const state = thunkAPI.getState() as RootState
+      const token = state.auth?.user?.accessToken
       return await notesService.checkStar(noteId, token)
     } catch (error) {
-      const message =
+      const message: string =
         error?.response?.data?.message || error.message || error.toString()
       return thunkAPI.rejectWithValue(message)
     }
@@ -145,14 +191,15 @@ export const checkStar = createAsyncThunk(
 )
 
 //Star a Note
-export const starNote = createAsyncThunk(
+export const starNote = createAppAsyncThunk(
   "notes/starNote",
-  async (noteId, thunkAPI) => {
+  async (noteId: string, thunkAPI) => {
     try {
-      const token = thunkAPI.getState().auth?.user?.accessToken
+      const state = thunkAPI.getState() as RootState
+      const token = state.auth?.user?.accessToken
       return await notesService.starNote(noteId, token)
     } catch (error) {
-      const message =
+      const message: string =
         error?.response?.data?.message || error.message || error.toString()
       return thunkAPI.rejectWithValue(message)
     }
@@ -160,14 +207,15 @@ export const starNote = createAsyncThunk(
 )
 
 //UnStar a Note
-export const unStarNote = createAsyncThunk(
+export const unStarNote = createAppAsyncThunk(
   "notes/unStarNote",
-  async (noteId, thunkAPI) => {
+  async (noteId: string, thunkAPI) => {
     try {
-      const token = thunkAPI.getState().auth?.user?.accessToken
+      const state = thunkAPI.getState() as RootState
+      const token = state.auth?.user?.accessToken
       return await notesService.unStarNote(noteId, token)
     } catch (error) {
-      const message =
+      const message: string =
         error?.response?.data?.message || error.message || error.toString()
       return thunkAPI.rejectWithValue(message)
     }
@@ -175,14 +223,15 @@ export const unStarNote = createAsyncThunk(
 )
 
 //Fork a Note
-export const forkNote = createAsyncThunk(
+export const forkNote = createAppAsyncThunk(
   "notes/forkNote",
-  async (noteId, thunkAPI) => {
+  async (noteId: string, thunkAPI) => {
     try {
-      const token = thunkAPI.getState().auth?.user?.accessToken
+      const state = thunkAPI.getState() as RootState
+      const token = state.auth?.user?.accessToken
       return await notesService.forkNote(noteId, token)
     } catch (error) {
-      const message =
+      const message: string =
         error?.response?.data?.message || error.message || error.toString()
       return thunkAPI.rejectWithValue(message)
     }
@@ -190,14 +239,15 @@ export const forkNote = createAsyncThunk(
 )
 
 //Get Number of Forks
-export const getForks = createAsyncThunk(
+export const getForks = createAppAsyncThunk(
   "notes/getForks",
-  async (noteId, thunkAPI) => {
+  async (noteId: string, thunkAPI) => {
     try {
-      const token = thunkAPI.getState().auth?.user?.accessToken
+      const state = thunkAPI.getState() as RootState
+      const token = state.auth?.user?.accessToken
       return await notesService.getForks(noteId, token)
     } catch (error) {
-      const message =
+      const message: string =
         error?.response?.data?.message || error.message || error.toString()
       return thunkAPI.rejectWithValue(message)
     }
@@ -232,13 +282,14 @@ export const notesSlice = createSlice({
     },
     removeNote: (state, action) => {
       const noteId = action.payload
-      state.userNotes = state.userNotes.filter((note) => note.id !== noteId)
-      console.log(state.userNotes)
+      state.userNotes = state.userNotes.filter(
+        (note: Note) => note.id !== noteId
+      )
     },
     searchNoteDesc: (state, action) => {
       const searchTerm = action.payload
       const searchResult = state.notes.filter(
-        (note) => note.description === searchTerm
+        (note: Note) => note.description === searchTerm
       )
 
       if (searchResult.length > 0) {

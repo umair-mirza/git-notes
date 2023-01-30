@@ -1,7 +1,11 @@
 import axios from "axios"
 
+type CodeParam = {
+  code: string
+}
+
 //Login User on Github
-const login = async (codeParam) => {
+const login = async (codeParam: CodeParam) => {
   if (codeParam.code.length > 1) {
     console.log("login with", codeParam)
     const response = await axios.post("/getAccessToken", codeParam)
