@@ -1,10 +1,25 @@
 /*----------------------------Object to Array converter---------------------------*/
-const filesObjectToArray = (obj) => {
+type Obj = {
+  files: {
+    fileName: {}
+  }
+}
+
+interface FileInterface {
+  fileName: string
+  content: string
+}
+
+const filesObjectToArray = (obj: Obj) => {
   return Object.values(obj)
 }
 
 /*----------------------------Convert noteData to the correct format as per API specification---------------------------*/
-const noteDataToFilesObject = (noteDescription, noteData, deletedFileNames) => {
+const noteDataToFilesObject = (
+  noteDescription: string,
+  noteData: FileInterface[],
+  deletedFileNames: string[]
+) => {
   const files = {}
 
   noteData.forEach((note) => {

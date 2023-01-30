@@ -1,5 +1,16 @@
 import { createTheme } from "@mui/material"
 
+declare module "@mui/material/styles" {
+  interface PaletteOptions {
+    tertiary: {
+      main: "#1176ff"
+    }
+    fourth: {
+      main: "ffffff"
+    }
+  }
+}
+
 export const theme = createTheme({
   palette: {
     primary: {
