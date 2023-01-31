@@ -1,5 +1,5 @@
 import React, { useEffect } from "react"
-import { useSelector, useDispatch } from "react-redux"
+import { useAppDispatch, useAppSelector } from "../store/store"
 import { Link, useNavigate } from "react-router-dom"
 import {
   fetchUserNotes,
@@ -20,7 +20,7 @@ import TableHead from "@mui/material/TableHead"
 import TableRow from "@mui/material/TableRow"
 import Paper from "@mui/material/Paper"
 
-import CustomButton from "../components/buttons/git-button"
+import GitButton from "../components/buttons/git-button"
 
 /*-------------------------MUI---------------------------*/
 
@@ -37,13 +37,13 @@ const tableHeadingSX = {
 /*-------------------------MUI---------------------------*/
 
 const MyNotes = () => {
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
   const navigate = useNavigate()
 
   const { userNotes, isSuccess, isError, isLoading, message, deletedNote } =
-    useSelector((state) => state.notes)
+    useAppSelector((state) => state.notes)
 
-  const { user } = useSelector((state) => state.auth)
+  const { user } = useAppSelector((state) => state.auth)
 
   useEffect(() => {
     if (isSuccess) {
@@ -56,12 +56,15 @@ const MyNotes = () => {
   }, [dispatch, isSuccess, isError, message])
 
   useEffect(() => {
-    dispatch(fetchUserNotes(user))
+    dispatch(fetchUserNotes(user!))
   }, [dispatch])
 
   //Cleanup on Unmount
   useEffect(() => {
-    return () => dispatch(clearUserNotes())
+    const cleanup = () => {
+      return () => dispatch(clearUserNotes())
+    }
+    cleanup()
   }, [dispatch])
 
   //Custom Hook to remove deleted note from list
@@ -135,7 +138,7 @@ const MyNotes = () => {
       </Box>
       <Box sx={{ marginTop: "20px" }}>
         <Link to="/" style={{ textDecoration: "none" }}>
-          <CustomButton>Back to Home</CustomButton>
+          <GitButton>Back to Home</GitButton>
         </Link>
       </Box>
     </Box>
