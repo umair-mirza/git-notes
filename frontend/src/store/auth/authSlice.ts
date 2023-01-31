@@ -23,7 +23,6 @@ const createAppAsyncThunk = createAsyncThunk.withTypes<{
   state: RootState
   dispatch: AppDispatch
   rejectValue: string
-  extra: { s: string; n: number }
 }>()
 
 type CodeParam = {
@@ -81,7 +80,7 @@ export const authSlice = createSlice({
         state.user = null
         state.message = action.payload
       })
-      .addCase(logout.fulfilled, (state) => {
+      .addCase(logout.fulfilled, (state, action) => {
         state.user = null
       })
   },

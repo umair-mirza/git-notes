@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { useDispatch } from "react-redux"
+import { useAppDispatch } from "../store/store"
 import { useNavigate } from "react-router-dom"
 import { searchNote, searchNoteDesc } from "../store/notes/notesSlice"
 
@@ -19,9 +19,9 @@ const searchIconSX = { color: "white", cursor: "pointer" }
 /*-------------------------MUI---------------------------*/
 
 const SearchBar = () => {
-  const [searchInput, setSearchInput] = useState("")
+  const [searchInput, setSearchInput] = useState<string>("")
 
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
   const navigate = useNavigate()
 
   const handleSearchInput = (e) => {

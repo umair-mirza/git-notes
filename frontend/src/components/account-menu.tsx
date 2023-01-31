@@ -1,4 +1,8 @@
 import * as React from "react"
+import { useAppDispatch, useAppSelector } from "../store/store"
+import { useNavigate } from "react-router-dom"
+import { logout, reset } from "../store/auth/authSlice"
+
 import { Link } from "react-router-dom"
 import Menu from "@mui/material/Menu"
 import MenuItem from "@mui/material/MenuItem"
@@ -9,9 +13,6 @@ import PersonAdd from "@mui/icons-material/PersonAdd"
 import Logout from "@mui/icons-material/Logout"
 import ArticleIcon from "@mui/icons-material/Article"
 import NoteAddIcon from "@mui/icons-material/NoteAdd"
-import { useNavigate } from "react-router-dom"
-import { useSelector, useDispatch } from "react-redux"
-import { logout, reset } from "../store/auth/authSlice"
 import { Box, styled } from "@mui/material"
 
 /*-------------------------MUI---------------------------*/
@@ -57,9 +58,9 @@ export default function AccountMenu() {
   const open = Boolean(anchorEl)
 
   const navigate = useNavigate()
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
 
-  const { user } = useSelector((state) => state.auth)
+  const { user } = useAppSelector((state) => state.auth)
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget)
@@ -80,12 +81,11 @@ export default function AccountMenu() {
         <Box
           component="img"
           onClick={handleClick}
-          src={user.avatar_url}
+          src={user?.avatar_url}
           alt="avatar"
           height="50px"
           width="50px"
           borderRadius="50%"
-          cursor="pointer"
           sx={{ cursor: "pointer" }}
         />
       </Tooltip>

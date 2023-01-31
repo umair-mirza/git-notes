@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react"
-import { useSelector, useDispatch } from "react-redux"
+import { useAppDispatch, useAppSelector } from "../store/store"
 import { useNavigate, useLocation } from "react-router-dom"
 import { GITHUB_LOGIN_URL } from "../constants"
 import { login, reset } from "../store/auth/authSlice"
@@ -10,14 +10,18 @@ import LoginButton from "./buttons/login-button"
 import AccountMenu from "./account-menu"
 import SearchBar from "./search-bar"
 
-const Header = () => {
-  const [tempCode, setTempCode] = useState(null)
+type TempCodeObject = {
+  code: string
+}
 
-  const dispatch = useDispatch()
+const Header = () => {
+  const [tempCode, setTempCode] = useState<TempCodeObject>({ code: "" })
+
+  const dispatch = useAppDispatch()
   const navigate = useNavigate()
   const location = useLocation()
 
-  const { user } = useSelector((state) => state.auth)
+  const { user } = useAppSelector((state) => state.auth)
 
   useEffect(() => {
     if (user) {
@@ -40,7 +44,7 @@ const Header = () => {
   }
 
   return (
-    <Box backgroundColor="primary.main" padding="10px">
+    <Box sx={{ backgroundColor: "primary.main" }} padding="10px">
       <Container>
         <Stack
           direction="row"
