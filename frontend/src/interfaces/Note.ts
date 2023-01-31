@@ -17,3 +17,21 @@ export interface Note {
     avatar_url: string
   }
 }
+
+export type NoteDataType = {
+  fileName: string
+  content: string
+}
+
+export type Files = {}
+
+export type UpdatedDataType = {
+  noteId: string
+  description: string
+  files: Files
+}
+
+export type FinalDataType = {
+  description: string
+  files: Files
+}

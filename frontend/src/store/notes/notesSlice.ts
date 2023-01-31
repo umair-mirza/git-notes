@@ -3,6 +3,7 @@ import notesService from "./notesService"
 import { Note } from "../../interfaces/Note"
 import { AppDispatch, RootState } from "../store"
 import { User } from "../../interfaces/User"
+import { UpdatedDataType, FinalDataType } from "../../interfaces/Note"
 
 interface NoteState {
   notes: Note[] | []
@@ -128,7 +129,7 @@ export const fetchUserNotes = createAppAsyncThunk(
 //Create new Note
 export const createNote = createAppAsyncThunk(
   "notes/createNote",
-  async (noteData: Note, thunkAPI) => {
+  async (noteData: FinalDataType, thunkAPI) => {
     try {
       const state = thunkAPI.getState() as RootState
       const token = state.auth?.user?.accessToken
@@ -160,7 +161,7 @@ export const deleteNote = createAppAsyncThunk(
 //Update a note
 export const updateNote = createAppAsyncThunk(
   "notes/updateNote",
-  async (updatedData: Note, thunkAPI) => {
+  async (updatedData: UpdatedDataType, thunkAPI) => {
     try {
       const state = thunkAPI.getState() as RootState
       const token = state.auth?.user?.accessToken

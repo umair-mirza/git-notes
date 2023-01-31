@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import { useSelector, useDispatch } from "react-redux"
+import { useAppDispatch, useAppSelector } from "../store/store"
 import { useNavigate, useParams } from "react-router-dom"
 import {
   createNote,
@@ -10,6 +10,7 @@ import {
 } from "../store/notes/notesSlice"
 import useUpdatedData from "../hooks/useUpdatedData"
 import { noteDataToFilesObject } from "../utils"
+import { NoteDataType, UpdatedDataType } from "../interfaces/Note"
 
 import Spinner from "../components/spinner"
 import { Box, Button, TextField, Typography } from "@mui/material"
@@ -35,19 +36,19 @@ const CustomButton = (props) => (
 /*-------------------------MUI---------------------------*/
 
 const CreateNote = () => {
-  const [noteDescription, setNoteDescription] = useState("")
-  const [noteData, setNoteData] = useState([
+  const [noteDescription, setNoteDescription] = useState<string>("")
+  const [noteData, setNoteData] = useState<NoteDataType[]>([
     {
       fileName: "",
       content: "",
     },
   ])
-  const [deletedFileNames, setDeletedFileNames] = useState([])
+  const [deletedFileNames, setDeletedFileNames] = useState<string[]>([])
 
   const { isLoading, isSuccess, isCreated, isUpdated, isError, message } =
-    useSelector((state) => state.notes)
+    useAppSelector((state) => state.notes)
 
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
   const navigate = useNavigate()
 
   const { noteId } = useParams()
@@ -84,7 +85,7 @@ const CreateNote = () => {
     navigate,
   ])
 
-  const handleChange = (index, e) => {
+  const handleChange = (index: number, e) => {
     let data = [...noteData]
 
     data[index][e.target.name] = e.target.value
@@ -93,13 +94,13 @@ const CreateNote = () => {
 
   //Add another file to the form
   const addFiles = () => {
-    let newData = { fileName: "", content: "" }
+    let newData: NoteDataType = { fileName: "", content: "" }
     setNoteData([...noteData, newData])
   }
 
   //Remove a file from the form
-  const removeFiles = (index) => {
-    let data = [...noteData]
+  const removeFiles = (index: number) => {
+    let data: NoteDataType[] = [...noteData]
 
     //For Deletion see Github Gist API Updating a Gist > Deleting a Gist File
     if (noteId) {
@@ -121,7 +122,7 @@ const CreateNote = () => {
   const submitForm = (e) => {
     e.preventDefault()
     if (noteId) {
-      const updatedData = { noteId, ...finalData }
+      const updatedData: UpdatedDataType = { noteId, ...finalData }
       console.log("submitted data", updatedData)
       dispatch(updateNote(updatedData))
     } else {

@@ -1,6 +1,7 @@
 import axios from "axios"
 import { Note } from "../../interfaces/Note"
 import { User } from "../../interfaces/User"
+import { FinalDataType } from "../../interfaces/Note"
 
 const API_URL: string = "https://api.github.com/gists"
 
@@ -56,7 +57,7 @@ const fetchUserNotes = async (user: User, token?: string) => {
 }
 
 //Create a Note
-const createNote = async (noteData: Note, token?: string) => {
+const createNote = async (noteData: FinalDataType, token?: string) => {
   const config = {
     headers: {
       Authorization: `Bearer ${token}`,
