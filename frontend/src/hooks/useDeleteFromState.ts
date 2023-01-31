@@ -1,4 +1,4 @@
-import { Note } from "../interfaces/Note"
+import { Note } from "../types/Note"
 import { useAppSelector } from "../store/store"
 
 const useDeleteFromState = () => {

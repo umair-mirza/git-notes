@@ -8,7 +8,7 @@ import {
   clearNotes,
   showSnackbar,
 } from "../store/notes/notesSlice"
-import { Note } from "../interfaces/Note"
+import { Note } from "../types/Note"
 import Spinner from "../components/spinner"
 import { format } from "date-fns"
 

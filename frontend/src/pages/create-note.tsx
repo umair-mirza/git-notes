@@ -10,30 +10,13 @@ import {
 } from "../store/notes/notesSlice"
 import useUpdatedData from "../hooks/useUpdatedData"
 import { noteDataToFilesObject } from "../utils"
-import { NoteDataType, UpdatedDataType } from "../interfaces/Note"
+import { NoteDataType, UpdatedDataType } from "../types/Note"
 
 import Spinner from "../components/spinner"
 import { Box, Button, TextField, Typography } from "@mui/material"
 import DeleteIcon from "@mui/icons-material/Delete"
-
-/*-------------------------MUI---------------------------*/
-
-const CustomButton = (props) => (
-  <Button
-    variant="contained"
-    color="primary"
-    sx={{
-      width: "200px",
-      my: "5px",
-      color: "white",
-    }}
-    onClick={props.onClick}
-  >
-    {props.children}
-  </Button>
-)
-
-/*-------------------------MUI---------------------------*/
+import GitButton from "../components/buttons/git-button"
+import { Stack } from "@mui/system"
 
 const CreateNote = () => {
   const [noteDescription, setNoteDescription] = useState<string>("")
@@ -193,11 +176,12 @@ const CreateNote = () => {
             </div>
           )
         })}
-        <CustomButton onClick={addFiles}>Add File</CustomButton>
-        <br />
-        <CustomButton onClick={submitForm}>
-          {noteId ? "Update Note" : "Create New Note"}
-        </CustomButton>
+        <Stack direction="column" width="25%" gap={3}>
+          <GitButton onClick={addFiles}>Add File</GitButton>
+          <GitButton onClick={submitForm}>
+            {noteId ? "Update Note" : "Create New Note"}
+          </GitButton>
+        </Stack>
       </form>
     </Box>
   )

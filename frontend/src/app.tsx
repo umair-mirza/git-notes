@@ -1,10 +1,10 @@
 import React from "react"
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
 import Spinner from "./components/spinner"
+import Header from "./components/header"
 import { theme } from "./theme"
 import { ThemeProvider } from "@mui/material/styles"
 import { Box, Container } from "@mui/material"
-import Header from "./components/header"
 
 const Note = React.lazy(() => import("./pages/note"))
 const MyNotes = React.lazy(() => import("./pages/my-notes"))

@@ -2,7 +2,7 @@ import { useEffect } from "react"
 import { useParams } from "react-router-dom"
 import { useAppSelector } from "../store/store"
 
-import { Note } from "../interfaces/Note"
+import { Note } from "../types/Note"
 
 import { filesObjectToArray } from "../utils"
 

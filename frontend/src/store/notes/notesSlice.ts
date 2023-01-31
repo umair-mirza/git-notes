@@ -1,9 +1,9 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit"
 import notesService from "./notesService"
-import { Note } from "../../interfaces/Note"
+import { Note } from "../../types/Note"
 import { AppDispatch, RootState } from "../store"
-import { User } from "../../interfaces/User"
-import { UpdatedDataType, FinalDataType } from "../../interfaces/Note"
+import { User } from "../../types/User"
+import { UpdatedDataType, FinalDataType } from "../../types/Note"
 
 interface NoteState {
   notes: Note[] | []
