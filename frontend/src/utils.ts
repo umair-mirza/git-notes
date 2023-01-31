@@ -40,4 +40,15 @@ const noteDataToFilesObject = (
   return finalData
 }
 
-export { filesObjectToArray, noteDataToFilesObject }
+/*----------------------------Check if multiple Keys exist in object---------------------------*/
+
+type ObjKeyCheck = {
+  neededKeys: string[]
+  obj: {}
+}
+
+const objectKeyChecker = (neededKeys: string[], obj: {}) => {
+  return neededKeys.every((key) => key in obj)
+}
+
+export { filesObjectToArray, noteDataToFilesObject, objectKeyChecker }

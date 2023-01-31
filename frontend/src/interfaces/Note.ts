@@ -2,8 +2,8 @@ export interface Note {
   url: string
   id: string
   public: boolean
-  created_at: string
-  updated_at: string
+  created_at: Date
+  updated_at: Date
   description: string
   files: {
     filename: {

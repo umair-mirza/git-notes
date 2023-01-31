@@ -8,7 +8,7 @@ import { UpdatedDataType, FinalDataType } from "../../interfaces/Note"
 interface NoteState {
   notes: Note[] | []
   userNotes: Note[] | []
-  note: Note | {}
+  note: Note
   searchedNote: Note | {}
   snackbar: {
     message: string
@@ -31,7 +31,25 @@ interface NoteState {
 const initialState: NoteState = {
   notes: [],
   userNotes: [],
-  note: {},
+  note: {
+    url: "",
+    id: "",
+    public: false,
+    created_at: new Date(),
+    updated_at: new Date(),
+    description: "",
+    files: {
+      filename: {
+        filename: "",
+        content: "",
+      },
+    },
+    owner: {
+      login: "",
+      id: "",
+      avatar_url: "",
+    },
+  },
   searchedNote: {},
   snackbar: { message: "", type: "success", isOpen: false },
   forks: 0,
@@ -268,7 +286,7 @@ export const notesSlice = createSlice({
       state.isForked = false
     },
     clearNote: (state) => {
-      state.note = {}
+      state.note = initialState.note
     },
     clearNotes: (state) => {
       state.notes = []
@@ -332,7 +350,7 @@ export const notesSlice = createSlice({
       .addCase(fetchNote.pending, (state) => {
         state.isLoading = true
       })
-      .addCase(fetchNote.fulfilled, (state, action) => {
+      .addCase(fetchNote.fulfilled, (state, action: PayloadAction<Note>) => {
         state.isLoading = false
         state.isSuccess = true
         state.note = action.payload

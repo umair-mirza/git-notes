@@ -1,5 +1,5 @@
 import React, { useEffect } from "react"
-import { useSelector, useDispatch } from "react-redux"
+import { useAppDispatch, useAppSelector } from "../store/store"
 import { useNavigate } from "react-router-dom"
 import { useParams } from "react-router-dom"
 import {
@@ -51,7 +51,7 @@ const noteContentSX = {
 /*-------------------------MUI---------------------------*/
 
 const Note = () => {
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
   const navigate = useNavigate()
 
   const {
@@ -63,9 +63,9 @@ const Note = () => {
     message,
     isStarred,
     isForked,
-  } = useSelector((state) => state.notes)
+  } = useAppSelector((state) => state.notes)
 
-  const { user } = useSelector((state) => state.auth)
+  const { user } = useAppSelector((state) => state.auth)
 
   const { noteId } = useParams()
 
@@ -80,44 +80,53 @@ const Note = () => {
 
     if (isForked) {
       dispatch(showSnackbar(["Note Successfully Forked", "success", true]))
-      dispatch(getForks(noteId))
+      dispatch(getForks(noteId!))
     }
   }, [dispatch, isSuccess, isError, isForked, message, noteId])
 
   useEffect(() => {
-    if (user) {
-      dispatch(fetchNote(noteId))
-      dispatch(checkStar(noteId))
-    } else {
-      dispatch(fetchNote(noteId))
+    if (noteId) {
+      if (user) {
+        dispatch(fetchNote(noteId))
+        dispatch(checkStar(noteId))
+      } else {
+        dispatch(fetchNote(noteId))
+      }
+      dispatch(getForks(noteId))
     }
-    dispatch(getForks(noteId))
   }, [dispatch, noteId])
 
   //Cleanup on Unmount
   useEffect(() => {
-    return () => dispatch(clearNote())
+    const cleanup = () => {
+      return () => dispatch(clearNote())
+    }
+    cleanup()
   }, [dispatch])
 
   //Handle Fork
   const forkHandler = () => {
-    if (!user) {
-      dispatch(showSnackbar(["You are not logged in", "error", true]))
-    } else {
-      dispatch(forkNote(noteId))
+    if (noteId) {
+      if (!user) {
+        dispatch(showSnackbar(["You are not logged in", "error", true]))
+      } else {
+        dispatch(forkNote(noteId))
+      }
     }
   }
 
   //Handle Star
   const starHandler = () => {
-    if (!user) {
-      dispatch(showSnackbar(["You are not logged in", "error", true]))
-      return
-    }
-    if (isStarred) {
-      dispatch(unStarNote(noteId))
-    } else if (!isStarred) {
-      dispatch(starNote(noteId))
+    if (noteId) {
+      if (!user) {
+        dispatch(showSnackbar(["You are not logged in", "error", true]))
+        return
+      }
+      if (isStarred) {
+        dispatch(unStarNote(noteId))
+      } else if (!isStarred) {
+        dispatch(starNote(noteId))
+      }
     }
   }
 
@@ -139,7 +148,7 @@ const Note = () => {
   //Back to All Handler
   const backToAllHandler = () => {
     dispatch(resetSearch())
-    if (note?.owner?.login === user?.login) {
+    if ("owner" in note && note?.owner?.login === user?.login) {
       navigate("/my-notes")
     } else {
       navigate("/")
@@ -151,28 +160,34 @@ const Note = () => {
   }
 
   const noteContent = () => {
-    const files = Object.values(note.files)
-    return files.map((file, index) => (
-      <Box key={index} sx={noteContentSX}>
-        <Stack
-          direction="row"
-          alignItems="center"
-          paddingBottom="5px"
-          sx={{ color: "tertiary.main" }}
-        >
-          <CodeIcon />
-          <Box component="span" sx={{ marginLeft: "10px" }}>
-            {file?.filename}
+    if ("files" in note) {
+      const files = Object.values(note?.files)
+      return files.map((file, index) => (
+        <Box key={index} sx={noteContentSX}>
+          <Stack
+            direction="row"
+            alignItems="center"
+            paddingBottom="5px"
+            sx={{ color: "tertiary.main" }}
+          >
+            <CodeIcon />
+            <Box component="span" sx={{ marginLeft: "10px" }}>
+              {file?.filename}
+            </Box>
+          </Stack>
+          <hr />
+          <Box
+            sx={{
+              padding: "10px 5px",
+              overflow: "none",
+              wordWrap: "break-word",
+            }}
+          >
+            {file?.content}
           </Box>
-        </Stack>
-        <hr />
-        <Box
-          sx={{ padding: "10px 5px", overflow: "none", wordWrap: "break-word" }}
-        >
-          {file?.content}
         </Box>
-      </Box>
-    ))
+      ))
+    }
   }
 
   return (

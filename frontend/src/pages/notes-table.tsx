@@ -1,5 +1,5 @@
-import React, { useEffect } from "react"
-import { useSelector, useDispatch } from "react-redux"
+import React, { useState, useEffect } from "react"
+import { useAppDispatch, useAppSelector } from "../store/store"
 import { useNavigate } from "react-router-dom"
 import {
   fetchNotes,
@@ -8,6 +8,7 @@ import {
   clearNotes,
   showSnackbar,
 } from "../store/notes/notesSlice"
+import { Note } from "../interfaces/Note"
 import Spinner from "../components/spinner"
 import { format } from "date-fns"
 
@@ -45,10 +46,10 @@ const avatarSX = {
 /*-------------------------MUI---------------------------*/
 
 const NotesTable = () => {
-  const [page, setPage] = React.useState(0)
-  const [rowsPerPage, setRowsPerPage] = React.useState(10)
+  const [page, setPage] = useState<number>(0)
+  const [rowsPerPage, setRowsPerPage] = useState<number>(10)
 
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
   const navigate = useNavigate()
 
   const {
@@ -59,7 +60,7 @@ const NotesTable = () => {
     isLoading,
     isSearchError,
     message,
-  } = useSelector((state) => state.notes)
+  } = useAppSelector((state) => state.notes)
 
   //UseEffect
   useEffect(() => {
@@ -80,7 +81,10 @@ const NotesTable = () => {
 
   //Cleanup on Unmount
   useEffect(() => {
-    return () => dispatch(clearNotes())
+    const cleanup = () => {
+      return () => dispatch(clearNotes())
+    }
+    cleanup()
   }, [dispatch])
 
   //Page changer for pagination
@@ -100,7 +104,7 @@ const NotesTable = () => {
   }
 
   //Total number of notes
-  const totalCount = 3000
+  const totalCount: number = 3000
 
   const selectedNotes =
     Object.keys(searchedNote).length > 0 && notes ? [searchedNote] : notes
@@ -124,7 +128,7 @@ const NotesTable = () => {
     } else {
       return (
         <TableBody>
-          {selectedNotes?.map((note) => (
+          {selectedNotes?.map((note: Note) => (
             <TableRow
               key={note.id}
               sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
@@ -171,21 +175,11 @@ const NotesTable = () => {
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
             <TableHead>
               <TableRow>
-                <TableCell fontWeight="bold" align="left">
-                  Avatar
-                </TableCell>
-                <TableCell fontWeight="bold" align="left">
-                  User
-                </TableCell>
-                <TableCell fontWeight="bold" align="left">
-                  Description
-                </TableCell>
-                <TableCell fontWeight="bold" align="left">
-                  Created Date
-                </TableCell>
-                <TableCell fontWeight="bold" align="left">
-                  Note Id
-                </TableCell>
+                <TableCell align="left">Avatar</TableCell>
+                <TableCell align="left">User</TableCell>
+                <TableCell align="left">Description</TableCell>
+                <TableCell align="left">Created Date</TableCell>
+                <TableCell align="left">Note Id</TableCell>
               </TableRow>
             </TableHead>
             {notesRenderer()}
@@ -207,14 +201,7 @@ const NotesTable = () => {
       </Box>
       {(Object.keys(searchedNote).length > 0 || isSearchError) && (
         <div>
-          <GitButton
-            variant="contained"
-            color="primary"
-            onClick={allResultsHandler}
-            sx={{ color: "white" }}
-          >
-            Back to All Results
-          </GitButton>
+          <GitButton onClick={allResultsHandler}>Back to All Results</GitButton>
         </div>
       )}
     </div>

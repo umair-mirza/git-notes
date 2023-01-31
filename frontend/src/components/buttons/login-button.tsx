@@ -1,7 +1,12 @@
 import React from "react"
 import { Button } from "@mui/material"
 
-const LoginButton = ({ url, children }) => {
+type LoginButtonProps = {
+  url: string
+  children: React.ReactNode
+}
+
+const LoginButton = ({ url, children }: LoginButtonProps) => {
   return (
     <Button
       component="button"
