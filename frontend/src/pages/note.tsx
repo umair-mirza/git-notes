@@ -82,7 +82,6 @@ const Note = () => {
       dispatch(showSnackbar(["Note Successfully Forked", "success", true]))
       dispatch(getForks(noteId!))
     }
-    dispatch(resetNotes())
   }, [dispatch, isSuccess, isError, isForked, message, noteId])
 
   useEffect(() => {
@@ -99,11 +98,10 @@ const Note = () => {
 
   //Cleanup on Unmount
   useEffect(() => {
-    const cleanup = () => {
-      return () => dispatch(clearNote())
+    return () => {
+      dispatch(clearNote())
     }
-    cleanup()
-  }, [dispatch])
+  }, [])
 
   //Handle Fork
   const forkHandler = () => {

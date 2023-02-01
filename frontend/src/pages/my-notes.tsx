@@ -61,11 +61,10 @@ const MyNotes = () => {
 
   //Cleanup on Unmount
   useEffect(() => {
-    const cleanup = () => {
-      return () => dispatch(clearUserNotes())
+    return () => {
+      dispatch(clearUserNotes())
     }
-    cleanup()
-  }, [dispatch])
+  }, [])
 
   //Custom Hook to remove deleted note from list
   const finalUserNotes = useDeleteFromState()

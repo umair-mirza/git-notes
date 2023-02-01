@@ -81,11 +81,10 @@ const NotesTable = () => {
 
   //Cleanup on Unmount
   useEffect(() => {
-    const cleanup = () => {
-      return () => dispatch(clearNotes())
+    return () => {
+      dispatch(clearNotes())
     }
-    cleanup()
-  }, [dispatch])
+  }, [])
 
   //Page changer for pagination
   const handleChangePage = (event, newPage) => {
