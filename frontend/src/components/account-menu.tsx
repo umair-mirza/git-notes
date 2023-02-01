@@ -1,7 +1,7 @@
 import * as React from "react"
 import { useAppDispatch, useAppSelector } from "../store/store"
 import { useNavigate } from "react-router-dom"
-import { logout, reset } from "../store/auth/authSlice"
+import { logout, reset } from "../store/auth/auth-slice"
 
 import { Link } from "react-router-dom"
 import Menu from "@mui/material/Menu"

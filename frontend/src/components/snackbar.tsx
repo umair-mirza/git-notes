@@ -1,6 +1,6 @@
 import React from "react"
 import { useAppDispatch, useAppSelector } from "../store/store"
-import { resetSnackbar } from "../store/notes/notesSlice"
+import { resetSnackbar } from "../store/notes/notes-slice"
 import Snackbar from "@mui/material/Snackbar"
 import MuiAlert from "@mui/material/Alert"
 import { AlertProps } from "@mui/material"

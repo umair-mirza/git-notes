@@ -6,8 +6,8 @@ import {
   resetNotes,
   clearUserNotes,
   showSnackbar,
-} from "../store/notes/notesSlice"
-import useDeleteFromState from "../hooks/useDeleteFromState"
+} from "../store/notes/notes-slice"
+import useDeleteFromState from "../hooks/use-delete-from-state"
 import Spinner from "../components/spinner"
 import { format } from "date-fns"
 

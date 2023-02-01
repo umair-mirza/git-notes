@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react"
 import { useAppDispatch, useAppSelector } from "../store/store"
 import { useNavigate, useLocation } from "react-router-dom"
 import { GITHUB_LOGIN_URL } from "../constants"
-import { login, reset } from "../store/auth/authSlice"
+import { login, reset } from "../store/auth/auth-slice"
 
 import { Box, Container, Stack, Typography } from "@mui/material"
 import LoginButton from "./buttons/login-button"

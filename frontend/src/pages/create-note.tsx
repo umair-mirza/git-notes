@@ -7,10 +7,10 @@ import {
   updateNote,
   clearNote,
   showSnackbar,
-} from "../store/notes/notesSlice"
-import useUpdatedData from "../hooks/useUpdatedData"
+} from "../store/notes/notes-slice"
+import useUpdatedData from "../hooks/use-updated-data"
 import { noteDataToFilesObject } from "../utils"
-import { NoteDataType, UpdatedDataType } from "../types/Note"
+import { NoteDataType, UpdatedDataType } from "../types/note.types"
 
 import Spinner from "../components/spinner"
 import { Box, Button, TextField, Typography } from "@mui/material"

@@ -1,7 +1,7 @@
 import axios from "axios"
-import { Note } from "../../types/Note"
-import { User } from "../../types/User"
-import { FinalDataType } from "../../types/Note"
+import { Note } from "../../types/note.types"
+import { User } from "../../types/user.types"
+import { FinalDataType } from "../../types/note.types"
 
 const API_URL: string = "https://api.github.com/gists"
 

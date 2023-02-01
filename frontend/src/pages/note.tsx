@@ -14,7 +14,7 @@ import {
   getForks,
   clearNote,
   showSnackbar,
-} from "../store/notes/notesSlice"
+} from "../store/notes/notes-slice"
 
 import Spinner from "../components/spinner"
 import { format } from "date-fns"
@@ -82,6 +82,7 @@ const Note = () => {
       dispatch(showSnackbar(["Note Successfully Forked", "success", true]))
       dispatch(getForks(noteId!))
     }
+    dispatch(resetNotes())
   }, [dispatch, isSuccess, isError, isForked, message, noteId])
 
   useEffect(() => {

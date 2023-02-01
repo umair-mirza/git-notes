@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import { useAppDispatch } from "../store/store"
 import { useNavigate } from "react-router-dom"
-import { searchNote, searchNoteDesc } from "../store/notes/notesSlice"
+import { searchNote, searchNoteDesc } from "../store/notes/notes-slice"
 
 import { Stack, TextField } from "@mui/material"
 import SearchIcon from "@mui/icons-material/Search"
